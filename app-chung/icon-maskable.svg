@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2E75B6"/>
+      <stop offset="1" stop-color="#1F4E79"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E3C566"/>
+      <stop offset="1" stop-color="#B8860B"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="512" height="512" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="#C9A227" stroke-opacity="0.45" stroke-width="6"/>
+  <text x="256" y="186" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="64" font-weight="700" fill="url(#gold)">100</text>
+  <!-- open book (maskable safe zone) -->
+  <path d="M148 272 C184 254 228 254 256 278 C284 254 328 254 364 272 L364 372 C328 354 284 354 256 378 C228 354 184 354 148 372 Z" fill="url(#gold)"/>
+  <path d="M256 278 L256 378" stroke="#1F4E79" stroke-width="7" stroke-linecap="round"/>
+  <path d="M168 300 C192 290 220 290 240 301" stroke="#1F4E79" stroke-opacity="0.55" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M272 301 C292 290 320 290 344 300" stroke="#1F4E79" stroke-opacity="0.55" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M168 326 C192 316 220 316 240 327" stroke="#1F4E79" stroke-opacity="0.35" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <path d="M272 327 C292 316 320 316 344 326" stroke="#1F4E79" stroke-opacity="0.35" stroke-width="6" stroke-linecap="round" fill="none"/>
+</svg>
