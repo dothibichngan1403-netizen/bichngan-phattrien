@@ -1178,7 +1178,7 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
     <span class="apptitle">PHẦN MỀM EVOLVE ENGLISH</span>
     <span class="appsub">Giao Tiếp Thích Ứng Mỗi Ngày</span>
     <span class="spacer"></span>
-    <span class="ver">Bản v2.0 · 12 lĩnh vực</span>
+    <span class="ver">Bản v2.1 · 12 lĩnh vực</span>
     <button class="title-tool" id="btnTitleInstall" title="Cài đặt app lên điện thoại/máy tính" style="display:none;">📲 Cài app</button>
     <button class="title-tool" id="btnTitleDark" title="Chế độ ban đêm">🌙 Ban đêm</button>
     <span class="winbtns"><button title="Thu nhỏ" id="winMin">─</button><button title="Phóng to" id="winMax">▢</button><button class="close" title="Đóng" id="winClose">✕</button></span>
@@ -1546,7 +1546,7 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
     <span class="stsec" id="stDomain">📖 Tất cả lĩnh vực</span>
     <span class="stsec" id="stWeak">🎯 0 từ yếu</span>
     <span class="spacer"></span>
-    <span class="stsec">EVOLVE ENGLISH · Bản v2.0</span>
+    <span class="stsec">EVOLVE ENGLISH · Bản v2.1</span>
   </div>
 
   <nav class="bottom-nav">
@@ -1585,8 +1585,8 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
       <h4>✅ Mở app không bị lỗi</h4>
       <ul>
         <li><b>File đã tải về:</b> trên máy tính, nhấn đúp vào file để mở bằng <b>Chrome</b> (nếu mở bằng trình duyệt khác: bấm phải vào file → Open with → Chrome). Trên điện thoại, mở file bằng Chrome.</li>
-        <li><b>Không mở bằng trình duyệt con</b> trong Zalo, Facebook, Messenger hay các app khác — trình duyệt con dễ lỗi giọng đọc và micro.</li>
-        <li><b>Micro và giọng đọc cần có mạng</b> và cần cấp quyền micro khi Chrome hỏi. Phần còn lại học offline được sau lần mở đầu.</li>
+        <li><b>Giọng đọc chạy được trong mọi trình duyệt</b> (kể cả trình duyệt con trong app khác), chỉ cần có mạng. Nếu mở bằng Chrome thì giọng đọc dùng giọng máy chuẩn hơn.</li>
+        <li><b>Micro chấm điểm vẫn cần mở bằng Chrome</b> và cần cấp quyền micro khi Chrome hỏi. Phần còn lại học offline được sau lần mở đầu.</li>
         <li><b>Bản online:</b> nếu thấy lỗi 404, kiểm tra địa chỉ phải có đủ đoạn <b>bichngan-phattrien/evolve-english/</b> ở cuối.</li>
       </ul>
     </div>
@@ -2074,11 +2074,67 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
       window.speechSynthesis.onvoiceschanged = populateVoices;
     }
 
+    // Giọng đọc dự phòng bằng file âm thanh (dùng khi trình duyệt không có Web Speech API,
+    // ví dụ trình duyệt con trong app Muse/Zalo/Facebook): phát âm thanh Google Translate TTS.
+    // Câu dài được cắt thành từng đoạn <=180 ký tự rồi phát nối tiếp nhau.
+    let fallbackAudio = null;
+    let fallbackToken = 0;
+
+    function stopFallbackAudio() {
+      if (fallbackAudio) {
+        try { fallbackAudio.pause(); } catch (e) {}
+        fallbackAudio = null;
+      }
+      fallbackToken++;
+    }
+
+    function chunkForTTS(text, maxLen) {
+      const words = String(text).split(/\s+/).filter(Boolean);
+      const chunks = [];
+      let cur = '';
+      for (const w of words) {
+        const next = cur ? cur + ' ' + w : w;
+        if (next.length > maxLen && cur) { chunks.push(cur); cur = w; }
+        else cur = next;
+      }
+      if (cur) chunks.push(cur);
+      return chunks.length ? chunks : [text];
+    }
+
+    function speakViaAudio(text, rate, lang, onEndCallback) {
+      stopFallbackAudio();
+      const token = fallbackToken;
+      const tl = (lang || 'en-US').toLowerCase().startsWith('vi') ? 'vi' : 'en';
+      const chunks = chunkForTTS(text, 180);
+      let idx = 0;
+      let playedAny = false;
+      function playNext() {
+        if (token !== fallbackToken) return; // đã bị ngắt bởi lệnh đọc mới
+        if (idx >= chunks.length) {
+          if (!playedAny) showToast('Chưa phát được giọng đọc, chị kiểm tra mạng rồi thử lại nhé.');
+          if (onEndCallback) onEndCallback();
+          return;
+        }
+        const url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=' + tl + '&client=tw-ob&q=' + encodeURIComponent(chunks[idx]);
+        const audio = new Audio();
+        fallbackAudio = audio;
+        audio.playbackRate = rate || 1.0;
+        audio.onended = () => { playedAny = true; idx++; playNext(); };
+        audio.onerror = () => { idx++; playNext(); };
+        audio.src = url;
+        try {
+          const pr = audio.play();
+          if (pr && pr.catch) pr.catch(() => { idx++; playNext(); });
+        } catch (e) { idx++; playNext(); }
+      }
+      playNext();
+    }
+
     function speakText(text, rate = 1.0, lang = 'en-US', onEndCallback = null) {
       clearTimeout(wordByWordTimer);
+      stopFallbackAudio();
       if (!('speechSynthesis' in window)) {
-        showToast('Trình duyệt chưa hỗ trợ giọng đọc tự động.');
-        if (onEndCallback) setTimeout(onEndCallback, 1200);
+        speakViaAudio(text, rate, lang, onEndCallback);
         return;
       }
       window.speechSynthesis.cancel();
@@ -2322,6 +2378,7 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
       busRunning = false;
       clearInterval(busCountdownTimer);
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      stopFallbackAudio();
       const btn = document.getElementById('btnToggleBusLoop');
       btn.textContent = '▶️ Bắt đầu Tự động chạy trên Xe buýt';
       btn.classList.remove('stop');
