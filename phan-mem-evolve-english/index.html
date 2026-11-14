@@ -1127,6 +1127,10 @@ body.dark #sidebar .sidehead{color:#93C5FD}
 #helpOverlay.show{display:block}
 #helpModal{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(580px,92vw);max-height:86vh;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.35);z-index:400;overflow:hidden;flex-direction:column}
 #helpModal.show{display:flex}
+#installOverlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:450}
+#installOverlay.show{display:block}
+#installModal{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(580px,92vw);max-height:86vh;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.35);z-index:460;overflow:hidden;flex-direction:column}
+#installModal.show{display:flex}
 .help-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(180deg,#2563EB,#1E3A8A);color:#fff;font-weight:800;font-size:15px}
 .help-head button{width:32px;height:32px;border:none;background:transparent;color:#fff;font-size:16px;cursor:pointer;border-radius:6px}
 .help-head button:hover{background:rgba(255,255,255,.2)}
@@ -1178,8 +1182,8 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
     <span class="apptitle">PHẦN MỀM EVOLVE ENGLISH</span>
     <span class="appsub">Giao Tiếp Thích Ứng Mỗi Ngày</span>
     <span class="spacer"></span>
-    <span class="ver">Bản v2.1 · 12 lĩnh vực</span>
-    <button class="title-tool" id="btnTitleInstall" title="Cài đặt app lên điện thoại/máy tính" style="display:none;">📲 Cài app</button>
+    <span class="ver">Bản v2.2 · 12 lĩnh vực</span>
+    <button class="title-tool" id="btnTitleInstall" title="Cài đặt app lên điện thoại/máy tính">📲 Cài app</button>
     <button class="title-tool" id="btnTitleDark" title="Chế độ ban đêm">🌙 Ban đêm</button>
     <span class="winbtns"><button title="Thu nhỏ" id="winMin">─</button><button title="Phóng to" id="winMax">▢</button><button class="close" title="Đóng" id="winClose">✕</button></span>
   </div>
@@ -1237,7 +1241,7 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
         </div>
       </div>
       <div class="top-actions">
-        <button class="icon-btn" id="btnInstallApp" title="Cài đặt app lên điện thoại/máy tính" style="display:none;">📲</button>
+        <button class="icon-btn" id="btnInstallApp" title="Cài đặt app lên điện thoại/máy tính">📲</button>
         <button class="icon-btn" id="btnSwitchPhoto" title="Đổi ảnh phong thái Công sở / Đời sống">✨</button>
         <button class="icon-btn" id="btnRefresh" title="Đổi biến thể tình huống mới">🔄</button>
         <button class="icon-btn" id="btnDarkMode" title="Chế độ ban đêm">🌙</button>
@@ -1546,7 +1550,7 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
     <span class="stsec" id="stDomain">📖 Tất cả lĩnh vực</span>
     <span class="stsec" id="stWeak">🎯 0 từ yếu</span>
     <span class="spacer"></span>
-    <span class="stsec">EVOLVE ENGLISH · Bản v2.1</span>
+    <span class="stsec">EVOLVE ENGLISH · Bản v2.2</span>
   </div>
 
   <nav class="bottom-nav">
@@ -1569,6 +1573,24 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
   </nav>
 
   <div id="drawerOverlay"></div>
+  <div id="installOverlay"></div>
+  <div id="installModal" role="dialog" aria-label="Cài app ra màn hình">
+    <div class="help-head"><span>📲 Cài app ra màn hình</span><button id="btnCloseInstall" title="Đóng">✕</button></div>
+    <div class="help-body">
+      <p>Trình duyệt chưa bật nút cài tự động, chị làm theo cách thủ công này nhé (chỉ cần làm 1 lần):</p>
+      <h4>📱 Trên điện thoại</h4>
+      <ol>
+        <li>Mở trang này bằng <b>app Chrome</b>. Nếu chị đang mở trong app Muse thì bấm <b>⋮</b> → <b>Mở bằng Chrome</b> trước.</li>
+        <li>Bấm <b>⋮</b> ở góc trên phải của Chrome.</li>
+        <li>Bấm <b>Cài đặt ứng dụng</b> (nếu không thấy thì bấm <b>Thêm vào Màn hình chính</b>).</li>
+        <li>Bấm <b>Cài đặt</b> — biểu tượng <b>EE</b> sẽ nằm ngoài màn hình chính, bấm vào là học ngay.</li>
+      </ol>
+      <h4>💻 Trên máy tính</h4>
+      <ul>
+        <li>Bấm biểu tượng <b>Cài đặt</b> ở cuối thanh địa chỉ Chrome, hoặc bấm <b>⋮</b> → <b>Lưu và chia sẻ</b> → <b>Cài đặt trang dưới dạng ứng dụng</b>.</li>
+      </ul>
+    </div>
+  </div>
   <div id="helpOverlay"></div>
   <div id="helpModal" role="dialog" aria-label="Trợ giúp">
     <div class="help-head"><span>❓ Trợ giúp — EVOLVE ENGLISH</span><button id="btnCloseHelp" title="Đóng">✕</button></div>
@@ -3035,7 +3057,7 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function() {
-        navigator.serviceWorker.register("sw.js").catch(function(){});
+        navigator.serviceWorker.register("sw.js").catch(function(err){ console.warn("Không đăng ký được service worker:", err); });
       });
     }
     let deferredInstallPrompt = null;
@@ -3045,11 +3067,33 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
       const b = document.getElementById("btnInstallApp");
       if (b) b.style.display = "";
     });
+    // Hộp hướng dẫn cài đặt thủ công (hiện khi trình duyệt không bật nút cài tự động)
+    function openInstallGuide() {
+      var m = document.getElementById("installModal"), o = document.getElementById("installOverlay");
+      if (m) m.classList.add("show");
+      if (o) o.classList.add("show");
+    }
+    function closeInstallGuide() {
+      var m = document.getElementById("installModal"), o = document.getElementById("installOverlay");
+      if (m) m.classList.remove("show");
+      if (o) o.classList.remove("show");
+    }
+    window.showInstallGuide = openInstallGuide;
+    (function () {
+      var c = document.getElementById("btnCloseInstall");
+      if (c) c.addEventListener("click", closeInstallGuide);
+      var o = document.getElementById("installOverlay");
+      if (o) o.addEventListener("click", closeInstallGuide);
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeInstallGuide(); });
+    })();
     document.getElementById("btnInstallApp").addEventListener("click", async () => {
-      if (!deferredInstallPrompt) return;
-      deferredInstallPrompt.prompt();
-      deferredInstallPrompt = null;
-      document.getElementById("btnInstallApp").style.display = "none";
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        deferredInstallPrompt = null;
+        document.getElementById("btnInstallApp").style.display = "none";
+        return;
+      }
+      openInstallGuide();
     });
   </script>
   <script>
