@@ -1,6 +1,6 @@
 /* Service worker — App EVOLVE ENGLISH.
    Cache-first cho toàn bộ app để mở nhanh và dùng offline sau lần mở đầu tiên. */
-const CACHE = "evolve-english-v1";
+const CACHE = "evolve-english-v2";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg", "./icon-maskable.svg"];
 
 self.addEventListener("install", (event) => {
