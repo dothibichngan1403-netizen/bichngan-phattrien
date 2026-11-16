@@ -13,3 +13,5 @@ kèm giọng đọc nhúng sẵn (nữ Aria / nam Helio) cho cả 15 trang.
   (nữ Lan Nhi / Linh San, nam Minh Quang) sẽ thay thế khi có tài khoản FPT.AI.
 
 Biên soạn: Jenifer_DoNa (Đỗ Thị Bích Ngân).
+
+Link đọc sách: https://dothibichngan1403-netizen.github.io/bichngan-phattrien/nhat-ky-nha-gia-kim/
