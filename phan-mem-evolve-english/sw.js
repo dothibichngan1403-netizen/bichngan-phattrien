@@ -1,6 +1,6 @@
 /* Service worker — Phần mềm EVOLVE ENGLISH.
    Cache-first cho toàn bộ app để mở nhanh và dùng offline sau lần mở đầu tiên. */
-const CACHE = "phan-mem-evolve-english-v7";
+const CACHE = "phan-mem-evolve-english-v8";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg", "./icon-maskable.svg", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png"];
 
 self.addEventListener("install", (event) => {
