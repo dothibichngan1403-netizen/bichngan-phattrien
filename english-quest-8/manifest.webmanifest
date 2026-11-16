@@ -1,0 +1,38 @@
+{
+  "name": "English Quest 8 — Hành trình tiếng Anh lớp 8",
+  "short_name": "English Quest 8",
+  "description": "Học tiếng Anh lớp 8 bằng giọng nói: nghe, nói, đọc, viết cùng giáo viên ảo. 2 unit: Leisure Time và Life in the Countryside.",
+  "lang": "vi",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f2fbfb",
+  "theme_color": "#0ea5a5",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
