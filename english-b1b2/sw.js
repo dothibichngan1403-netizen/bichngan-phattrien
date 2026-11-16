@@ -1,6 +1,6 @@
 /* Service worker — English for Intermediate Learners (B1–B2).
    Cache-first cho toàn bộ app để mở nhanh và dùng offline sau lần mở đầu tiên. */
-const CACHE = "english-b1b2-v1";
+const CACHE = "english-b1b2-v2";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png"];
 
 self.addEventListener("install", (event) => {
