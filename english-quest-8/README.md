@@ -1,4 +1,4 @@
-# English Quest 8 — Hành trình tiếng Anh lớp 8 (Bản PWA v1)
+# English Quest 8 — Hành trình tiếng Anh lớp 8 (Bản PWA v1.1)
 
 App học tiếng Anh lớp 8 bằng giọng nói: nghe, nói, đọc, viết cùng giáo viên ảo
 (Ms. Mia, Mr. Ethan, Ms. Sofia). 2 unit: Leisure Time và Life in the Countryside.
@@ -21,8 +21,7 @@ theo hướng dẫn trong hộp thoại cài đặt của app.
 
 ## Lưu ý
 
-- Ảnh giáo viên (`teachers/teacher-mia.jpg`, `teacher-ethan.jpg`,
-  `teacher-sofia.jpg`) chưa có trong gói này. Khi chưa có ảnh thật, app tự hiện
-  ảnh minh họa có chữ cái đầu tên giáo viên thay cho khung ảnh vỡ. Gửi thêm 3
-  ảnh chân dung giáo viên để gắn ảnh thật vào app.
+- Ảnh 3 giáo viên (Ms. Mia, Mr. Ethan, Ms. Sofia) đã nhúng sẵn trong `index.html`
+  (base64, giữ nguyên 100% file gốc chị gửi ngày 16/11/2026). File gốc giữ trong
+  thư mục `teachers/` kèm theo để đối chiếu.
 - Tiến độ học lưu riêng trên từng máy (localStorage `eq8_state_v1`).

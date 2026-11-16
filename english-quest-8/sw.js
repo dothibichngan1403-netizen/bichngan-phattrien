@@ -1,7 +1,7 @@
-/* Service worker — English Quest 8 (PWA v1).
+/* Service worker — English Quest 8 (PWA v1.1).
    Cache-first cho toàn bộ app để mở nhanh và dùng offline sau lần mở đầu tiên.
    Giọng đọc (Web Speech API) và chấm điểm micro vẫn cần trình duyệt hỗ trợ. */
-const CACHE = "english-quest-8-v1";
+const CACHE = "english-quest-8-v2";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png", "./icon.svg", "./apple-touch-icon-180.png"];
 
 self.addEventListener("install", (event) => {
