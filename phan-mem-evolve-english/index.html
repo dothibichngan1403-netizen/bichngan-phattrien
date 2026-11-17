@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Phần mềm EVOLVE ENGLISH – Giao Tiếp Thích Ứng Mỗi Ngày</title>
   <meta name="description" content="Ứng dụng luyện phản xạ tiếng Anh giao tiếp công việc và đời sống trên xe buýt, tự động thích ứng trình độ." />
   <meta name="theme-color" content="#1E3A8A">
@@ -11,6 +11,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Evolve English">
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon-180.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1187,7 +1188,7 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
     <span class="apptitle">PHẦN MỀM EVOLVE ENGLISH</span>
     <span class="appsub">Giao Tiếp Thích Ứng Mỗi Ngày</span>
     <span class="spacer"></span>
-    <span class="ver">Bản v2.7 · 12 lĩnh vực</span>
+    <span class="ver">Bản v2.8 · 12 lĩnh vực</span>
     <button class="title-tool" id="btnTitleInstall" title="Cài đặt app lên điện thoại/máy tính">📲 Cài app</button>
     <button class="title-tool" id="btnTitleDark" title="Chế độ ban đêm">🌙 Ban đêm</button>
     <span class="winbtns"><button title="Thu nhỏ" id="winMin">─</button><button title="Phóng to" id="winMax">▢</button><button class="close" title="Đóng" id="winClose">✕</button></span>
@@ -1555,7 +1556,7 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
     <span class="stsec" id="stDomain">📖 Tất cả lĩnh vực</span>
     <span class="stsec" id="stWeak">🎯 0 từ yếu</span>
     <span class="spacer"></span>
-    <span class="stsec">EVOLVE ENGLISH · Bản v2.7</span>
+    <span class="stsec">EVOLVE ENGLISH · Bản v2.8</span>
   </div>
 
   <nav class="bottom-nav">
@@ -1582,14 +1583,25 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
   <div id="installModal" role="dialog" aria-label="Cài app ra màn hình">
     <div class="help-head"><span>📲 Cài app ra màn hình</span><button id="btnCloseInstall" title="Đóng">✕</button></div>
     <div class="help-body">
-      <p>Trình duyệt chưa bật nút cài tự động, chị làm theo cách thủ công này nhé (chỉ cần làm 1 lần):</p>
-      <h4>📱 Trên điện thoại</h4>
-      <ol>
-        <li>Mở trang này bằng <b>app Chrome</b>. Nếu chị đang mở trong app Muse thì bấm <b>⋮</b> → <b>Mở bằng Chrome</b> trước.</li>
-        <li>Bấm <b>⋮</b> ở góc trên phải của Chrome.</li>
-        <li>Bấm <b>Cài đặt ứng dụng</b> (nếu không thấy thì bấm <b>Thêm vào Màn hình chính</b>).</li>
-        <li>Bấm <b>Cài đặt</b> — biểu tượng <b>EE</b> sẽ nằm ngoài màn hình chính, bấm vào là học ngay.</li>
-      </ol>
+      <p>Trình duyệt chưa bật nút cài tự động, bạn làm theo cách thủ công này nhé (chỉ cần làm 1 lần):</p>
+      <div id="installIOS">
+        <h4>📱 iPhone (Safari)</h4>
+        <ol>
+          <li>Mở trang này bằng <b>app Safari</b> (biểu tượng la bàn). Nếu bạn đang mở trong Zalo, Messenger hay app khác thì bấm <b>…</b> hoặc <b>⋮</b> → <b>Mở bằng Safari</b> trước.</li>
+          <li>Bấm nút <b>Chia sẻ</b> (hình vuông có mũi tên hướng lên) ở giữa thanh dưới cùng.</li>
+          <li>Cuộn xuống, bấm <b>Thêm vào Màn hình chính</b>.</li>
+          <li>Bấm <b>Thêm</b> — biểu tượng <b>EE</b> sẽ nằm ngoài màn hình chính, bấm vào là học ngay.</li>
+        </ol>
+      </div>
+      <div id="installAndroid">
+        <h4>📱 Android (Chrome)</h4>
+        <ol>
+          <li>Mở trang này bằng <b>app Chrome</b>. Nếu bạn đang mở trong app Muse thì bấm <b>⋮</b> → <b>Mở bằng Chrome</b> trước.</li>
+          <li>Bấm <b>⋮</b> ở góc trên phải của Chrome.</li>
+          <li>Bấm <b>Cài đặt ứng dụng</b> (nếu không thấy thì bấm <b>Thêm vào Màn hình chính</b>).</li>
+          <li>Bấm <b>Cài đặt</b> — biểu tượng <b>EE</b> sẽ nằm ngoài màn hình chính, bấm vào là học ngay.</li>
+        </ol>
+      </div>
       <h4>💻 Trên máy tính</h4>
       <ul>
         <li>Bấm biểu tượng <b>Cài đặt</b> ở cuối thanh địa chỉ Chrome, hoặc bấm <b>⋮</b> → <b>Lưu và chia sẻ</b> → <b>Cài đặt trang dưới dạng ứng dụng</b>.</li>
@@ -3073,8 +3085,15 @@ body.dark #toolbar .tbtn.primary{background:var(--primary);color:#fff}
       if (b) b.style.display = "";
     });
     // Hộp hướng dẫn cài đặt thủ công (hiện khi trình duyệt không bật nút cài tự động)
+    function isIOSDevice() {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    }
     function openInstallGuide() {
       var m = document.getElementById("installModal"), o = document.getElementById("installOverlay");
+      var ios = document.getElementById("installIOS"), and = document.getElementById("installAndroid");
+      var isiOS = isIOSDevice();
+      if (ios) ios.style.display = isiOS ? "" : "none";
+      if (and) and.style.display = isiOS ? "none" : "";
       if (m) m.classList.add("show");
       if (o) o.classList.add("show");
     }
