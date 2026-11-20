@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>TẠO TUYỆT TÁC TỪ TÂM • BÀI GIẢNG 4D CINEMA 16:9 • 18.11.2026 • Giọng Mới • Bản v3</title>
+  <title>TẠO TUYỆT TÁC TỪ TÂM • BÀI GIẢNG 4D CINEMA 16:9 • 18.11.2026 • Giọng Mới • Bản v4</title>
   <meta name="description" content="Bài giảng tương tác 4D Cinema 16:9 - Tạo Tuyệt Tác Từ Tâm (18.11.2026): 30 Trang Slide NotebookLM, Hội Đồng Trí Tuệ AI, Thẻ Lật 3D Chuyển Hóa, Thuyết Minh & Phụ Đề Tiếng Việt Tự Động, Video YouTube & Google Flow">
 
   <!-- Tailwind CSS CDN -->
@@ -862,7 +862,7 @@
         <div class="flex items-center gap-2 flex-wrap">
           <span class="text-xs font-black text-amber-400 tracking-wider">TẠO TUYỆT TÁC TỪ TÂM • 18.11.2026</span>
           <span class="text-[10px] bg-amber-500/20 text-amber-300 font-extrabold px-1.5 py-0.2 rounded border border-amber-500/30">4D CINEMA 16:9</span>
-          <span class="text-[10px] bg-violet-500/20 text-violet-300 font-extrabold px-1.5 py-0.2 rounded border border-violet-500/30">Bản v3 — xem tốt trên điện thoại</span>
+          <span class="text-[10px] bg-violet-500/20 text-violet-300 font-extrabold px-1.5 py-0.2 rounded border border-violet-500/30">Bản v4 — sửa lỗi giọng đọc</span>
           <span id="xpHudBadge" class="text-[10px] bg-emerald-500/15 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30" title="Điểm trải nghiệm & Chuyển hóa (Lật thẻ + Khám phá slide)">
             🏆 10 XP • 1/30
           </span>
@@ -1413,6 +1413,7 @@
     let currentVoiceGender = 'female';
     let currentTTSSpeed = 0.95;
     let isPlaying = false;
+    let narrationToken = 0; // Tăng mỗi lần bắt đầu thuyết minh mới để hủy các lần thử lại cũ còn chờ
     let isAutoTour = false;
     let isKenBurnsActive = true;
     let isDrawModeActive = false;
@@ -1448,11 +1449,17 @@
     let audioCtx = null;
 
     function initAudioContext() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
+      // Nhạc lỗi thì chỉ tắt nhạc, không bao giờ được làm hỏng giọng đọc.
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      } catch (e) {
+        console.warn('[Nhạc nền] Không tạo được AudioContext:', e && e.message);
+        audioCtx = null;
       }
     }
 
@@ -2098,6 +2105,7 @@
         embeddedAudio.onerror = null;
         embeddedAudio.ontimeupdate = null;
         embeddedAudio.onloadedmetadata = null;
+        embeddedAudio.onplaying = null;
         embeddedAudio.pause();
         embeddedAudio.removeAttribute("src");
         embeddedAudio.load();
@@ -2150,6 +2158,10 @@
       }
     }
 
+    // Thử phát giọng nhúng tối đa 2 lần: lần đầu + 1 lần thử lại bằng Audio
+    // element mới và Blob URL mới (lỗi lần bấm phát đầu tiên trên điện thoại
+    // thường do audio chưa sẵn sàng, thử lại là phát được). Chỉ khi cả 2 lần
+    // đều lỗi mới rơi sang giọng trình duyệt.
     function playEmbeddedAudio(idx, startSentenceIdx) {
       if (!embeddedAudioValid) return false;
       // Lớp bảo vệ thứ hai: lời giảng của trang đang mở phải đúng y lời gốc
@@ -2161,49 +2173,80 @@
       if (!src) return false;
       const totalDuration = (AUDIO_DURATIONS[currentVoiceGender] || [])[idx];
       if (!totalDuration) return false;
-      embeddedSentenceBounds = computeSentenceBounds(speechSentences, totalDuration);
-      const audio = new Audio(getAudioBlobUrl(currentVoiceGender, idx, src));
-      embeddedAudio = audio;
-      audio.preload = "auto";
-      audio.playbackRate = currentTTSSpeed;
+      const attemptGender = currentVoiceGender;
+      const myToken = narrationToken;
       const seekTo = Math.max(0, Math.min(startSentenceIdx || 0, speechSentences.length - 1));
-      const seekTime = embeddedSentenceBounds[seekTo] || 0;
-      audio.onloadedmetadata = () => {
-        if (embeddedAudio !== audio) return;
-        try { if (seekTime > 0) audio.currentTime = seekTime; } catch (e) {}
-        if (audio.paused && isPlaying) audio.play().catch(() => {});
-      };
-      audio.ontimeupdate = () => {
-        if (embeddedAudio !== audio || !isPlaying) return;
-        const t = audio.currentTime;
-        let si = embeddedSentenceBounds.length - 2;
-        for (let k = 0; k < embeddedSentenceBounds.length - 1; k++) {
-          if (t < embeddedSentenceBounds[k + 1]) { si = k; break; }
-        }
-        showEmbeddedSentence(si);
-      };
-      audio.onended = () => {
-        if (embeddedAudio !== audio) return;
-        embeddedAudio = null;
-        embeddedNarrationFinished();
-      };
-      // Chặn chuyển sang giọng trình duyệt 2 lần (onerror + play().catch
-      // có thể cùng kích hoạt trên điện thoại).
-      let audioFallbackDone = false;
-      const fallbackToTTS = () => {
-        if (audioFallbackDone || embeddedAudio !== audio) return;
-        audioFallbackDone = true;
-        stopEmbeddedAudio();
-        if (!isPlaying) return;
-        updateVoiceStatus("tts");
-        speakCurrentSentence();
-      };
-      audio.onerror = fallbackToTTS;
       // Hiển thị ngay câu bắt đầu trước khi audio kịp phát
       currentSentenceIdx = seekTo;
       document.getElementById("liveSubtitleText").innerHTML = `<span class="text-amber-200 font-semibold">${speechSentences[seekTo]}</span>`;
       document.getElementById("audioTimeDisplay").textContent = `Câu ${seekTo + 1} / ${speechSentences.length}`;
-      audio.play().catch(fallbackToTTS);
+      let audioFallbackDone = false;
+      let retryCount = 0;
+      const playAttempt = () => {
+        // Tính lại mốc câu (stopEmbeddedAudio đã xóa mảng mốc ở lần thử trước).
+        embeddedSentenceBounds = computeSentenceBounds(speechSentences, totalDuration);
+        const seekTime = embeddedSentenceBounds[seekTo] || 0;
+        const audio = new Audio(getAudioBlobUrl(attemptGender, idx, src));
+        embeddedAudio = audio;
+        audio.preload = "auto";
+        audio.playbackRate = currentTTSSpeed;
+        audio.onplaying = () => {
+          if (embeddedAudio === audio) updateVoiceStatus("embedded");
+        };
+        audio.onloadedmetadata = () => {
+          if (embeddedAudio !== audio) return;
+          try { if (seekTime > 0) audio.currentTime = seekTime; } catch (e) {}
+          if (audio.paused && isPlaying) audio.play().catch(() => {});
+        };
+        audio.ontimeupdate = () => {
+          if (embeddedAudio !== audio || !isPlaying) return;
+          const t = audio.currentTime;
+          let si = embeddedSentenceBounds.length - 2;
+          for (let k = 0; k < embeddedSentenceBounds.length - 1; k++) {
+            if (t < embeddedSentenceBounds[k + 1]) { si = k; break; }
+          }
+          showEmbeddedSentence(si);
+        };
+        audio.onended = () => {
+          if (embeddedAudio !== audio) return;
+          embeddedAudio = null;
+          embeddedNarrationFinished();
+        };
+        const failAttempt = (err) => {
+          if (audioFallbackDone || embeddedAudio !== audio) return;
+          const reason = err ? (err.name ? err.name + ': ' + (err.message || '') : String(err)) : 'unknown error';
+          console.warn('[Giọng nhúng] Không phát được trang ' + (idx + 1) + ' (' + attemptGender + '), lần thử ' + (retryCount + 1) + ': ' + reason);
+          if (retryCount < 1 && isPlaying) {
+            retryCount++;
+            stopEmbeddedAudio();
+            const bar = document.getElementById("voiceStatusBar");
+            if (bar) bar.textContent = "🔄 Đang thử phát lại giọng đọc…";
+            setTimeout(() => {
+              if (!isPlaying || audioFallbackDone) return;
+              if (myToken !== narrationToken || currentVoiceGender !== attemptGender || currentSlideIndex !== idx) return;
+              const key = attemptGender + ":" + idx;
+              if (audioBlobUrlCache[key]) {
+                try { URL.revokeObjectURL(audioBlobUrlCache[key]); } catch (e) {}
+                delete audioBlobUrlCache[key];
+              }
+              playAttempt();
+            }, 300);
+            return;
+          }
+          audioFallbackDone = true;
+          stopEmbeddedAudio();
+          if (!isPlaying) return;
+          const bar = document.getElementById("voiceStatusBar");
+          if (bar) bar.textContent = "⚠️ Giọng nhúng không phát được (" + (err && err.name ? err.name : 'lỗi phát') + ") — đã chuyển sang giọng trình duyệt";
+          speakCurrentSentence();
+        };
+        audio.onerror = () => {
+          const ae = audio.error;
+          failAttempt(ae ? { name: 'MediaError ' + ae.code, message: ae.message || '' } : null);
+        };
+        audio.play().catch(failAttempt);
+      };
+      playAttempt();
       updateVoiceStatus("embedded");
       return true;
     }
@@ -2342,6 +2385,7 @@
     function startMusicBox(auto) {
       if (isMusicPlaying) return; // Đang phát rồi thì giữ nguyên người bật (không cướp quyền)
       initAudioContext();
+      if (!audioCtx) return; // Không có AudioContext thì bỏ qua nhạc, giọng đọc vẫn phát bình thường
       musicMasterGain = audioCtx.createGain();
       musicMasterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
       musicMasterGain.gain.exponentialRampToValueAtTime(1, audioCtx.currentTime + 1.2);
@@ -2393,6 +2437,14 @@
       window.speechSynthesis.onvoiceschanged = loadVoices;
     }
 
+    function hasVietnameseVoice() {
+      // Lấy lại danh sách giọng mới nhất (getVoices() lúc đầu có thể trả về
+      // rỗng do giọng chưa tải xong) rồi kiểm tra có giọng tiếng Việt thật không.
+      if (!window.speechSynthesis) return false;
+      availableVoices = window.speechSynthesis.getVoices() || [];
+      return availableVoices.some(v => (v.lang || '').toLowerCase().includes('vi'));
+    }
+
     function pickVietnameseVoice(gender) {
       const viVoices = availableVoices.filter(v => (v.lang || '').toLowerCase().includes('vi'));
       if (viVoices.length === 0) return null;
@@ -2436,14 +2488,18 @@
     function startNarration(startIdx = 0) {
       stopEmbeddedAudio();
       if (window.speechSynthesis) window.speechSynthesis.cancel();
+      narrationToken++;
       const s = SLIDES[currentSlideIndex];
       speechSentences = splitIntoSentences(s.script);
       currentSentenceIdx = Math.min(startIdx, speechSentences.length - 1);
       isPlaying = true;
       updateAudioUI(true);
-      startMusicAuto();
-      // Ưu tiên giọng thu sẵn (chỉ khi còn hiệu lực và lời giảng đúng y lời gốc)
-      if (playEmbeddedAudio(currentSlideIndex, currentSentenceIdx)) return;
+      // Ưu tiên giọng thu sẵn (chỉ khi còn hiệu lực và lời giảng đúng y lời gốc).
+      // Nhạc bật SAU khi giọng đọc đã bắt đầu để nhạc không bao giờ chặn giọng đọc.
+      if (playEmbeddedAudio(currentSlideIndex, currentSentenceIdx)) {
+        try { startMusicAuto(); } catch (e) { console.warn('[Nhạc nền] Không bật được nhạc:', e && e.message); }
+        return;
+      }
       // Dự phòng: giọng của trình duyệt đọc đúng nội dung mới
       if (!window.speechSynthesis) {
         isPlaying = false;
@@ -2452,6 +2508,7 @@
         showToast('⚠️ Trình duyệt không hỗ trợ đọc giọng nói TTS.');
         return;
       }
+      try { startMusicAuto(); } catch (e) { console.warn('[Nhạc nền] Không bật được nhạc:', e && e.message); }
       speakCurrentSentence();
     }
 
@@ -2467,6 +2524,16 @@
             startNarration(0);
           }, 900);
         }
+        return;
+      }
+
+      // Không có giọng tiếng Việt thật thì DỪNG hẳn, không đọc bằng giọng lạ
+      // hay chạy phụ đề im lặng (cuốn này không có chế độ phụ đề tự động).
+      if (!window.speechSynthesis || !hasVietnameseVoice()) {
+        stopNarration(false);
+        const bar = document.getElementById("voiceStatusBar");
+        if (bar) bar.textContent = "⚠️ Trình duyệt này không phát được giọng đọc. Chị bấm nút phát lại để thử lại, hoặc mở link bằng Chrome nhé.";
+        showToast("⚠️ Trình duyệt này không phát được giọng đọc. Chị bấm nút phát lại để thử lại, hoặc mở link bằng Chrome nhé.");
         return;
       }
 
@@ -2491,6 +2558,9 @@
         isPlaying = false;
         updateAudioUI(false);
         stopMusicAuto();
+        const bar = document.getElementById("voiceStatusBar");
+        if (bar) bar.textContent = "⚠️ Trình duyệt này không phát được giọng đọc. Chị bấm nút phát lại để thử lại, hoặc mở link bằng Chrome nhé.";
+        showToast("⚠️ Trình duyệt này không phát được giọng đọc. Chị bấm nút phát lại để thử lại, hoặc mở link bằng Chrome nhé.");
       };
       window.speechSynthesis.speak(utter);
     }
