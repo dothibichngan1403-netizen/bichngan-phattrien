@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>Kiến Tạo Di Sản: Hành Trình Từ Trái Tim Đến Trí Tuệ Nhân Tạo — Bài Giảng Tương Tác • Giọng Mới • Bản v3</title>
+<title>Kiến Tạo Di Sản: Hành Trình Từ Trái Tim Đến Trí Tuệ Nhân Tạo — Bài Giảng Tương Tác • Giọng Mới • Bản v4</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
@@ -924,7 +924,7 @@ body::before {
           <span class="brand-sub">Từ Trái Tim Đến AI • 30 Slides</span>
         </span>
       </button>
-      <span class="v2-badge" title="Bản v3: sửa lỗi phát giọng đọc — tự thử lại giọng nhúng, không chạy phụ đề im lặng"><span class="v2-badge-full">✦ Bản v3 — sửa lỗi giọng đọc</span><span class="v2-badge-short">✦ Bản v3</span></span>
+      <span class="v2-badge" title="Bản v4: luôn mặc định giọng nữ Aria khi mở trang, chỉ chạy phụ đề khi chị chủ động chọn; sửa lỗi phát giọng đọc — tự thử lại giọng nhúng, không chạy phụ đề im lặng"><span class="v2-badge-full">✦ Bản v4 — sửa lỗi giọng đọc</span><span class="v2-badge-short">✦ Bản v4</span></span>
       <div class="pillar-pill" id="pillar-pill">
         <span class="pillar-dot"></span>
         <span id="pillar-pill-text">Mở Đầu</span>
@@ -1729,6 +1729,12 @@ function getVoiceMode() {
   if (v === 'embedded:male') return { type: 'embedded', gender: 'male' };
   return { type: 'tts' };
 }
+// Cờ ghi nhận lựa chọn CHỦ ĐỘNG của chị với chế độ phụ đề. CHỈ được đặt
+// bởi trình nghe sự kiện 'change' bên dưới — loadVoices() không bao giờ
+// được tự đặt cờ này. (Bản v4: sửa lỗi mặc định giọng — trước đây mở trang
+// lần đầu, cả Aria và phụ đề cùng được gắn selected, lựa chọn gắn sau là
+// phụ đề thắng nên sách chạy phụ đề im lặng dù giọng nhúng vẫn tốt.)
+let userChoseSubtitle = false;
 function loadVoices() {
   const sel = document.getElementById('voice-select');
   const prev = sel.value;
@@ -1739,8 +1745,9 @@ function loadVoices() {
     if (selected) opt.selected = true;
     sel.appendChild(opt);
   };
-  // Giọng nhúng luôn đứng đầu và là mặc định (nữ Aria).
-  addOpt('embedded:female', '🎙️ Giọng nữ Aria (nhúng sẵn)', prev === '' || prev === 'embedded:female');
+  // Giọng nhúng luôn đứng đầu và là mặc định (nữ Aria) — kể cả khi
+  // prev === '' (mở trang lần đầu), trừ khi chị đã chủ động chọn phụ đề.
+  addOpt('embedded:female', '🎙️ Giọng nữ Aria (nhúng sẵn)', prev === 'embedded:female' || (prev === '' && !userChoseSubtitle));
   addOpt('embedded:male', '🎙️ Giọng nam Helio (nhúng sẵn)', prev === 'embedded:male');
   if ('speechSynthesis' in window) {
     const all = speechSynthesis.getVoices();
@@ -1748,7 +1755,7 @@ function loadVoices() {
     viVoices.forEach((v) => {
       addOpt(v.name, `🇻🇳 ${v.name.slice(0, 22)}`, prev === v.name);
     });
-    if (!viVoices.length) addOpt('', '🇻🇳 Phụ đề TV tự động', prev === '');
+    if (!viVoices.length) addOpt('', '🇻🇳 Phụ đề TV tự động', userChoseSubtitle && prev === '');
   } else {
     addOpt('', '🇻🇳 Phụ đề TV tự động', false);
   }
@@ -1759,6 +1766,11 @@ if ('speechSynthesis' in window) {
 } else {
   loadVoices();
 }
+// Ghi nhận lựa chọn chủ động của chị trên ô chọn giọng: chỉ khi chị tự
+// tay chọn "Phụ đề TV tự động" thì chế độ phụ đề hẹn giờ mới được phép.
+document.getElementById('voice-select').addEventListener('change', function () {
+  userChoseSubtitle = (this.value === '');
+});
 updateVoiceStatus(embeddedAudioValid ? "embedded" : "tts");
 
 function speakOneLine(text) {
@@ -1871,8 +1883,9 @@ function speakCurrentCueTTSOnly() {
       state.cueTimer = setTimeout(nextCue, 350);
     };
     speechSynthesis.speak(u);
-  } else if (document.getElementById('voice-select').value === '') {
-    // Người dùng CHỦ ĐỘNG chọn "Phụ đề TV tự động" → giữ chế độ phụ đề hẹn giờ.
+  } else if (userChoseSubtitle && document.getElementById('voice-select').value === '') {
+    // Chị CHỦ ĐỘNG chọn "Phụ đề TV tự động" (cờ userChoseSubtitle) → giữ chế độ phụ đề hẹn giờ.
+    // Nếu ô giọng ở '' do mặc định (cờ false) thì rơi xuống nhánh dưới: dừng hẳn + báo rõ.
     document.getElementById('cue-status').textContent = 'CC Đang chạy phụ đề tiếng Việt tự động';
     const est = Math.max(2600, (line.length * 64) / rate);
     state.cueTimer = setTimeout(nextCue, est);
