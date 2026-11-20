@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>TẠO TUYỆT TÁC TỪ TÂM • BÀI GIẢNG 4D CINEMA 16:9 • 18.11.2026 • Giọng Mới • Bản v4</title>
+  <title>TẠO TUYỆT TÁC TỪ TÂM • BÀI GIẢNG 4D CINEMA 16:9 • 18.11.2026 • Giọng Mới • Bản v5</title>
   <meta name="description" content="Bài giảng tương tác 4D Cinema 16:9 - Tạo Tuyệt Tác Từ Tâm (18.11.2026): 30 Trang Slide NotebookLM, Hội Đồng Trí Tuệ AI, Thẻ Lật 3D Chuyển Hóa, Thuyết Minh & Phụ Đề Tiếng Việt Tự Động, Video YouTube & Google Flow">
 
   <!-- Tailwind CSS CDN -->
@@ -406,6 +406,12 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     }
 
+    /* Nút "Nghe liên tục cả bài" (v5) — trạng thái đang chạy: sáng hơn + phát sáng */
+    #listenAllBtn.listen-all-active {
+      background: #fde68a !important;
+      box-shadow: 0 0 18px rgba(253, 230, 138, 0.8);
+    }
+
     .soundwave-bar {
       width: 3px;
       height: 12px;
@@ -765,6 +771,7 @@
       }
       .audio-bar + div button { min-height: 44px !important; }
       #autoTourBtn { min-height: 40px !important; padding-left: 12px; padding-right: 12px; }
+      #listenAllBtn { min-height: 44px !important; }
       #headerControls button { min-height: 44px; min-width: 44px; }
       .voice-pill { min-height: 36px; padding: 6px 12px; font-size: 12px; }
       .script-box-container button, #cardSectionWrapper button { min-height: 36px; }
@@ -862,7 +869,7 @@
         <div class="flex items-center gap-2 flex-wrap">
           <span class="text-xs font-black text-amber-400 tracking-wider">TẠO TUYỆT TÁC TỪ TÂM • 18.11.2026</span>
           <span class="text-[10px] bg-amber-500/20 text-amber-300 font-extrabold px-1.5 py-0.2 rounded border border-amber-500/30">4D CINEMA 16:9</span>
-          <span class="text-[10px] bg-violet-500/20 text-violet-300 font-extrabold px-1.5 py-0.2 rounded border border-violet-500/30">Bản v4 — sửa lỗi giọng đọc</span>
+          <span class="text-[10px] bg-violet-500/20 text-violet-300 font-extrabold px-1.5 py-0.2 rounded border border-violet-500/30">Bản v5 — nghe liên tục cả bài</span>
           <span id="xpHudBadge" class="text-[10px] bg-emerald-500/15 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30" title="Điểm trải nghiệm & Chuyển hóa (Lật thẻ + Khám phá slide)">
             🏆 10 XP • 1/30
           </span>
@@ -1115,6 +1122,9 @@
               <button onclick="toggleAudio()" id="playAudioBtn" class="w-9 h-9 rounded-full bg-amber-500 hover:bg-amber-400 text-black flex items-center justify-center font-bold text-sm shadow-lg transition transform hover:scale-105 shrink-0" title="Phát / Tạm dừng thuyết minh tiếng Việt (Phím K)">
                 ▶
               </button>
+
+              <!-- Nghe liên tục cả bài (v5) -->
+              <button onclick="toggleListenAll()" id="listenAllBtn" class="h-11 px-4 rounded-full bg-amber-500 hover:bg-amber-400 text-black flex items-center justify-center font-extrabold text-xs shadow-lg transition shrink-0 whitespace-nowrap" title="Nghe liên tục từ trang này đến hết trang 30, nhạc không ngắt">▶ Nghe liên tục cả bài</button>
 
               <!-- Soundwave Visualizer -->
               <div class="flex items-center gap-1 h-6 px-1 soundwave-paused" id="soundwaveContainer">
@@ -2148,13 +2158,21 @@
     function embeddedNarrationFinished() {
       isPlaying = false;
       updateAudioUI(false);
-      stopMusicAuto();
       if (isAutoTour && currentSlideIndex < SLIDES.length - 1) {
+        // Chế độ liên tục: giữ nhạc chạy xuyên suốt sang trang sau.
         setTimeout(() => {
           if (!isAutoTour) return;
           renderSlide(currentSlideIndex + 1, false);
           startNarration(0);
-        }, 900);
+        }, 700);
+      } else {
+        stopMusicAuto();
+        if (isAutoTour) {
+          // Đã nghe hết trang 30 trong chế độ liên tục: tắt chế độ, dừng nhạc
+          // nhẹ nhàng (fade 0,8s) và báo hoàn thành.
+          setAutoTour(false);
+          showToast('🎉 Đã nghe xong toàn bộ bài giảng 30 trang!');
+        }
       }
     }
 
@@ -2465,7 +2483,10 @@
 
     function stopNarration(resetSubtitle = false) {
       stopEmbeddedAudio();
-      stopMusicAuto();
+      // Chế độ nghe liên tục: giữ nhạc chạy xuyên suốt giữa các trang (không
+      // dừng/khởi động lại nhạc ở mỗi lần chuyển trang). Chỉ dừng nhạc khi tắt
+      // hẳn chế độ liên tục hoặc khi nghe từng trang bình thường.
+      if (!isAutoTour) stopMusicAuto();
       if (window.speechSynthesis) window.speechSynthesis.cancel();
       isPlaying = false;
       updateAudioUI(false);
@@ -2477,10 +2498,13 @@
       }
     }
 
+    // Nút phát thường = nghe từng trang: luôn tắt chế độ nghe liên tục trước.
     function toggleAudio() {
       if (isPlaying) {
+        setAutoTour(false);
         stopNarration(false);
       } else {
+        setAutoTour(false);
         startNarration(0);
       }
     }
@@ -2504,6 +2528,7 @@
       if (!window.speechSynthesis) {
         isPlaying = false;
         updateAudioUI(false);
+        setAutoTour(false);
         stopMusicAuto();
         showToast('⚠️ Trình duyệt không hỗ trợ đọc giọng nói TTS.');
         return;
@@ -2516,13 +2541,21 @@
       if (!isPlaying || currentSentenceIdx >= speechSentences.length) {
         isPlaying = false;
         updateAudioUI(false);
-        stopMusicAuto();
         if (isAutoTour && currentSlideIndex < SLIDES.length - 1) {
+          // Chế độ liên tục: giữ nhạc chạy xuyên suốt sang trang sau.
           setTimeout(() => {
             if (!isAutoTour) return;
             renderSlide(currentSlideIndex + 1, false);
             startNarration(0);
-          }, 900);
+          }, 700);
+        } else {
+          stopMusicAuto();
+          if (isAutoTour) {
+            // Đã nghe hết trang 30 trong chế độ liên tục: tắt chế độ, dừng nhạc
+            // nhẹ nhàng (fade 0,8s) và báo hoàn thành.
+            setAutoTour(false);
+            showToast('🎉 Đã nghe xong toàn bộ bài giảng 30 trang!');
+          }
         }
         return;
       }
@@ -2530,6 +2563,7 @@
       // Không có giọng tiếng Việt thật thì DỪNG hẳn, không đọc bằng giọng lạ
       // hay chạy phụ đề im lặng (cuốn này không có chế độ phụ đề tự động).
       if (!window.speechSynthesis || !hasVietnameseVoice()) {
+        setAutoTour(false);
         stopNarration(false);
         const bar = document.getElementById("voiceStatusBar");
         if (bar) bar.textContent = "⚠️ Trình duyệt này không phát được giọng đọc. Chị bấm nút phát lại để thử lại, hoặc mở link bằng Chrome nhé.";
@@ -2557,6 +2591,7 @@
         if (!isPlaying) return;
         isPlaying = false;
         updateAudioUI(false);
+        setAutoTour(false);
         stopMusicAuto();
         const bar = document.getElementById("voiceStatusBar");
         if (bar) bar.textContent = "⚠️ Trình duyệt này không phát được giọng đọc. Chị bấm nút phát lại để thử lại, hoặc mở link bằng Chrome nhé.";
@@ -2586,19 +2621,55 @@
       if (isPlaying) startNarration(currentSentenceIdx);
     }
 
-    function toggleAutoTour() {
-      isAutoTour = !isAutoTour;
-      const btn = document.getElementById('autoTourBtn');
-      btn.classList.toggle('bg-amber-500', isAutoTour);
-      btn.classList.toggle('text-black', isAutoTour);
-      btn.classList.toggle('bg-slate-800', !isAutoTour);
-      btn.classList.toggle('text-slate-300', !isAutoTour);
+    // Bật/tắt chế độ nghe liên tục (tự động thuyết minh + chuyển trang) — một cờ
+    // duy nhất isAutoTour dùng chung cho nút "Tự Động" cũ và nút mới
+    // "Nghe liên tục cả bài"; hai nút luôn đồng bộ trạng thái với nhau.
+    function setAutoTour(on) {
+      isAutoTour = on;
+      const oldBtn = document.getElementById('autoTourBtn');
+      if (oldBtn) {
+        oldBtn.classList.toggle('bg-amber-500', on);
+        oldBtn.classList.toggle('text-black', on);
+        oldBtn.classList.toggle('bg-slate-800', !on);
+        oldBtn.classList.toggle('text-slate-300', !on);
+      }
+      const lb = document.getElementById('listenAllBtn');
+      if (lb) {
+        lb.textContent = on ? '⏸ Dừng nghe liên tục' : '▶ Nghe liên tục cả bài';
+        lb.classList.toggle('listen-all-active', on);
+      }
+    }
+
+    // Nút "Nghe liên tục cả bài": một lần bấm là nghe hết từ trang đang mở đến
+    // hết trang 30; bấm lại thì dừng hẳn (kể cả nhạc nền).
+    function toggleListenAll() {
       playSoundEffect('click');
-      if (isAutoTour && !isPlaying) {
-        startNarration(0);
-        showToast('🔁 Bật chế độ Tự Động Thuyết Minh & Chuyển Slide');
-      } else if (!isAutoTour) {
+      if (isAutoTour) {
+        setAutoTour(false);
+        stopNarration(false);
+        showToast('⏸ Đã dừng nghe liên tục');
+        return;
+      }
+      // Đang ở trang 30 mà không đọc nữa → quay về trang 1 rồi bắt đầu lại.
+      if (currentSlideIndex >= SLIDES.length - 1 && !isPlaying) {
+        renderSlide(0, false);
+      }
+      setAutoTour(true);
+      showToast('▶ Đang nghe liên tục cả bài — từ trang ' + (currentSlideIndex + 1) + ' đến hết trang 30');
+      startNarration(0);
+    }
+
+    function toggleAutoTour() {
+      playSoundEffect('click');
+      if (isAutoTour) {
+        setAutoTour(false);
         showToast('⏹️ Đã tắt chế độ Tự Động');
+      } else {
+        setAutoTour(true);
+        if (!isPlaying) {
+          startNarration(0);
+          showToast('🔁 Bật chế độ Tự Động Thuyết Minh & Chuyển Slide');
+        }
       }
     }
 
@@ -2733,8 +2804,8 @@
       playSoundEffect('flip');
     }
 
-    function prevSlide() { if (currentSlideIndex > 0) renderSlide(currentSlideIndex - 1); }
-    function nextSlide() { if (currentSlideIndex < SLIDES.length - 1) renderSlide(currentSlideIndex + 1); }
+    function prevSlide() { if (currentSlideIndex > 0) { setAutoTour(false); renderSlide(currentSlideIndex - 1); } }
+    function nextSlide() { if (currentSlideIndex < SLIDES.length - 1) { setAutoTour(false); renderSlide(currentSlideIndex + 1); } }
 
     // COPY SYSTEM
     function initCopySystem() {
