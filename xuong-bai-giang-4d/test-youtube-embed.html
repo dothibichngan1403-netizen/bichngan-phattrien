@@ -30,8 +30,12 @@
 <p>Địa chỉ khung: <code>https://www.youtube-nocookie.com/embed/RcGyVTAoXEU</code></p>
 <iframe src="https://www.youtube-nocookie.com/embed/RcGyVTAoXEU" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
+<h2>4. Khung nhúng có tham số origin — ĐÚNG như Xưởng bản v5 sinh ra</h2>
+<p>Địa chỉ khung: <code>https://www.youtube.com/embed/RcGyVTAoXEU?rel=0&amp;origin=https://dothibichngan1403-netizen.github.io</code> — kèm đúng thuộc tính <code>referrerpolicy</code> và <code>allow</code> mà trình phát 4D bản v5 dùng. Khung này kiểm chứng rằng URL nhúng có tham số origin tự nó là hợp lệ (trang chẩn đoán này chạy trên https nên luôn gửi được Referer — khung này KHÔNG tái hiện được trường hợp trang bài giảng chạy trên Blob URL).</p>
+<iframe src="https://www.youtube.com/embed/RcGyVTAoXEU?rel=0&amp;origin=https://dothibichngan1403-netizen.github.io" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 <h2>Đối chiếu</h2>
 <p>Xem video gốc trên YouTube (mở tab mới): <a href="https://www.youtube.com/watch?v=RcGyVTAoXEU" target="_blank" rel="noopener" style="color:#fbbf24">https://www.youtube.com/watch?v=RcGyVTAoXEU</a></p>
-<p><b>Cách đọc kết quả:</b> nếu cả 3 khung đều lỗi 153 trong khi link gốc ở trên vẫn phát được, thì lỗi nằm ở MÔI TRƯỜNG trình duyệt (trình duyệt này chặn video nhúng), không phải lỗi mã của Xưởng. Nếu khung 1 phát được mà khung 2 lỗi, thì lỗi nằm ở tham số/thuộc tính của khung 2.</p>
+<p><b>Cách đọc kết quả:</b> nếu cả 3 khung đầu đều lỗi 153 trong khi link gốc ở trên vẫn phát được, thì lỗi nằm ở MÔI TRƯỜNG trình duyệt (trình duyệt này chặn video nhúng), không phải lỗi mã của Xưởng. Nếu khung 1 phát được mà khung 2 lỗi, thì lỗi nằm ở tham số/thuộc tính của khung 2. Kết quả ngày 20/11/2026: cả 3 khung đều PHÁT ĐƯỢC — chứng tỏ trình duyệt không chặn video nhúng; Lỗi 153 chỉ xảy ra trong trang bài giảng vì trang đó chạy trên Blob URL (xem trước trong xưởng, tab toàn màn hình) nên không gửi được Referer cho YouTube. Bản v5 sửa bằng tham số <code>origin</code> (khung 4) — tham số này là thông tin nhận diện tương đương khi không gửi được Referer, theo đúng tài liệu YouTube.</p>
 </body>
 </html>
