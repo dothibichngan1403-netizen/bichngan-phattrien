@@ -1,0 +1,3364 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>Sức Mạnh Của Thói Quen Nhỏ — Bài Giảng Tương Tác 4D (Sách Mẫu)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #34d399;
+  --accent-glow: rgba(52, 211, 153, 0.32);
+  --gold: #fbbf24;
+  --rose: #fb7185;
+  --cyan: #38bdf8;
+  --violet: #c084fc;
+  --bg: #070b16;
+  --bg-2: #0d1426;
+  --panel: rgba(15, 23, 42, 0.84);
+  --panel-solid: #10192e;
+  --card: rgba(24, 35, 62, 0.72);
+  --card-hover: rgba(33, 48, 84, 0.86);
+  --border: rgba(148, 163, 184, 0.18);
+  --border-strong: rgba(255, 255, 255, 0.24);
+  --text: #f1f5f9;
+  --text-soft: #cbd5e1;
+  --text-muted: #94a3b8;
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.48);
+  --right-scale: 1;
+  --radius: 14px;
+}
+
+[data-theme="light"] {
+  --bg: #f6efe7;
+  --bg-2: #efe5d8;
+  --panel: rgba(255, 252, 247, 0.92);
+  --panel-solid: #fffdf9;
+  --card: rgba(255, 255, 255, 0.92);
+  --card-hover: #ffffff;
+  --border: rgba(140, 108, 78, 0.2);
+  --border-strong: rgba(140, 108, 78, 0.35);
+  --text: #1e2433;
+  --text-soft: #334155;
+  --text-muted: #64748b;
+  --shadow: 0 12px 32px rgba(72, 50, 28, 0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  width: 100%; height: 100%; overflow: hidden;
+  font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+  background: var(--bg); color: var(--text);
+  user-select: none;
+}
+
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(circle at 12% 15%, var(--accent-glow), transparent 42%),
+    radial-gradient(circle at 88% 82%, rgba(251, 191, 36, 0.12), transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.06), transparent 60%);
+  transition: background 0.6s ease;
+}
+
+.app-shell {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  width: 100vw; height: 100vh;
+  /* Bản v2 (20/11/2026): chặn cuộn ngang — thanh đầu trang tràn ở khung hẹp
+     (ví dụ khung xem trước của Xưởng ~680px) từng tạo thanh cuộn ngang và
+     làm chip tiêu đề chồng lên che mất nút "Video / Flow". */
+  overflow-x: hidden;
+}
+
+/* ===== TOP HUD HEADER ===== */
+.top-hud {
+  height: 58px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 0 14px;
+  background: var(--panel);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  z-index: 20;
+}
+
+.hud-left, .hud-center, .hud-right {
+  display: flex; align-items: center; gap: 8px;
+}
+
+.brand-btn {
+  display: flex; align-items: center; gap: 9px;
+  background: linear-gradient(135deg, rgba(251,191,36,0.16), rgba(52,211,153,0.14));
+  border: 1px solid var(--border-strong);
+  color: var(--text); padding: 6px 11px; border-radius: 11px;
+  cursor: pointer; transition: all 0.2s;
+}
+.brand-btn:hover { transform: translateY(-1px); border-color: var(--accent); box-shadow: 0 0 16px var(--accent-glow); }
+.brand-icon { font-size: 18px; }
+.brand-text { display: flex; flex-direction: column; text-align: left; line-height: 1.15; }
+.brand-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 13.5px; letter-spacing: 0.2px; }
+.brand-sub { font-size: 10px; color: var(--text-muted); }
+
+.pillar-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px; border-radius: 999px;
+  font-size: 11.5px; font-weight: 600;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+  color: var(--text); white-space: nowrap;
+}
+.pillar-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+
+/* Gamification HUD */
+.game-hud {
+  display: flex; align-items: center; gap: 10px;
+  padding: 5px 12px; border-radius: 12px;
+  background: var(--card); border: 1px solid var(--border);
+}
+.rank-badge {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11.5px; font-weight: 700; color: var(--gold); white-space: nowrap;
+}
+.xp-wrap { display: flex; flex-direction: column; gap: 3px; min-width: 115px; }
+.xp-meta { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); font-weight: 600; }
+.xp-bar { height: 6px; border-radius: 99px; background: rgba(148,163,184,0.2); overflow: hidden; }
+.xp-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--gold)); width: 5%; transition: width 0.45s cubic-bezier(.22,1,.36,1); }
+.stat-chip {
+  font-size: 11px; font-weight: 600; color: var(--text-soft);
+  padding: 3px 8px; border-radius: 8px; background: rgba(148,163,184,0.12); white-space: nowrap;
+}
+
+/* Action Buttons */
+.hud-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 10px; border-radius: 9px;
+  border: 1px solid var(--border); background: var(--card); color: var(--text-soft);
+  font-family: inherit; font-size: 11.5px; font-weight: 600;
+  cursor: pointer; transition: all 0.18s; white-space: nowrap;
+}
+.hud-btn:hover { background: var(--card-hover); color: var(--text); border-color: var(--accent); }
+.hud-btn.active {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  border-color: var(--accent); color: var(--text);
+}
+.hud-btn.icon-only { padding: 6px 8px; }
+.preset-group { display: flex; gap: 3px; background: rgba(148,163,184,0.1); padding: 3px; border-radius: 10px; border: 1px solid var(--border); }
+.preset-group .hud-btn { border: none; background: transparent; padding: 4px 7px; font-size: 11px; border-radius: 7px; }
+.preset-group .hud-btn.active, .preset-group .hud-btn:hover { background: var(--card-hover); color: var(--text); }
+
+/* ===== MAIN FLEXIBLE WORKSPACE ===== */
+.workspace {
+  flex: 1; min-height: 0;
+  display: flex; padding: 10px; gap: 0;
+  overflow: hidden; position: relative;
+}
+
+.pane {
+  display: flex; flex-direction: column; min-width: 240px; min-height: 0;
+  background: var(--panel); backdrop-filter: blur(18px);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow); overflow: hidden;
+  transition: border-color 0.25s;
+}
+.pane:hover { border-color: color-mix(in srgb, var(--accent) 36%, var(--border)); }
+.pane.hidden { display: none !important; }
+.pane.maximized { width: 100% !important; flex: 1 1 100% !important; }
+
+#left-pane { width: 52%; flex-shrink: 0; }
+#right-pane { flex: 1; min-width: 280px; }
+
+/* Resizer Handles */
+.resizer-h {
+  width: 12px; flex-shrink: 0; cursor: col-resize;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 10;
+}
+.resizer-h::after {
+  content: ""; width: 4px; height: 52px; border-radius: 99px;
+  background: var(--border-strong); transition: all 0.2s;
+}
+.resizer-h:hover::after, .resizer-h.dragging::after {
+  height: 92px; width: 5px; background: var(--accent); box-shadow: 0 0 14px var(--accent);
+}
+.resizer-h.hidden { display: none !important; }
+
+.resizer-v {
+  height: 11px; flex-shrink: 0; cursor: row-resize;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; position: relative; z-index: 10;
+}
+.resizer-v::after {
+  content: ""; height: 4px; width: 56px; border-radius: 99px;
+  background: var(--border-strong); transition: all 0.2s;
+}
+.resizer-v:hover::after, .resizer-v.dragging::after {
+  width: 104px; height: 5px; background: var(--accent); box-shadow: 0 0 14px var(--accent);
+}
+.resizer-v.hidden { display: none !important; }
+
+/* Pane Toolbars */
+.pane-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 8px 12px; flex-shrink: 0;
+  background: rgba(148, 163, 184, 0.06);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.tab-group { display: flex; gap: 4px; flex-wrap: wrap; }
+.tab-btn {
+  padding: 5px 10px; border-radius: 8px; border: 1px solid transparent;
+  background: transparent; color: var(--text-muted);
+  font-family: inherit; font-size: 11.5px; font-weight: 600;
+  cursor: pointer; transition: all 0.18s;
+}
+.tab-btn:hover { color: var(--text); background: rgba(148,163,184,0.1); }
+.tab-btn.active {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.zoom-tools { display: flex; align-items: center; gap: 4px; }
+.mini-btn {
+  padding: 4px 8px; border-radius: 7px; border: 1px solid var(--border);
+  background: var(--card); color: var(--text-soft);
+  font-family: inherit; font-size: 11px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.mini-btn:hover { border-color: var(--accent); color: var(--text); }
+.zoom-label { font-size: 11px; font-weight: 700; color: var(--text-muted); min-width: 38px; text-align: center; }
+
+/* ===== LEFT PANE: MEDIA & SLIDE STAGE ===== */
+.left-body {
+  flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
+}
+
+#slide-stage {
+  flex: 1; min-height: 120px; position: relative; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: radial-gradient(circle at center, rgba(15,23,42,0.5), rgba(3,6,14,0.92));
+  cursor: grab;
+}
+#slide-stage.panning { cursor: grabbing; }
+#slide-stage.hidden { display: none !important; }
+
+#slide-img-wrap {
+  flex: 1; min-height: 0; width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  padding: 10px 14px 6px; overflow: hidden;
+}
+#slide-img {
+  max-width: 100%; max-height: 100%; object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.12);
+  transform-origin: center center;
+  transition: transform 0.14s ease-out;
+  pointer-events: none;
+}
+
+.stage-nav-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 38px; height: 54px; border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(8, 12, 24, 0.64); color: #fff; font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; opacity: 0.55; transition: all 0.2s; z-index: 6;
+  backdrop-filter: blur(8px);
+}
+.stage-nav-arrow:hover { opacity: 1; background: var(--accent); color: #051019; border-color: transparent; transform: translateY(-50%) scale(1.06); }
+.stage-nav-arrow.prev { left: 10px; }
+.stage-nav-arrow.next { right: 10px; }
+
+.slide-badge-float {
+  position: absolute; top: 10px; left: 12px; z-index: 5;
+  padding: 4px 10px; border-radius: 999px;
+  background: rgba(6, 10, 22, 0.72); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.16);
+  font-size: 11px; font-weight: 700; color: #f8fafc;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* Live Vietnamese Subtitle Bar (Docked cleanly below slide, never covers slide text) */
+.subtitle-overlay {
+  flex-shrink: 0; width: calc(100% - 24px); max-width: 780px; z-index: 7;
+  margin: 0 auto 8px;
+  padding: 7px 14px; border-radius: 10px;
+  background: rgba(5, 9, 20, 0.86); backdrop-filter: blur(10px);
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, rgba(255,255,255,0.14));
+  color: #fefce8; text-align: center;
+  font-size: 12.5px; line-height: 1.45; font-weight: 500;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  transition: opacity 0.22s;
+}
+.subtitle-overlay.hidden { display: none !important; }
+.subtitle-tag {
+  display: inline-block; font-size: 9.5px; font-weight: 800; letter-spacing: 0.6px;
+  text-transform: uppercase; color: var(--gold); margin-right: 6px;
+  padding: 1px 6px; border-radius: 5px; background: rgba(251,191,36,0.16);
+}
+
+/* Video & Google Flow Stage */
+#video-stage {
+  height: 44%; min-height: 160px;
+  display: flex; flex-direction: column; overflow: hidden;
+  background: rgba(6, 10, 20, 0.55);
+  border-top: 1px solid var(--border);
+}
+#video-stage.hidden { display: none !important; }
+#video-stage.full-stage { height: 100% !important; flex: 1; border-top: none; }
+
+.video-url-bar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 10px; background: rgba(148,163,184,0.06);
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.video-url-bar input {
+  flex: 1; min-width: 120px; padding: 6px 10px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--panel-solid); color: var(--text);
+  font-family: inherit; font-size: 11.5px; outline: none;
+}
+.video-url-bar input:focus { border-color: var(--accent); }
+.video-presets {
+  display: flex; gap: 5px; padding: 5px 10px; overflow-x: auto; flex-shrink: 0;
+  border-bottom: 1px solid var(--border); background: rgba(148,163,184,0.03);
+}
+.video-chip {
+  padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--card); color: var(--text-soft);
+  font-size: 10.5px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.15s;
+}
+.video-chip:hover { border-color: var(--accent); color: var(--text); }
+.video-player-box {
+  flex: 1; min-height: 0; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  background: #02050c;
+}
+.video-player-box iframe, .video-player-box video {
+  width: 100%; height: 100%; border: none;
+}
+/* Bản v6 — Mặt nạ video YouTube (nạp lười): chỉ hiện ảnh thu nhỏ + nút
+   phát; iframe YouTube chỉ được tạo khi chị bấm phát (xem loadYoutubePlayer).
+   Ảnh thu nhỏ dùng object-fit: contain — thấy nguyên tấm, không cắt khung
+   (đúng chuẩn không cắt khung của sách 4D). */
+.yt-facade {
+  position: relative; width: 100%; height: 100%; display: block;
+  padding: 0; border: none; background: #000; cursor: pointer; overflow: hidden;
+}
+.yt-facade-thumb { width: 100%; height: 100%; object-fit: contain; display: block; }
+.yt-facade-play {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 74px; height: 54px; border-radius: 14px; pointer-events: none;
+  background: rgba(255, 0, 0, 0.88); color: #fff; font-size: 26px; line-height: 54px; text-align: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+}
+.yt-facade-label {
+  position: absolute; left: 0; right: 0; bottom: 10px; text-align: center;
+  color: #fff; font-size: 13px; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9); pointer-events: none;
+}
+
+/* Narration Bar (Bottom of Left Pane) */
+.narration-bar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 8px 12px; flex-shrink: 0;
+  background: rgba(148, 163, 184, 0.08);
+  border-top: 1px solid var(--border);
+}
+.play-narration-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 9px; border: none;
+  background: linear-gradient(135deg, var(--accent), var(--cyan));
+  color: #05111d; font-family: inherit; font-size: 12px; font-weight: 800;
+  cursor: pointer; transition: all 0.2s;
+}
+.play-narration-btn:hover { transform: scale(1.03); box-shadow: 0 0 18px var(--accent-glow); }
+
+/* Voice Status Bar — trạng thái giọng đọc đang dùng (giọng nhúng / giọng trình duyệt) */
+.voice-status-bar {
+  font-size: 11px; color: var(--gold); line-height: 1.4;
+  background: rgba(148, 163, 184, 0.08);
+  border-top: 1px solid var(--border);
+  padding: 5px 12px; flex-shrink: 0;
+}
+.play-narration-btn.playing { background: linear-gradient(135deg, var(--rose), var(--gold)); }
+
+/* Nút "Nghe liên tục cả bài" — nổi bật, đủ lớn để chạm trên điện thoại */
+.listen-all-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 9px; border: 2px solid #f59e0b;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1a1005; font-family: inherit; font-size: 13px; font-weight: 800;
+  cursor: pointer; transition: all 0.2s; min-height: 44px; white-space: nowrap;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.45);
+}
+.listen-all-btn:hover { transform: scale(1.03); box-shadow: 0 0 20px rgba(245, 158, 11, 0.65); }
+.listen-all-btn.active { background: linear-gradient(135deg, #fde68a, #fbbf24); border-color: #fde68a; box-shadow: 0 0 22px rgba(253, 230, 138, 0.8); }
+
+.cue-progress {
+  flex: 1; min-width: 90px; display: flex; flex-direction: column; gap: 3px;
+}
+.cue-track {
+  height: 6px; border-radius: 99px; background: rgba(148,163,184,0.22);
+  overflow: hidden; cursor: pointer;
+}
+.cue-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s; }
+.cue-info { font-size: 10px; color: var(--text-muted); display: flex; justify-content: space-between; }
+
+.select-mini {
+  padding: 4px 7px; border-radius: 7px; border: 1px solid var(--border);
+  background: var(--panel-solid); color: var(--text-soft);
+  font-family: inherit; font-size: 11px; max-width: 135px;
+}
+
+/* ===== RIGHT PANE: ANALYSIS + FLIP CARDS + COUNCIL OF AI ===== */
+.right-body {
+  flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
+}
+
+#right-top {
+  height: 58%; min-height: 140px;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+#right-top.hidden { display: none !important; }
+#right-top.expanded { height: 100% !important; flex: 1; }
+
+.right-scroll {
+  flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px;
+  font-size: calc(13.5px * var(--right-scale));
+  user-select: text;
+}
+.right-scroll::-webkit-scrollbar, .chat-stream::-webkit-scrollbar, .map-grid::-webkit-scrollbar,
+.quick-prompts::-webkit-scrollbar, .video-presets::-webkit-scrollbar, .pillar-nav::-webkit-scrollbar {
+  width: 5px; height: 4px;
+}
+.right-scroll::-webkit-scrollbar-track, .chat-stream::-webkit-scrollbar-track,
+.quick-prompts::-webkit-scrollbar-track, .video-presets::-webkit-scrollbar-track, .pillar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+.right-scroll::-webkit-scrollbar-thumb, .chat-stream::-webkit-scrollbar-thumb, .map-grid::-webkit-scrollbar-thumb,
+.quick-prompts::-webkit-scrollbar-thumb, .video-presets::-webkit-scrollbar-thumb, .pillar-nav::-webkit-scrollbar-thumb {
+  background: rgba(148,163,184,0.28); border-radius: 99px;
+}
+
+.slide-header-card {
+  margin-bottom: 14px;
+}
+.slide-eyebrow {
+  font-size: 0.78em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--accent); margin-bottom: 4px; display: flex; align-items: center; gap: 8px;
+}
+.slide-main-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.42em; font-weight: 800; line-height: 1.28; color: var(--text);
+  margin-bottom: 6px;
+}
+.slide-quote-box {
+  padding: 10px 13px; border-radius: 10px;
+  border-left: 3px solid var(--gold);
+  background: linear-gradient(90deg, rgba(251,191,36,0.12), transparent);
+  font-style: italic; font-size: 0.94em; color: var(--text-soft); line-height: 1.5;
+}
+
+/* ===== 3D TRANSFORMATION FLIP CARD ===== */
+.flip-section { margin: 14px 0 16px; }
+.flip-section-head {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+}
+.section-label {
+  font-size: 0.82em; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px;
+  color: var(--text-muted); display: flex; align-items: center; gap: 6px;
+}
+
+.flip-scene {
+  perspective: 1200px; cursor: pointer; position: relative;
+}
+.flip-card {
+  position: relative; width: 100%; min-height: 215px;
+  transform-style: preserve-3d;
+  transition: transform 0.72s cubic-bezier(.22, 1, .36, 1);
+}
+.flip-card.flipped { transform: rotateY(180deg); }
+
+.flip-face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 14px; padding: 15px 16px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  border: 1px solid var(--border-strong);
+  overflow-y: auto;
+}
+.flip-front {
+  background: linear-gradient(145deg, rgba(244, 63, 94, 0.14), rgba(30, 41, 59, 0.85));
+  border-color: rgba(251, 113, 133, 0.42);
+}
+[data-theme="light"] .flip-front {
+  background: linear-gradient(145deg, #fff1f2, #fff7ed);
+}
+.flip-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.18), rgba(15, 23, 42, 0.9));
+  border-color: rgba(52, 211, 153, 0.55);
+  box-shadow: 0 0 28px rgba(52, 211, 153, 0.18);
+}
+[data-theme="light"] .flip-back {
+  background: linear-gradient(145deg, #ecfdf5, #fefce8);
+}
+
+.flip-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.75em; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px;
+  padding: 3px 9px; border-radius: 999px; width: fit-content; margin-bottom: 7px;
+}
+.flip-front .flip-badge { background: rgba(244,63,94,0.22); color: #fda4af; }
+[data-theme="light"] .flip-front .flip-badge { color: #be123c; }
+.flip-back .flip-badge { background: rgba(16,185,129,0.22); color: #6ee7b7; }
+[data-theme="light"] .flip-back .flip-badge { color: #047857; }
+
+.flip-title { font-size: 1.04em; font-weight: 800; margin-bottom: 8px; line-height: 1.35; }
+.flip-list { list-style: none; display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.flip-list li { font-size: 0.9em; line-height: 1.45; color: var(--text-soft); padding-left: 16px; position: relative; }
+.flip-front .flip-list li::before { content: "✕"; position: absolute; left: 0; color: var(--rose); font-weight: 800; }
+.flip-back .flip-list li::before { content: "✦"; position: absolute; left: 0; color: var(--gold); font-weight: 800; }
+
+.flip-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding-top: 8px; border-top: 1px dashed var(--border); font-size: 0.82em;
+}
+.flip-hint { color: var(--gold); font-weight: 700; display: flex; align-items: center; gap: 4px; }
+.master-btn {
+  padding: 5px 11px; border-radius: 8px; border: none;
+  background: linear-gradient(135deg, #10b981, #fbbf24);
+  color: #051314; font-family: inherit; font-size: 11.5px; font-weight: 800;
+  cursor: pointer; transition: transform 0.15s;
+}
+.master-btn:hover { transform: scale(1.04); }
+.master-btn.done { background: rgba(16,185,129,0.25); color: #6ee7b7; border: 1px solid #10b981; }
+[data-theme="light"] .master-btn.done { color: #047857; }
+
+/* Analysis & Action Cards */
+.analysis-grid { display: flex; flex-direction: column; gap: 10px; }
+.info-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 14px;
+}
+.info-card h4 {
+  font-size: 0.9em; font-weight: 800; color: var(--accent);
+  margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+.analysis-points { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.analysis-points li {
+  font-size: 0.92em; line-height: 1.55; color: var(--text-soft);
+  padding-left: 18px; position: relative;
+}
+.analysis-points li::before {
+  content: "◈"; position: absolute; left: 0; color: var(--accent); font-size: 0.85em;
+}
+.action-box {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 13%, var(--card)), rgba(251,191,36,0.09));
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
+}
+
+/* Quiz & Journal Tab */
+.quiz-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+.quiz-q { font-weight: 700; font-size: 0.98em; line-height: 1.48; margin-bottom: 10px; }
+.quiz-opts { display: flex; flex-direction: column; gap: 7px; }
+.quiz-opt {
+  text-align: left; padding: 9px 12px; border-radius: 10px;
+  border: 1px solid var(--border); background: rgba(148,163,184,0.06);
+  color: var(--text-soft); font-family: inherit; font-size: 0.9em; cursor: pointer;
+  transition: all 0.18s;
+}
+.quiz-opt:hover { border-color: var(--accent); background: var(--card-hover); color: var(--text); }
+.quiz-opt.correct { background: rgba(16,185,129,0.22); border-color: #10b981; color: var(--text); font-weight: 700; }
+.quiz-opt.wrong { background: rgba(244,63,94,0.2); border-color: #f43f5e; }
+.quiz-explain {
+  margin-top: 10px; padding: 9px 11px; border-radius: 9px;
+  background: rgba(16,185,129,0.12); border-left: 3px solid #10b981;
+  font-size: 0.88em; line-height: 1.5; color: var(--text-soft);
+}
+.journal-area {
+  width: 100%; min-height: 88px; padding: 10px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--panel-solid); color: var(--text);
+  font-family: inherit; font-size: 0.9em; resize: vertical; outline: none; margin-top: 8px;
+}
+.journal-area:focus { border-color: var(--accent); }
+
+/* Verbatim Tab */
+.verbatim-box {
+  white-space: pre-wrap; font-size: 0.94em; line-height: 1.65;
+  padding: 13px; border-radius: 11px; background: var(--card); border: 1px solid var(--border);
+  margin-bottom: 12px; color: var(--text-soft);
+}
+.cue-item {
+  padding: 8px 10px; border-radius: 8px; margin-bottom: 6px;
+  background: rgba(148,163,184,0.07); border: 1px solid transparent;
+  cursor: pointer; font-size: 0.9em; line-height: 1.5; transition: all 0.15s;
+}
+.cue-item:hover, .cue-item.active {
+  border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+/* ===== COUNCIL OF AI CHAMBER (BOTTOM RIGHT) ===== */
+#right-bottom {
+  flex: 1; min-height: 150px;
+  display: flex; flex-direction: column; overflow: hidden;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.45), rgba(8, 13, 28, 0.72));
+  border-top: 1px solid var(--border);
+}
+[data-theme="light"] #right-bottom {
+  background: linear-gradient(180deg, #faf4ec, #f4ece0);
+}
+#right-bottom.hidden { display: none !important; }
+#right-bottom.expanded { flex: 1 1 100% !important; height: 100% !important; border-top: none; }
+
+.council-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap;
+  padding: 7px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+  background: rgba(148,163,184,0.06);
+}
+.council-title {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 800; color: var(--gold); letter-spacing: 0.3px;
+}
+.persona-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.persona-btn {
+  padding: 4px 9px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--card); color: var(--text-soft);
+  font-family: inherit; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.18s;
+}
+.persona-btn:hover { transform: translateY(-1px); color: var(--text); }
+.persona-btn.active[data-p="zen"] { background: rgba(16,185,129,0.22); border-color: #10b981; color: #6ee7b7; }
+.persona-btn.active[data-p="educator"] { background: rgba(251,113,133,0.22); border-color: #fb7185; color: #fda4af; }
+.persona-btn.active[data-p="expert"] { background: rgba(56,189,248,0.22); border-color: #38bdf8; color: #7dd3fc; }
+.persona-btn.active[data-p="all"] { background: rgba(251,191,36,0.24); border-color: #fbbf24; color: #fde68a; }
+[data-theme="light"] .persona-btn.active[data-p="zen"] { color: #047857; }
+[data-theme="light"] .persona-btn.active[data-p="educator"] { color: #be123c; }
+[data-theme="light"] .persona-btn.active[data-p="expert"] { color: #0369a1; }
+[data-theme="light"] .persona-btn.active[data-p="all"] { color: #b45309; }
+
+.quick-prompts {
+  display: flex; gap: 6px; padding: 6px 12px; overflow-x: auto; flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+}
+.q-pill {
+  padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--card); color: var(--text-soft); font-family: inherit;
+  font-size: 11px; cursor: pointer; white-space: nowrap; transition: all 0.16s;
+}
+.q-pill:hover { border-color: var(--gold); color: var(--text); background: var(--card-hover); }
+
+.chat-stream {
+  flex: 1; min-height: 0; overflow-y: auto; padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 9px; user-select: text;
+}
+.msg {
+  max-width: 96%; padding: 9px 12px; border-radius: 12px;
+  font-size: calc(12.5px * var(--right-scale)); line-height: 1.55;
+  animation: fadeUp 0.25s ease;
+}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.msg.user {
+  align-self: flex-end;
+  background: color-mix(in srgb, var(--accent) 22%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+}
+.msg.ai {
+  align-self: flex-start;
+  background: var(--card); border: 1px solid var(--border);
+}
+.msg.ai.zen { border-left: 3px solid #10b981; }
+.msg.ai.educator { border-left: 3px solid #fb7185; }
+.msg.ai.expert { border-left: 3px solid #38bdf8; }
+.msg-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin-bottom: 4px; font-size: 11px; font-weight: 800;
+}
+.msg.ai.zen .msg-author { color: #34d399; }
+.msg.ai.educator .msg-author { color: #fb7185; }
+.msg.ai.expert .msg-author { color: #38bdf8; }
+[data-theme="light"] .msg.ai.zen .msg-author { color: #047857; }
+[data-theme="light"] .msg.ai.educator .msg-author { color: #be123c; }
+[data-theme="light"] .msg.ai.expert .msg-author { color: #0369a1; }
+.speak-msg-btn {
+  background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 12px;
+}
+.speak-msg-btn:hover { color: var(--gold); }
+
+.council-input-row {
+  display: flex; gap: 7px; padding: 8px 12px; flex-shrink: 0;
+  border-top: 1px solid var(--border); background: rgba(148,163,184,0.05);
+}
+.council-input-row input {
+  flex: 1; padding: 8px 12px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--panel-solid); color: var(--text);
+  font-family: inherit; font-size: 12.5px; outline: none;
+}
+.council-input-row input:focus { border-color: var(--gold); }
+.send-btn {
+  padding: 0 15px; border-radius: 10px; border: none;
+  background: linear-gradient(135deg, var(--gold), var(--accent));
+  color: #07111a; font-family: inherit; font-size: 12px; font-weight: 800;
+  cursor: pointer; transition: all 0.18s;
+}
+.send-btn:hover { transform: scale(1.03); }
+
+/* ===== BOTTOM NAVIGATION DOCK ===== */
+.bottom-dock {
+  height: 50px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 0 14px;
+  background: var(--panel); backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  z-index: 20;
+}
+.pillar-nav { display: flex; gap: 5px; overflow-x: auto; padding: 2px 0; }
+.p-nav-btn {
+  padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border);
+  background: transparent; color: var(--text-muted);
+  font-family: inherit; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap;
+  transition: all 0.18s;
+}
+.p-nav-btn:hover { color: var(--text); border-color: var(--border-strong); }
+.p-nav-btn.active {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  border-color: var(--accent); color: var(--text);
+}
+.slide-stepper { display: flex; align-items: center; gap: 8px; }
+.nav-step-btn {
+  padding: 6px 13px; border-radius: 9px; border: 1px solid var(--border);
+  background: var(--card); color: var(--text);
+  font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.18s;
+}
+.nav-step-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--card-hover); }
+.nav-step-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.slide-counter { font-size: 12px; font-weight: 800; color: var(--gold); min-width: 66px; text-align: center; }
+
+/* ===== MODALS (SLIDE MAP, LIGHTBOX, API SETTINGS) ===== */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(3, 6, 16, 0.8); backdrop-filter: blur(10px);
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-backdrop.open { display: flex; }
+.modal-box {
+  width: min(1140px, 95vw); max-height: 90vh;
+  background: var(--panel-solid); border: 1px solid var(--border-strong);
+  border-radius: 18px; box-shadow: 0 24px 70px rgba(0,0,0,0.65);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+}
+.modal-head h3 { font-family: 'Playfair Display', serif; font-size: 18px; }
+.map-grid {
+  padding: 16px; overflow-y: auto;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(195px, 1fr)); gap: 12px;
+}
+.map-thumb {
+  border-radius: 12px; overflow: hidden; border: 2px solid var(--border);
+  background: var(--card); cursor: pointer; transition: all 0.18s; position: relative;
+}
+.map-thumb:hover { transform: translateY(-3px); border-color: var(--accent); }
+.map-thumb.current { border-color: var(--gold); box-shadow: 0 0 20px rgba(251,191,36,0.3); }
+.map-thumb img { width: 100%; aspect-ratio: 16/9; object-fit: contain; display: block; }
+.map-thumb-info { padding: 7px 9px; font-size: 11px; line-height: 1.35; }
+.map-thumb-num { font-weight: 800; color: var(--gold); margin-right: 4px; }
+.map-done-badge {
+  position: absolute; top: 6px; right: 6px;
+  background: #10b981; color: #04130f; font-size: 10px; font-weight: 800;
+  padding: 2px 6px; border-radius: 999px;
+}
+
+/* Lightbox */
+.lightbox-img {
+  max-width: 94vw; max-height: 88vh; border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.85);
+}
+
+/* Toast */
+.toast {
+  position: fixed; top: 70px; right: 18px; z-index: 200;
+  padding: 10px 16px; border-radius: 12px;
+  background: linear-gradient(135deg, #10b981, #fbbf24);
+  color: #051214; font-weight: 800; font-size: 12.5px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+  transform: translateX(130%); transition: transform 0.32s cubic-bezier(.22,1,.36,1);
+}
+.toast.show { transform: translateX(0); }
+
+@media (max-width: 960px) {
+  .workspace { flex-direction: column; overflow-y: auto; }
+  #left-pane, #right-pane { width: 100% !important; min-height: 460px; }
+  .resizer-h { display: none; }
+  .game-hud .xp-wrap, .preset-group { display: none; }
+}
+
+/* Bản v2 (20/11/2026): thanh đầu trang + thanh điều hướng dưới phải gọn lại
+   SỚM (1100px, không chờ 640px) — khung xem trước của Xưởng chỉ rộng ~680px,
+   ở khoảng 641–1100px thanh đầu trang từng tràn ngang, chip tiêu đề chồng lên
+   và che mất nút "🎬 Video / Flow" trong thanh công cụ. */
+@media (max-width: 1100px) {
+  .top-hud { height: auto; min-height: 52px; flex-wrap: wrap; padding: 6px 10px; gap: 6px; }
+  .brand-sub, .pillar-pill { display: none; }
+  .v2-badge-full { display: none; }
+  .v2-badge-short { display: inline-flex; }
+  .game-hud .xp-wrap, .preset-group { display: none; }
+  .bottom-dock { height: auto; min-height: 56px; flex-wrap: wrap; padding: 8px 10px; gap: 8px; }
+}
+
+    /* ===== BẢN v2 — HUY HIỆU, GHI CHÚ NHẠC, HIỆU ỨNG ĐỘNG & BONG BÓNG ===== */
+    .v2-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px; border-radius: 999px;
+      border: 1px solid rgba(251, 191, 36, 0.55);
+      background: rgba(251, 191, 36, 0.12); color: #fde68a;
+      font-size: 10.5px; font-weight: 800; white-space: nowrap;
+    }
+    .v2-badge-short { display: none; }
+    .music-note-bar {
+      font-size: 11px; color: var(--text-muted); line-height: 1.4;
+      background: rgba(148, 163, 184, 0.08);
+      border-top: 1px solid var(--border);
+      padding: 5px 12px; flex-shrink: 0;
+    }
+
+    /* Bản v2 (20/11/2026): khung hướng dẫn bật giọng tiếng Việt — chỉ hiện khi
+       máy không có giọng vi-VN (mặc định ẩn; khung này không có class .hidden
+       chung nên phải có quy tắc ẩn riêng). */
+    .voice-guide-panel {
+      font-size: 12.5px; color: var(--text); line-height: 1.55;
+      background: rgba(251, 191, 36, 0.12);
+      border-top: 1px solid rgba(251, 191, 36, 0.45);
+      border-bottom: 1px solid rgba(251, 191, 36, 0.45);
+      padding: 10px 14px; flex-shrink: 0;
+    }
+    .voice-guide-panel.hidden { display: none !important; }
+    .voice-guide-panel p { margin: 5px 0; }
+    .voice-guide-panel ul { margin: 5px 0 5px 18px; }
+    .voice-guide-panel li { margin-bottom: 4px; }
+    .voice-guide-title { font-weight: 800; font-size: 13px; color: #fde68a; }
+    .voice-guide-panel .mini-btn { margin-top: 6px; }
+
+    /* Bản v2 (20/11/2026): dòng ghi nguồn ở thanh điều hướng dưới. */
+    .book-credit { font-size: 10.5px; color: var(--text-muted); white-space: nowrap; }
+
+    /* --- Lớp phủ hiệu ứng: trên ảnh, dưới phụ đề (z-7) và mũi tên (z-6) --- */
+    #fxOverlay {
+      position: absolute; inset: 0; z-index: 4;
+      pointer-events: none; overflow: hidden; border-radius: 10px;
+    }
+    #fxCanvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    #fxDom { position: absolute; inset: 0; }
+    .fx-item { position: absolute; pointer-events: none; }
+    .fx-item svg { display: block; width: 100%; height: auto; }
+    .fx-item svg g, .fx-item svg path, .fx-item svg circle, .fx-item svg ellipse { transform-box: fill-box; }
+
+    @keyframes fxFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fxSway { from { transform: rotate(-2.5deg); } to { transform: rotate(2.5deg); } }
+
+    /* --- Mầm cây nảy mầm: thân vẽ dần lên, 2 lá non xòe ra, rồi đung đưa nhẹ --- */
+    .fx-sprout { left: 5%; bottom: 3%; width: clamp(64px, 16%, 120px); animation: fxFadeIn 0.6s ease both; }
+    .fx-sprout .stem { stroke-dasharray: 130; stroke-dashoffset: 130; animation: fxSproutGrow 1.6s ease-out 0.2s forwards; }
+    .fx-sprout .leaf-l { transform-origin: 90% 90%; transform: scale(0); animation: fxLeafUnfurl 0.9s ease-out 1.2s forwards; }
+    .fx-sprout .leaf-r { transform-origin: 10% 90%; transform: scale(0); animation: fxLeafUnfurl 0.9s ease-out 1.5s forwards; }
+    .fx-sprout .sprout-sway { transform-origin: 50% 100%; animation: fxSway 4s ease-in-out 2.2s infinite alternate; }
+    @keyframes fxSproutGrow { to { stroke-dashoffset: 0; } }
+    @keyframes fxLeafUnfurl { to { transform: scale(1); } }
+
+    /* --- Ngọn lửa bập bùng: 3 lớp lửa nhấp nháy lệch nhịp + than hồng bay lên --- */
+    .fx-flame { right: 5%; bottom: 3%; width: clamp(64px, 16%, 110px); }
+    .fx-flame .flame-outer { transform-origin: 50% 100%; animation: fxFlameA 0.55s ease-in-out infinite alternate; }
+    .fx-flame .flame-mid { transform-origin: 50% 100%; animation: fxFlameB 0.42s ease-in-out infinite alternate; }
+    .fx-flame .flame-inner { transform-origin: 50% 100%; animation: fxFlameC 0.31s ease-in-out infinite alternate; }
+    .fx-flame .ember { animation: fxEmberRise 2.2s ease-out infinite; opacity: 0; }
+    .fx-flame .ember.e2 { animation-delay: 0.7s; }
+    .fx-flame .ember.e3 { animation-delay: 1.4s; }
+    @keyframes fxFlameA { from { transform: scaleY(1) skewX(-2deg); } to { transform: scaleY(1.12) skewX(3deg); } }
+    @keyframes fxFlameB { from { transform: scale(1) translateX(-1px); } to { transform: scale(1.09, 1.16) translateX(1px); } }
+    @keyframes fxFlameC { from { transform: scale(1); opacity: 0.95; } to { transform: scale(1.14, 1.22); opacity: 1; } }
+    @keyframes fxEmberRise { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 100% { transform: translateY(-46px) translateX(6px); opacity: 0; } }
+
+    /* --- Bàn chân nhấp nhõm bước đi: 2 chân nhún xen kẽ + bóng đổ nhịp theo --- */
+    .fx-feet { left: 50%; bottom: 4%; transform: translateX(-50%); width: clamp(90px, 22%, 150px); }
+    .fx-feet .foot-l { animation: fxStepL 0.9s ease-in-out infinite; }
+    .fx-feet .foot-r { animation: fxStepR 0.9s ease-in-out infinite; }
+    .fx-feet .shadow { animation: fxShadowL 0.9s ease-in-out infinite; transform-origin: center; }
+    .fx-feet .shadow.s2 { animation-name: fxShadowR; }
+    @keyframes fxStepL { 0%, 45%, 100% { transform: translateY(0) rotate(0deg); } 20% { transform: translateY(-12px) rotate(-10deg); } }
+    @keyframes fxStepR { 0%, 50%, 100% { transform: translateY(0) rotate(0deg); } 70% { transform: translateY(-12px) rotate(10deg); } }
+    @keyframes fxShadowL { 0%, 45%, 100% { transform: scaleX(1); opacity: 0.35; } 20% { transform: scaleX(0.7); opacity: 0.15; } }
+    @keyframes fxShadowR { 0%, 50%, 100% { transform: scaleX(1); opacity: 0.35; } 70% { transform: scaleX(0.7); opacity: 0.15; } }
+
+    /* --- Bướm bay: cánh vẫy liên tục, lượn vòng quanh khung cảnh --- */
+    .fx-butterfly { left: 6%; top: 12%; width: clamp(48px, 11%, 84px); animation: fxButterflyFly 16s ease-in-out infinite alternate; }
+    .fx-butterfly .wing-l { transform-origin: 100% 50%; animation: fxWingFlap 0.28s ease-in-out infinite alternate; }
+    .fx-butterfly .wing-r { transform-origin: 0% 50%; animation: fxWingFlap 0.28s ease-in-out infinite alternate; }
+    @keyframes fxWingFlap { from { transform: scaleX(1); } to { transform: scaleX(0.25); } }
+    @keyframes fxButterflyFly {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(300%, 45%); }
+      50% { transform: translate(150%, -25%); }
+      75% { transform: translate(420%, 25%); }
+      100% { transform: translate(250%, 70%); }
+    }
+
+    /* --- Tre đung đưa --- */
+    .fx-bamboo { right: 3%; bottom: 0; width: clamp(60px, 14%, 110px); transform-origin: 50% 100%; animation: fxSway 6s ease-in-out infinite alternate; }
+
+    /* --- Tia sáng lan tỏa xoay chậm --- */
+    .fx-rays {
+      left: 50%; top: -32%; width: 150%; aspect-ratio: 1;
+      transform: translateX(-50%);
+      opacity: 0.15;
+      background: repeating-conic-gradient(from 0deg, rgba(251, 191, 36, 0.55) 0deg 6deg, transparent 6deg 18deg);
+      -webkit-mask-image: radial-gradient(circle, black 0%, transparent 62%);
+      mask-image: radial-gradient(circle, black 0%, transparent 62%);
+      animation: fxRaysRotate 40s linear infinite;
+    }
+    @keyframes fxRaysRotate { to { transform: translateX(-50%) rotate(360deg); } }
+
+    /* --- Vòng tròn đồng tâm lan tỏa (trang 2): 5 vòng nhịp nhàng phập phồng --- */
+    .fx-rings { left: 50%; top: 50%; transform: translate(-50%, -50%); width: clamp(140px, 55%, 320px); opacity: 0.85; }
+    .fx-rings .ring { fill: none; stroke: #fbbf24; stroke-width: 2; opacity: 0.7; transform-origin: center; animation: fxRingPulse 3.2s ease-in-out infinite; }
+    .fx-rings .r2 { animation-delay: 0.3s; stroke: #f59e0b; }
+    .fx-rings .r3 { animation-delay: 0.6s; stroke: #fde68a; }
+    .fx-rings .r4 { animation-delay: 0.9s; stroke: #fbbf24; }
+    .fx-rings .r5 { animation-delay: 1.2s; stroke: #f59e0b; }
+    @keyframes fxRingPulse { 0%, 100% { transform: scale(0.94); opacity: 0.35; } 50% { transform: scale(1.04); opacity: 0.85; } }
+
+    /* ===== BẢN v2 — TINH CHỈNH MOBILE (Android + iPhone) ===== */
+    @media (max-width: 640px) {
+      .app-shell { height: 100vh; height: 100dvh; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+      .top-hud { height: auto; min-height: 52px; flex-wrap: wrap; padding: 6px 10px; padding-top: max(6px, env(safe-area-inset-top)); gap: 6px; }
+      .brand-sub, .pillar-pill { display: none; }
+      .v2-badge-full { display: none; }
+      .v2-badge-short { display: inline-flex; }
+      .workspace { padding: 8px; }
+      #left-pane, #right-pane { min-height: 0 !important; }
+      #slide-stage { flex: none; }
+      #slide-img-wrap { flex: none; aspect-ratio: 16 / 9; padding: 8px; }
+      .slide-badge-float { font-size: 10px; }
+      .stage-nav-arrow { width: 44px; height: 44px; opacity: 0.92; font-size: 22px; }
+      .subtitle-overlay { font-size: 14px; }
+      .narration-bar { gap: 6px; padding: 8px 10px; }
+      .play-narration-btn { min-height: 44px; padding: 8px 14px; }
+      .listen-all-btn { min-height: 44px; padding: 8px 14px; }
+      .mini-btn { min-height: 36px; padding: 6px 10px; }
+      #musicBtn, #fxToggleBtn { min-height: 40px; }
+      .select-mini { min-height: 36px; font-size: 12px; }
+      .voice-status-bar, .music-note-bar { font-size: 12px; }
+      .right-scroll { font-size: 14px; padding: 12px; }
+      .slide-main-title { font-size: 1.25em; }
+      .pane-bar { flex-wrap: wrap; }
+      .tab-group, .persona-tabs { flex-wrap: wrap; }
+      .bottom-dock { height: auto; min-height: 56px; flex-wrap: wrap; padding: 8px 10px; padding-bottom: max(8px, env(safe-area-inset-bottom)); gap: 8px; }
+      .nav-step-btn { min-height: 44px; padding: 8px 14px; }
+      .p-nav-btn { min-height: 36px; padding: 7px 12px; }
+      .book-credit { display: none; }
+      .hud-btn { min-height: 40px; }
+      .send-btn { min-height: 44px; }
+      #council-input, #video-url-input, #gemini-key-input { font-size: 16px; }
+      .toast { top: max(70px, env(safe-area-inset-top)); right: 10px; left: 10px; text-align: center; }
+      button, .tab-btn, .persona-btn { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    }
+    @media (max-width: 480px) {
+      .workspace { padding: 6px; }
+      .top-hud { padding: 5px 8px; }
+      .brand-title { font-size: 13px; }
+      .slide-main-title { font-size: 1.12em; }
+      .right-scroll { padding: 10px; }
+      .narration-bar { padding: 6px 8px; }
+    }
+    @media (orientation: landscape) and (max-height: 500px) {
+      .top-hud { height: 46px; min-height: 0; }
+      .bottom-dock { height: 44px; min-height: 0; }
+      #slide-img-wrap { aspect-ratio: auto; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fx-item, .fx-item * { animation: none !important; }
+    }
+
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <!-- TOP HUD -->
+  <header class="top-hud">
+    <div class="hud-left">
+      <button class="brand-btn" id="open-map-btn" title="Mở Bản đồ Bài Giảng (Phím M)">
+        <span class="brand-icon">🌱</span>
+        <span class="brand-text">
+          <span class="brand-title">Sức Mạnh Của Thói Quen Nhỏ</span>
+          <span class="brand-sub">Bài giảng mẫu • Trình phát 4D • 3 Trang</span>
+        </span>
+      </button>
+      <span class="v2-badge" title="Trình phát 4D: nút 'Nghe liên tục cả bài' — một lần bấm nghe hết cả bài, nhạc không ngắt giữa các trang; luôn mặc định giọng nữ Aria; tự thử lại giọng nhúng, không chạy phụ đề im lặng"><span class="v2-badge-full">✦ Trình phát 4D — nghe liên tục cả bài</span><span class="v2-badge-short">✦ Mẫu 4D</span></span>
+      <div class="pillar-pill" id="pillar-pill">
+        <span class="pillar-dot"></span>
+        <span id="pillar-pill-text">Mở Đầu</span>
+      </div>
+    </div>
+
+    <div class="hud-center">
+      <div class="game-hud" title="Tiến trình học tập & Chuyển hóa">
+        <span class="rank-badge" id="rank-badge">🌱 Người Khởi Hành</span>
+        <div class="xp-wrap">
+          <div class="xp-meta"><span id="xp-text">0 XP</span><span id="master-text">0 Thẻ</span></div>
+          <div class="xp-bar"><div class="xp-fill" id="xp-fill"></div></div>
+        </div>
+        <span class="stat-chip" id="visited-chip">📖 0</span>
+      </div>
+    </div>
+
+    <div class="hud-right">
+      <div class="preset-group" title="Bố cục nhanh (hoặc kéo thanh giữa)">
+        <button class="hud-btn active" data-layout="50" title="Chia đôi 50/50">50/50</button>
+        <button class="hud-btn" data-layout="66" title="Ưu tiên Slide & Video">Trái lớn</button>
+        <button class="hud-btn" data-layout="34" title="Ưu tiên Phân tích & AI">Phải lớn</button>
+      </div>
+      <button class="hud-btn" id="autotour-btn" title="Tự động thuyết minh & chuyển slide">▶ Tự động</button>
+      <button class="hud-btn icon-only" id="sfx-btn" title="Bật/Tắt âm thanh tương tác">🔊</button>
+      <button class="hud-btn icon-only" id="theme-btn" title="Chuyển chế độ Đêm Huyền Ảo / Nắng Mai">☀️</button>
+      <button class="hud-btn" id="api-btn" title="Kết nối Gemini API trực tiếp (tùy chọn)">⚙️ API</button>
+    </div>
+  </header>
+
+  <!-- MAIN FLEXIBLE WORKSPACE -->
+  <main class="workspace" id="workspace">
+    <!-- LEFT PANE: PDF SLIDE + VIDEO + NARRATION -->
+    <section class="pane" id="left-pane">
+      <div class="pane-bar">
+        <div class="tab-group" id="left-mode-tabs">
+          <button class="tab-btn active" data-lmode="slide">🖼️ Slide PDF Gốc</button>
+          <button class="tab-btn" data-lmode="video">🎬 Video / Flow</button>
+          <button class="tab-btn" data-lmode="both">⚡ Song Song (Trên/Dưới)</button>
+        </div>
+        <div class="zoom-tools">
+          <button class="mini-btn" id="slide-zoom-out" title="Thu nhỏ hình">−</button>
+          <span class="zoom-label" id="slide-zoom-val">100%</span>
+          <button class="mini-btn" id="slide-zoom-in" title="Phóng to hình">+</button>
+          <button class="mini-btn" id="slide-zoom-reset" title="Vừa khung">↺</button>
+          <button class="mini-btn" id="lightbox-btn" title="Xem ảnh lớn">🔍 Ảnh lớn</button>
+          <button class="mini-btn" id="max-left-btn" title="Phóng to/Thu gọn khối trái">⤢</button>
+        </div>
+      </div>
+
+      <div class="left-body">
+        <!-- SLIDE PDF STAGE -->
+        <div id="slide-stage">
+          <div class="slide-badge-float">
+            <span id="float-slide-num">Slide 01</span>
+            <span style="opacity:.6">• Kéo để di chuyển khi phóng to</span>
+          </div>
+          <button class="stage-nav-arrow prev" id="stage-prev" title="Slide trước (←)">‹</button>
+          <div id="slide-img-wrap">
+            <img id="slide-img" alt="Slide bài giảng PDF" draggable="false" />
+          </div>
+          <div id="fxOverlay"><canvas id="fxCanvas"></canvas><div id="fxDom"></div></div>
+          <button class="stage-nav-arrow next" id="stage-next" title="Slide tiếp theo (→)">›</button>
+
+          <div class="subtitle-overlay" id="subtitle-overlay">
+            <span class="subtitle-tag">Phụ đề TV</span>
+            <span id="subtitle-text">Bấm "🎙️ Thuyết minh TV" để nghe bài giảng với phụ đề tiếng Việt tự động.</span>
+          </div>
+        </div>
+
+        <!-- VERTICAL RESIZER INSIDE LEFT PANE (for Song Song mode) -->
+        <div class="resizer-v hidden" id="left-v-resizer" title="Kéo lên/xuống để thay đổi chiều cao Slide và Video"></div>
+
+        <!-- VIDEO & GOOGLE FLOW STAGE -->
+        <div id="video-stage" class="hidden">
+          <div class="video-url-bar">
+            <input type="text" id="video-url-input" placeholder="Dán link YouTube, Google Flow, Google Drive hoặc .mp4..." />
+            <button class="mini-btn" id="embed-video-btn" style="background:var(--accent);color:#041219;border:none;padding:6px 11px;">Nhúng ngay</button>
+            <a id="open-video-ext" href="#" target="_blank" rel="noopener" class="mini-btn" style="text-decoration:none" title="Mở video gốc ở tab mới">▶ Xem video trên YouTube</a>
+          </div>
+          <div class="video-presets" id="video-presets"></div>
+          <div class="video-player-box" id="video-player-box"></div>
+          <div class="video-fallback-note" style="font-size:12px;color:var(--text-muted);text-align:center;padding:6px 10px 10px;">Nếu video không phát được trong khung này, bấm nút trên để xem video gốc ở tab mới.</div>
+        </div>
+      </div>
+
+      <!-- VIETNAMESE NARRATION & AUTO SUBTITLE BAR -->
+      <div class="narration-bar">
+        <button class="play-narration-btn" id="play-narration-btn">🎙️ Thuyết minh TV</button>
+        <button class="listen-all-btn" id="listen-all-btn" title="Nghe liên tục từ trang này đến hết bài, nhạc không ngắt">▶ Nghe liên tục cả bài</button>
+        <button class="mini-btn active" id="toggle-sub-btn" title="Bật/Tắt phụ đề tiếng Việt">CC Phụ đề</button>
+        <button class="mini-btn" id="musicBtn" title="Bật/Tắt nhạc nền hộp nhạc (tự phát cùng giọng đọc)">🎵 Nhạc nền</button>
+        <button class="mini-btn active" id="fxToggleBtn" title="Bật/Tắt hiệu ứng động &amp; bong bóng">✨ Hiệu ứng</button>
+        <div class="cue-progress">
+          <div class="cue-track" id="cue-track"><div class="cue-fill" id="cue-fill"></div></div>
+          <div class="cue-info"><span id="cue-status">Sẵn sàng thuyết minh tiếng Việt</span><span id="cue-counter">0/0</span></div>
+        </div>
+        <select class="select-mini" id="rate-select" title="Tốc độ đọc">
+          <option value="0.85">0.85x Chậm</option>
+          <option value="0.95" selected>0.95x Vừa phải</option>
+          <option value="1">1.0x Chuẩn</option>
+          <option value="1.15">1.15x Nhanh</option>
+          <option value="1.3">1.3x Rất nhanh</option>
+        </select>
+        <select class="select-mini" id="voice-select" title="Chọn giọng đọc tiếng Việt"></select>
+      </div>
+      <div class="voice-status-bar" id="voiceStatusBar" title="Chuẩn giọng đọc: tiếng Việt MIỀN NAM">🎙️ Đang nghe bằng giọng đọc của trình duyệt. Muốn giọng Aria/Helio trầm ấm nhúng sẵn, gửi file HTML này cho trợ lý Jade để thu giọng.</div>
+      <div class="voice-guide-panel hidden" id="voiceGuidePanel">
+        <div class="voice-guide-title">📱 Máy này chưa có giọng đọc tiếng Việt</div>
+        <p>Trang bài giảng đọc bằng giọng của trình duyệt, mà máy này chưa có giọng tiếng Việt nên bấm phát sẽ im lặng. Chị bật giọng theo hướng dẫn dưới đây rồi tải lại trang là nghe được:</p>
+        <ul>
+          <li><b>Điện thoại Samsung:</b> Cài đặt → Quản lý chung → Chuyển văn bản thành giọng nói → chọn Google Text-to-Speech → bấm ⚙️ → Cài đặt dữ liệu giọng nói → tải giọng nói <b>Tiếng Việt</b>.</li>
+          <li><b>iPhone:</b> Cài đặt → Trợ năng → Nội dung được đọc → Giọng nói → chọn <b>Tiếng Việt</b> (tải về nếu chưa có).</li>
+        </ul>
+        <p>Trong lúc chờ bật giọng, chị có thể chọn <b>“🇻🇳 Phụ đề TV tự động”</b> trong ô chọn giọng bên trên để đọc bằng phụ đề và nghe liên tục cả bài. Muốn giọng <b>Aria / Helio</b> trầm ấm nhúng sẵn thì gửi file HTML này cho trợ lý <b>Jade</b> để thu giọng.</p>
+        <button class="mini-btn" id="voiceGuideCloseBtn">Đã hiểu, đóng lại</button>
+      </div>
+      <!-- Bản v6: đề nghị nghe bằng phụ đề khi máy không có giọng tiếng Việt
+           (hiện khi chị bấm "Nghe liên tục" mà máy không đọc được, hoặc khi
+           giọng lỗi giữa chừng) — chị chuyển sang phụ đề chỉ bằng một lần bấm,
+           thay vì việc nghe kẹt im lặng ở trang 1 như trước. -->
+      <div class="voice-guide-panel hidden" id="subtitleOfferPanel">
+        <div class="voice-guide-title">🎧 Máy này chưa có giọng đọc tiếng Việt</div>
+        <p>Chị nghe bằng <b>phụ đề tự động</b> nhé? Trang sẽ tự chạy phụ đề tiếng Việt và chuyển trang liên tục, không cần giọng đọc.</p>
+        <button class="mini-btn" id="subtitleOfferYesBtn" style="background:var(--accent);color:#041219;border:none;padding:8px 14px;font-weight:700;">▶ Nghe bằng phụ đề tự động</button>
+        <button class="mini-btn" id="subtitleOfferNoBtn">Để sau</button>
+      </div>
+      <div class="music-note-bar">🎵 Nhạc nền hộp nhạc tự phát cùng giọng đọc — bấm nút 🎵 Nhạc nền để tắt/mở nhạc • Bong bóng &amp; hiệu ứng động: bấm nút ✨ Hiệu ứng để tắt/mở.</div>
+    </section>
+
+    <!-- CENTER HORIZONTAL RESIZER -->
+    <div class="resizer-h" id="h-resizer" title="Kéo trái/phải để thay đổi kích thước 2 khối (Nhấn đúp để chia 50/50)"></div>
+
+    <!-- RIGHT PANE: ANALYSIS + 3D FLIP CARDS + COUNCIL OF AI -->
+    <section class="pane" id="right-pane">
+      <!-- TOP SUB-PANE: ANALYSIS & TRANSFORMATION FLIP CARDS -->
+      <div id="right-top">
+        <div class="pane-bar">
+          <div class="tab-group" id="right-tabs">
+            <button class="tab-btn active" data-rtab="study">✨ Phân Tích & Thẻ Lật</button>
+            <button class="tab-btn" data-rtab="game">🎮 Thử Thách & Ghi Chú</button>
+            <button class="tab-btn" data-rtab="verbatim">📜 Toàn Văn & Kịch Bản</button>
+          </div>
+          <div class="zoom-tools">
+            <button class="mini-btn" id="text-zoom-out" title="Thu nhỏ chữ">A−</button>
+            <span class="zoom-label" id="text-zoom-val">100%</span>
+            <button class="mini-btn" id="text-zoom-in" title="Phóng to chữ">A+</button>
+            <button class="mini-btn" id="max-rtop-btn" title="Phóng to khối Phân tích">⤢</button>
+            <button class="mini-btn" id="max-right-btn" title="Phóng to toàn khối Phải">⬌</button>
+          </div>
+        </div>
+
+        <div class="right-scroll" id="right-scroll">
+          <!-- Dynamic Slide Study / Game / Verbatim Content -->
+        </div>
+      </div>
+
+      <!-- VERTICAL RESIZER BETWEEN ANALYSIS & COUNCIL OF AI -->
+      <div class="resizer-v" id="right-v-resizer" title="Kéo lên/xuống để điều chỉnh không gian Phân tích và Hội đồng AI"></div>
+
+      <!-- BOTTOM SUB-PANE: COUNCIL OF AI -->
+      <div id="right-bottom">
+        <div class="council-head">
+          <div class="council-title">
+            <span>🏛️ HỘI ĐỒNG AI TRÍ TUỆ</span>
+            <span id="ai-mode-badge" style="font-size:10px;padding:2px 6px;border-radius:6px;background:rgba(52,211,153,0.16);color:#6ee7b7;">Trí tuệ nội bộ</span>
+          </div>
+          <div class="persona-tabs" id="persona-tabs">
+            <button class="persona-btn active" data-p="all">🌟 Cả Hội Đồng</button>
+            <button class="persona-btn" data-p="zen">🧘 Thiền Sư</button>
+            <button class="persona-btn" data-p="educator">🎓 Nhà Giáo Dục</button>
+            <button class="persona-btn" data-p="expert">🚀 Chuyên Gia</button>
+            <button class="mini-btn" id="max-council-btn" title="Phóng to/Thu gọn Hội đồng AI">⤢</button>
+          </div>
+        </div>
+        <div class="quick-prompts" id="quick-prompts"></div>
+        <div class="chat-stream" id="chat-stream"></div>
+        <div class="council-input-row">
+          <input type="text" id="council-input" placeholder="Đặt câu hỏi cho Hội đồng AI ngay tại trang bài học này..." />
+          <button class="send-btn" id="council-send">Hỏi Hội Đồng ✦</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- BOTTOM NAVIGATION DOCK -->
+  <footer class="bottom-dock">
+    <div class="pillar-nav" id="pillar-nav"></div>
+    <span class="book-credit" id="book-credit">Bài giảng 4D • tạo bằng Xưởng v7</span>
+    <div class="slide-stepper">
+      <button class="nav-step-btn" id="btn-prev">← Trước</button>
+      <span class="slide-counter" id="slide-counter">01</span>
+      <button class="nav-step-btn" id="btn-next">Tiếp →</button>
+    </div>
+  </footer>
+</div>
+
+<!-- SLIDE MAP MODAL -->
+<div class="modal-backdrop" id="map-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>🗺️ Bản Đồ Hành Trình — Sức Mạnh Của Thói Quen Nhỏ</h3>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="mini-btn" id="export-notes-btn">📥 Xuất Sổ Tay</button>
+        <button class="mini-btn" id="close-map-btn">✕ Đóng</button>
+      </div>
+    </div>
+    <div class="map-grid" id="map-grid"></div>
+  </div>
+</div>
+
+<!-- FULLSCREEN LIGHTBOX -->
+<div class="modal-backdrop" id="lightbox-modal" style="cursor:zoom-out;">
+  <img class="lightbox-img" id="lightbox-img" alt="Slide phóng to toàn màn hình" />
+</div>
+
+<!-- GEMINI API SETTINGS MODAL -->
+<div class="modal-backdrop" id="api-modal">
+  <div class="modal-box" style="width:min(500px,92vw);">
+    <div class="modal-head">
+      <h3>⚙️ Kết Nối Gemini API Trực Tiếp (Tùy Chọn)</h3>
+      <button class="mini-btn" id="close-api-btn">✕</button>
+    </div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:11px;font-size:13px;line-height:1.55;color:var(--text-soft);">
+      <p>Hội đồng AI đã tích hợp sẵn <b>kho tri thức chuyên sâu cho mọi trang trong sách</b> (hoạt động tức thì, kể cả khi ngoại tuyến).</p>
+      <p>Nếu muốn Hội đồng AI phản hồi tự do trực tiếp bằng <b>Google Gemini API</b>, hãy dán API Key của bạn vào bên dưới (chỉ lưu cục bộ trên trình duyệt của bạn):</p>
+      <input type="password" id="gemini-key-input" placeholder="AIzaSy..." style="padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-family:inherit;" />
+      <select id="gemini-model-select" style="padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-family:inherit;">
+        <option value="gemini-2.5-flash">gemini-2.5-flash (Khuyên dùng - Nhanh & Thông minh)</option>
+        <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+      </select>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px;">
+        <button class="mini-btn" id="clear-api-btn">Xóa Key</button>
+        <button class="send-btn" id="save-api-btn" style="padding:8px 16px;">Lưu Kết Nối</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+/* TRANG XEM BÀI GIẢNG 4D (xem.html) — Xưởng v7.
+   Đọc dữ liệu bài giảng từ localStorage (xưởng lưu khi chị bấm Tạo)
+   rồi giao cho khung trình phát 4D bên dưới. Trang chạy trên https
+   nên video YouTube phát được (Blob URL/file:// bị Lỗi 153 dù đã
+   nạp lười — vòng 6). Không tìm thấy dữ liệu thì hiện sách dự phòng
+   1 trang hướng dẫn quay lại Xưởng. */
+window.__VIEWER_MODE__ = true;
+window.__BOOK_DATA__ = (function () {
+  var FALLBACK = {"meta": {"title": "Không tìm thấy bài giảng", "tagline": "Xưởng tạo bài giảng 4D • Jenifer_DoNa"}, "pillars": [{"id": "intro", "num": "0", "name": "Thông báo", "full": "Thông báo — Quay lại Xưởng tạo bài", "color": "#34d399", "glow": "rgba(52,211,153,0.35)", "range": [1, 1]}], "presetVideos": [], "slides": [{"id": 1, "pillar": "intro", "title": "Không tìm thấy bài giảng", "subtitle": "Trang xem chưa nhận được dữ liệu bài giảng", "quote": "Quay lại Xưởng, dán link và nội dung bài giảng rồi bấm Tạo — trang xem sẽ hiện bài mới ngay.", "verbatim": "KHÔNG TÌM THẤY BÀI GIẢNG\nTrang xem chưa nhận được dữ liệu bài giảng.\nQuay lại Xưởng tạo bài giảng 4D để tạo bài mới.", "video": {"url": "", "title": ""}, "analysis": ["Trang này mở mà không có dữ liệu bài giảng — có thể chị mở thẳng link trang xem mà chưa tạo bài, hoặc dữ liệu đã bị xóa khỏi trình duyệt.", "Quay lại trang Xưởng, dán link bài giảng và nội dung rồi bấm “Tạo trang bài giảng 4D” — bài mới sẽ hiện ở đây ngay.", "Nếu chị vừa tạo bài mà vẫn thấy trang này, thử tải lại trang Xưởng rồi bấm Tạo lại một lần nhé."], "action": "Mở trang Xưởng và tạo lại bài giảng — chỉ mất khoảng một phút.", "flip": {"beforeTitle": "Mở thẳng link trang xem", "beforePoints": ["Chưa tạo bài mà đã mở trang xem.", "Dữ liệu bài đã bị xóa khỏi trình duyệt.", "Mở trang xem trên trình duyệt khác với trình duyệt đã tạo bài."], "afterTitle": "Tạo bài từ Xưởng rồi xem", "afterPoints": ["Mở trang Xưởng trên cùng trình duyệt này.", "Dán link + nội dung rồi bấm Tạo.", "Bài mới hiện ngay trong khung xem trước và nút Mở toàn màn hình."], "takeaway": "Trang xem chỉ hiện bài vừa tạo từ Xưởng trên cùng trình duyệt."}, "narration": ["Chào bạn, trang xem chưa tìm thấy dữ liệu bài giảng.", "Bạn quay lại trang Xưởng, dán link và nội dung bài giảng rồi bấm Tạo nhé."], "quiz": {"q": "Muốn xem bài giảng ở trang này thì làm gì?", "options": ["Mở trang Xưởng và bấm Tạo bài giảng", "Tải lại trang này nhiều lần", "Xóa lịch sử trình duyệt", "Đợi vài phút rồi quay lại"], "correct": 0, "explain": "Trang xem chỉ hiện bài vừa tạo từ Xưởng trên cùng trình duyệt."}, "council": {"prompts": ["Bạn muốn tạo bài giảng về chủ đề gì?", "Bạn đã chuẩn bị link và nội dung bài giảng chưa?", "Bạn muốn bài giảng có bao nhiêu trang?"], "zen": "Mỗi bài giảng bắt đầu từ một bước nhỏ: mở Xưởng, dán link, dán nội dung, rồi bấm Tạo.", "educator": "Trang xem là nơi hiển thị thành quả — còn Xưởng là nơi tạo ra thành quả đó. Quay lại Xưởng nhé.", "expert": "Dữ liệu bài giảng lưu trong trình duyệt này; mở Xưởng trên cùng trình duyệt để tạo và xem."}}], "audio": {"female": [[]], "male": [[]]}, "images": ["data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDUwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwZjc2NmUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxNGI4YTYiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQ1MCIgZmlsbD0idXJsKCNnKSIvPjxjaXJjbGUgY3g9IjY1MCIgY3k9IjkwIiByPSIxMjAiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuMTIiLz48Y2lyY2xlIGN4PSIxMjAiIGN5PSIzNjAiIHI9IjE2MCIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iMC4wOCIvPjx0ZXh0IHg9IjQwMCIgeT0iMjEwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSI0NCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPljGsOG7n25nIFThuqFvIELDoGkgR2nhuqNuZyA0RDwvdGV4dD48dGV4dCB4PSI0MDAiIHk9IjI2MCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiNkMWZhZTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlF1YXkgbOG6oWkgWMaw4bufbmcgxJHhu4MgdOG6oW8gYsOgaSBnaeG6o25nIG3hu5tpIG5ow6k8L3RleHQ+PC9zdmc+"]};
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var id = params.get('book') || 'latest';
+    var raw = null;
+    try { raw = localStorage.getItem('xuong_bai_giang_4d_book_' + id); } catch (e) {}
+    if (!raw && id !== 'latest') { try { raw = localStorage.getItem('xuong_bai_giang_4d_book_latest'); } catch (e) {} }
+    if (raw) {
+      var data = JSON.parse(raw);
+      if (data && data.slides && data.slides.length && data.meta) return data;
+    }
+  } catch (e) {}
+  return FALLBACK;
+})();
+</script>
+<script>
+// ===== DỮ LIỆU SÁCH (DO XƯỞNG TẠO BÀI GIẢNG 4D ĐIỀN VÀO) =====
+// Khung trình phát bài giảng 4D — trích từ sách bản v5 (giọng theo từng đoạn,
+// Blob URL, nút "Nghe liên tục cả bài", nhạc hộp nhạc, hiệu ứng động).
+// Xưởng thay dữ liệu tại 6 điểm chèn khi chị bấm "Tạo trang bài giảng 4D".
+// Giọng đọc: sách này dùng giọng của trình duyệt; muốn giọng Aria/Helio nhúng sẵn,
+// gửi file HTML này cho trợ lý Jade để thu giọng.
+
+const BOOK_META = window.__BOOK_DATA__.meta;
+
+const PILLARS = window.__BOOK_DATA__.pillars;
+
+const PRESET_VIDEOS = window.__BOOK_DATA__.presetVideos;
+
+const SLIDES = window.__BOOK_DATA__.slides;
+
+// Bản sao lời giảng gốc để đối chiếu trước khi phát giọng thu sẵn.
+const DEFAULT_MASTER_SLIDES = JSON.parse(JSON.stringify(SLIDES));
+
+// Giọng đọc nhúng sẵn (nữ Aria / nam Helio): mỗi đoạn thuyết minh (cue) có 1 file
+// thu sẵn; mảng lồng nhau [giới tính][trang][cue].
+// Đây là giọng tổng hợp tiếng Việt, CHƯA phải giọng miền Nam chuẩn FPT.AI
+// (Lan Nhi / Linh San / Minh Quang) — sẽ thay khi có tài khoản FPT.AI.
+
+const AUDIO_SETS = window.__BOOK_DATA__.audio;
+
+// Cờ hiệu lực của giọng nhúng: các file giọng thu sẵn chỉ khớp với lời giảng
+// gốc của sách này. Nếu nội dung trang bị thay đổi, cờ này tắt để giọng đọc
+// chuyển sang giọng của trình duyệt (đọc đúng nội dung mới) thay vì phát lại giọng cũ.
+// Bản v5: khóa lưu trữ theo TỪNG CUỐN SÁCH — trước đây mọi cuốn sách dùng
+// chung một khóa 'bai_giang_4d_v1' nên mở cuốn mới lại khôi phục vị trí đã
+// xem của cuốn cũ (bản xem trước mở ở trang 2, tạo lại mở ở trang 8).
+// Định danh sách = tiêu đề + dòng phụ (người giảng + ngày) bỏ dấu, viết
+// thường, tối đa 60 ký tự. Hai cuốn cùng tên + cùng người giảng/ngày là
+// cùng một cuốn sách nên dùng chung khóa là đúng.
+function bookStorageSlug() {
+  const meta = (typeof BOOK_META !== 'undefined' && BOOK_META) || {};
+  const raw = (meta.title || '') + '|' + (meta.tagline || '');
+  const s = raw.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D')
+    .replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase();
+  return s.slice(0, 60) || 'sach-4d';
+}
+const BOOK_KEY = bookStorageSlug();
+const AUDIO_VALID_KEY = 'bai_giang_4d_audio_valid_v02_' + BOOK_KEY;
+let embeddedAudioValid = true;
+try {
+  if (localStorage.getItem(AUDIO_VALID_KEY) === "0") embeddedAudioValid = false;
+} catch (e) {}
+function setEmbeddedAudioValid(valid) {
+  embeddedAudioValid = valid;
+  try { localStorage.setItem(AUDIO_VALID_KEY, valid ? "1" : "0"); } catch (e) {}
+  if (!valid) updateVoiceStatus("tts");
+}
+
+const SLIDE_IMAGES = window.__BOOK_DATA__.images;
+
+// Áp dụng tiêu đề sách (BOOK_META) lên giao diện: tiêu đề tab trình duyệt,
+// tên sách ở đầu trang, tiêu đề bản đồ hành trình. Đặt ở cuối khối dữ liệu
+// vì cần SLIDES đã khai báo để đếm số trang. <script> nằm cuối <body> nên
+// các phần tử giao diện đã tồn tại khi đoạn này chạy.
+try {
+  document.title = BOOK_META.title + ' — Bài Giảng Tương Tác 4D';
+  const _brandTitle = document.querySelector('.brand-title');
+  if (_brandTitle) _brandTitle.textContent = BOOK_META.title;
+  const _brandSub = document.querySelector('.brand-sub');
+  if (_brandSub) _brandSub.textContent = BOOK_META.tagline + ' • ' + SLIDES.length + ' Trang';
+  const _mapHead = document.querySelector('#map-modal .modal-head h3');
+  if (_mapHead) _mapHead.textContent = '🗺️ Bản Đồ Hành Trình — ' + BOOK_META.title;
+} catch (e) { /* Giữ nguyên nhãn mặc định trong HTML nếu có lỗi. */ }
+
+
+// ===== STATE =====
+const STORAGE_KEY = 'bai_giang_4d_v2_' + BOOK_KEY;
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) {}
+
+const state = {
+  idx: Math.min(Math.max(saved.idx || 0, 0), SLIDES.length - 1),
+  leftMode: 'slide', // 'slide' | 'video' | 'both'
+  rightTab: 'study', // 'study' | 'game' | 'verbatim'
+  persona: 'all',    // 'all' | 'zen' | 'educator' | 'expert'
+  slideZoom: 1,
+  panX: 0, panY: 0,
+  textScale: 1,
+  sfx: saved.sfx !== false,
+  showSub: true,
+  theme: saved.theme || 'dark',
+  xp: saved.xp || 10,
+  visited: new Set(saved.visited || [1]),
+  mastered: new Set(saved.mastered || []),
+  quizDone: new Set(saved.quizDone || []),
+  notes: saved.notes || {},
+  customVideos: saved.customVideos || {},
+  apiKey: saved.apiKey || '',
+  apiModel: saved.apiModel || 'gemini-2.5-flash',
+  narrating: false,
+  autoTour: false,
+  cueIdx: 0,
+  cueTimer: null,
+  pageStartAt: 0, // Bản v2: thời điểm mở trang hiện tại
+  narrationStartAt: 0, // Bản v3: thời điểm bắt đầu thuyết minh trang hiện tại (mốc đo mức sàn 8 giây/trang ở chế độ phụ đề — đo từ lúc bắt đầu nghe, không đo từ lúc mở trang vì trang đầu có thể đã mở từ lâu trước khi chị bấm nghe)
+  subtitleMode: false, // Bản v3: true khi nhánh phụ đề hẹn giờ thật sự đang chạy. Bản v5: chỉ còn dùng để chẩn đoán (mức sàn 8 giây/trang không còn phụ thuộc cờ này — xem nhánh hết đoạn trong speakCurrentCue).
+  flipped: false,
+  maxPane: null, // null | 'left' | 'right' | 'rtop' | 'council'
+  chatHistories: {}
+};
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      idx: state.idx, sfx: state.sfx, theme: state.theme, xp: state.xp,
+      visited: [...state.visited], mastered: [...state.mastered],
+      quizDone: [...state.quizDone], notes: state.notes,
+      customVideos: state.customVideos, apiKey: state.apiKey, apiModel: state.apiModel
+    }));
+  } catch(e) {}
+}
+
+// ===== WEB AUDIO SFX =====
+let audioCtx = null;
+function playTone(freq = 520, dur = 0.12, type = 'sine', vol = 0.08) {
+  if (!state.sfx) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + dur);
+  } catch(e) {}
+}
+function playChime() {
+  playTone(523.25, 0.14, 'triangle', 0.08);
+  setTimeout(() => playTone(659.25, 0.16, 'triangle', 0.08), 80);
+  setTimeout(() => playTone(783.99, 0.24, 'sine', 0.08), 160);
+}
+
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+function addXP(pts, reason) {
+  state.xp += pts;
+  updateGameHUD();
+  saveState();
+  playChime();
+  if (reason) showToast(`✨ +${pts} XP — ${reason}`);
+}
+
+function getRank(xp) {
+  if (xp >= 800) return '👑 Bậc Thầy Kiến Tạo';
+  if (xp >= 500) return '🚀 Kiến Trúc Sư AI';
+  if (xp >= 280) return '🔥 Người Thắp Lửa';
+  if (xp >= 120) return '☀️ Người Gieo Nắng';
+  return '🌱 Người Khởi Hành';
+}
+
+function updateGameHUD() {
+  document.getElementById('rank-badge').textContent = getRank(state.xp);
+  document.getElementById('xp-text').textContent = `${state.xp} XP`;
+  document.getElementById('master-text').textContent = `${state.mastered.size}/${SLIDES.length} Thẻ`;
+  document.getElementById('visited-chip').textContent = `📖 ${state.visited.size}/${SLIDES.length}`;
+  const pct = Math.min(100, Math.round((state.xp / 900) * 100));
+  document.getElementById('xp-fill').style.width = `${Math.max(5, pct)}%`;
+}
+
+// ===== THEME & PILLAR ACCENT =====
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', state.theme);
+  document.getElementById('theme-btn').textContent = state.theme === 'dark' ? '☀️' : '🌙';
+}
+function applyPillarAccent(pillarId) {
+  const p = PILLARS.find(x => x.id === pillarId) || PILLARS[0];
+  document.documentElement.style.setProperty('--accent', p.color);
+  document.documentElement.style.setProperty('--accent-glow', p.glow);
+  document.getElementById('pillar-pill-text').textContent = p.full;
+  document.querySelectorAll('.p-nav-btn').forEach(b => b.classList.toggle('active', b.dataset.pid === p.id));
+}
+
+// ===== VIDEO / GOOGLE FLOW PARSER =====
+// Bản v3: tách ID video YouTube chuẩn từ mọi dạng link (watch?v=, youtu.be,
+// /shorts/, /embed/, /live/, /v/, m./music. — kèm tham số phụ như ?si=, &t=).
+// Ưu tiên phân tích bằng URL, dự phòng bằng biểu thức chính quy.
+function extractYoutubeId(rawUrl) {
+  const url = (rawUrl || '').trim();
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./, '').replace(/^m\./, '');
+    if (host === 'youtu.be') {
+      const id = (u.pathname.split('/')[1] || '');
+      if (/^[A-Za-z0-9_-]{11}$/.test(id)) return id;
+    }
+    if (host === 'youtube.com' || host === 'music.youtube.com') {
+      const v = u.searchParams.get('v');
+      if (/^[A-Za-z0-9_-]{11}$/.test(v || '')) return v;
+      const m = u.pathname.match(/^\/(?:embed|shorts|live|v)\/([A-Za-z0-9_-]{11})/);
+      if (m) return m[1];
+    }
+  } catch (e) { /* URL không phân tích được: rơi xuống biểu thức chính quy */ }
+  const m = url.match(/(?:youtube\.com\/(?:watch\?[^#]*v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+// Bản v5: địa chỉ trang Xưởng trên GitHub Pages — dùng làm tham số origin
+// cho trình phát YouTube nhúng (xem chú thích trong parseVideoEmbed).
+// Đây là địa chỉ cố định của nhà xuất bản, KHÔNG lấy từ location.origin.
+const WORKSHOP_ORIGIN = 'https://dothibichngan1403-netizen.github.io';
+
+function parseVideoEmbed(rawUrl) {
+  const url = (rawUrl || '').trim();
+  if (!url) return { type: 'empty' };
+  // YouTube — Bản v5: THAM SỐ origin (điểm khác biệt thật gây ra Lỗi 153).
+  // Đã chứng minh bằng trang chẩn đoán test-youtube-embed.html: cùng trình
+  // duyệt, cùng video, 3 khung iframe tĩnh trên trang https đều PHÁT ĐƯỢC,
+  // chỉ khung trong trang bài giảng là báo Lỗi 153. Theo tài liệu YouTube,
+  // Lỗi 153 nghĩa là "yêu cầu không kèm HTTP Referer hay thông tin nhận
+  // diện tương đương": trang bài giảng chạy trên Blob URL (xem trước trong
+  // xưởng, tab toàn màn hình) hoặc file:// (file tải về) nên trình duyệt
+  // KHÔNG gửi được Referer xác định trang nhúng là ai — YouTube từ chối
+  // phát. Cách sửa theo đúng tài liệu YouTube: thêm tham số origin (thông
+  // tin nhận diện tương đương khi không gửi được Referer) với giá trị là
+  // địa chỉ trang Xưởng trên GitHub Pages. KHÔNG dùng location.origin
+  // (trên file:// nó là "null", trên Blob URL cũng không ổn định).
+  // Trình phát chuẩn + tham số tối thiểu (giữ từ bản v3).
+  const ytId = extractYoutubeId(url);
+  if (ytId) {
+    return {
+      type: 'iframe',
+      isYoutube: true,
+      ytId: ytId, // Bản v6: cần ID để lấy ảnh thu nhỏ cho mặt nạ nạp lười (i.ytimg.com/vi/{ID}/hqdefault.jpg).
+      src: `https://www.youtube.com/embed/${ytId}?rel=0&origin=${WORKSHOP_ORIGIN}`,
+      ext: `https://www.youtube.com/watch?v=${ytId}`
+    };
+  }
+  // Google Drive
+  let gd = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if (gd) {
+    return { type: 'iframe', src: `https://drive.google.com/file/d/${gd[1]}/preview`, ext: url };
+  }
+  // Direct Video
+  if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(url)) {
+    return { type: 'video', src: url, ext: url };
+  }
+  // Google Flow or other embeddable URL
+  return { type: 'iframe', src: url, ext: url };
+}
+
+// Bản v4: video gốc của cả cuốn sách — video đầu tiên trong PRESET_VIDEOS
+// (thường là link bài giảng chị dán vào xưởng). Dùng làm dự phòng khi trang
+// đang mở không có video riêng: tab Video không bao giờ trống, và video
+// không "biến mất" khi chuyển trang hay dừng nghe liên tục (trước đây chỉ
+// trang 1 có video nên sang trang 2+ là khung video trống + ô link trống,
+// chị tưởng video bị mất). Sách không có PRESET_VIDEOS thì trả về '' và
+// giữ nguyên hành vi cũ (hiện dòng hướng dẫn dán link).
+function bookVideoUrl() {
+  return (typeof PRESET_VIDEOS !== 'undefined' && PRESET_VIDEOS[0] && PRESET_VIDEOS[0].url) || '';
+}
+
+// Bản v6 — NẠP LƯỜI iframe YouTube (sửa Lỗi 153 còn lại sau bản v5).
+// Kết quả kiểm chứng manh mối (đọc mã thật, không đoán): iframe KHÔNG được
+// tạo lúc tải trang (renderSlide chỉ gọi renderVideoForSlide khi tab Video
+// đang mở, và tab Video mặc định đóng), nhưng khi chị bấm tab Video thì
+// iframe được tạo NGAY TRONG CÙNG TÁC VỤ JS với việc bỏ class hidden khỏi
+// #video-stage — tức là lúc tạo iframe, trình duyệt chưa kịp bố cục lại nên
+// khung chứa vẫn có kích thước 0x0; trình phát YouTube khởi tạo trong khung
+// 0x0 rồi báo "Lỗi cấu hình trình phát video / Lỗi 153", và khi đã lỗi thì
+// bấm tab cũng chỉ thấy lỗi cũ (đúng như quan sát). Trong khi đó các khung
+// trên trang chẩn đoán test-youtube-embed.html nằm trong HTML tĩnh, hiển thị
+// ngay từ lúc tải trang nên phát được.
+// Cách sửa (mẫu mặt nạ/lazy-load chuẩn): renderVideoForSlide chỉ hiện ẢNH
+// THU NHỎ + NÚT PHÁT; iframe chỉ được tạo khi chị bấm phát — lúc đó tab Video
+// đang hiển thị và khung đã có kích thước thật từ lâu. Thêm autoplay=1 để
+// phát ngay (lệnh bấm của người dùng cho phép tự phát có tiếng). Giữ nguyên
+// tham số origin + referrerpolicy của bản v5.
+function loadYoutubePlayer(box, embedSrc) {
+  if (!box || !embedSrc) return;
+  const sep = embedSrc.indexOf('?') === -1 ? '?' : '&';
+  box.innerHTML = `<iframe src="${escapeHtml(embedSrc + sep + 'autoplay=1')}" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+}
+
+function renderVideoForSlide(slide, forceUrl = null) {
+  const url = forceUrl !== null ? forceUrl : (state.customVideos[slide.id] || slide.video.url || bookVideoUrl());
+  document.getElementById('video-url-input').value = url;
+  const parsed = parseVideoEmbed(url);
+  const box = document.getElementById('video-player-box');
+  const ext = document.getElementById('open-video-ext');
+  ext.href = parsed.ext || '#';
+  // Bản v3: nút mở video gốc LUÔN hiện với nhãn rõ ràng (trước đây chỉ là
+  // biểu tượng ↗ nhỏ khó thấy) — phương án dự phòng khi iframe nhúng lỗi
+  // (ví dụ YouTube Lỗi 153): chị vẫn xem được video gốc chỉ bằng một lần bấm.
+  ext.textContent = parsed.isYoutube ? '▶ Xem video trên YouTube' : '↗ Mở video gốc';
+  if (parsed.type === 'video') {
+    box.innerHTML = `<video src="${escapeHtml(parsed.src)}" controls playsinline></video>`;
+  } else if (parsed.type === 'iframe') {
+    if (parsed.isYoutube && parsed.ytId) {
+      if (typeof window !== 'undefined' && window.__VIEWER_MODE__) {
+        // Bản v7 — chế độ xem trên https (trang xem.html): nhúng iframe
+        // trực tiếp khi mở tab Video, không qua mặt nạ — trang chạy trên
+        // https nên YouTube xác minh được nguồn gốc trang nhúng (như khung
+        // 4 trên trang chẩn đoán, khung này phát được). Hoãn tới khung hình
+        // sau để tab kịp hiển thị và có kích thước thật trước khi trình phát
+        // khởi tạo; nếu chị đã chuyển tab khác thì không nhúng nữa.
+        box.innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:20px;text-align:center;">⏳ Đang tải video…</div>`;
+        const doEmbed = () => {
+          const st = document.getElementById('video-stage');
+          if (st && st.classList.contains('hidden')) return;
+          loadYoutubePlayer(box, parsed.src);
+        };
+        if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => requestAnimationFrame(doEmbed));
+        else setTimeout(doEmbed, 0);
+      } else {
+        // Bản v6: YouTube chỉ hiện mặt nạ (ảnh thu nhỏ + nút phát) — iframe
+        // chỉ tạo khi chị bấm phát (xem loadYoutubePlayer). URL nhúng đầy đủ
+        // lưu trong data-embed-src để nút phát đọc ra khi bấm. (File tải về
+        // mở ở file:// hoặc Blob URL vẫn có thể Lỗi 153 — nút "Xem video
+        // trên YouTube" bên dưới là phương án dự phòng chắc chắn nhất.)
+        box.innerHTML = `<button type="button" class="yt-facade" data-embed-src="${escapeHtml(parsed.src)}" onclick="loadYoutubePlayer(this.parentElement, this.getAttribute('data-embed-src'))" aria-label="Phát video YouTube"><img class="yt-facade-thumb" src="https://i.ytimg.com/vi/${parsed.ytId}/hqdefault.jpg" alt="" /><span class="yt-facade-play">▶</span><span class="yt-facade-label">Bấm để phát video</span></button>`;
+      }
+    } else {
+      // Video không phải YouTube (Drive/Flow/link nhúng khác): nhúng trực
+      // tiếp như cũ (không gặp Lỗi 153 của YouTube).
+      // Bản v5: gắn referrerpolicy="strict-origin-when-cross-origin" (chính
+      // sách YouTube khuyên dùng) để trình duyệt gửi Referer xác định được
+      // trang nhúng mỗi khi gửi được; trên Blob URL/file không gửi được thì
+      // tham số origin trong URL nhúng đã nhận diện thay (xem parseVideoEmbed).
+      // KHÔNG dùng chính sách no-referrer — YouTube từ chối phát khi không
+      // nhận diện được trang nhúng (Lỗi 153).
+      box.innerHTML = `<iframe src="${escapeHtml(parsed.src)}" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+    }
+  } else {
+    box.innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:20px;text-align:center;">Dán đường dẫn YouTube, Google Flow hoặc .mp4 vào thanh trên để nhúng video minh họa.</div>`;
+  }
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ===== RENDER SLIDE =====
+function renderSlide() {
+  stopNarration(false);
+  state.pageStartAt = Date.now(); // Bản v2: mốc thời gian mở trang (giữ trang ≥ 8 giây ở chế độ phụ đề)
+  const s = SLIDES[state.idx];
+  state.visited.add(s.id);
+  state.flipped = false;
+  saveState();
+
+  applyPillarAccent(s.pillar);
+  updateGameHUD();
+
+  // Left Slide Image
+  const img = document.getElementById('slide-img');
+  img.src = SLIDE_IMAGES[s.id - 1];
+  img.alt = `Slide ${s.id}: ${s.title}`;
+  document.getElementById('lightbox-img').src = SLIDE_IMAGES[s.id - 1];
+  document.getElementById('float-slide-num').textContent = `Slide ${String(s.id).padStart(2,'0')} / ${SLIDES.length}`;
+  document.getElementById('slide-counter').textContent = `${String(s.id).padStart(2,'0')} / ${SLIDES.length}`;
+  document.getElementById('btn-prev').disabled = state.idx === 0;
+  document.getElementById('btn-next').disabled = state.idx === SLIDES.length - 1;
+  resetSlideZoom();
+
+  // Subtitle preview
+  document.getElementById('subtitle-text').textContent = s.narration[0];
+  document.getElementById('cue-counter').textContent = `0/${s.narration.length}`;
+  document.getElementById('cue-fill').style.width = '0%';
+  document.getElementById('cue-status').textContent = 'Sẵn sàng thuyết minh tiếng Việt';
+
+  // Video (render lazily if visible)
+  if (state.leftMode !== 'slide') renderVideoForSlide(s);
+  else document.getElementById('video-url-input').value = state.customVideos[s.id] || s.video.url || bookVideoUrl();
+
+  renderRightTop();
+  renderCouncilForSlide();
+  FxEngine.startForSlide(state.idx);
+}
+
+function renderRightTop() {
+  const s = SLIDES[state.idx];
+  const p = PILLARS.find(x => x.id === s.pillar);
+  const container = document.getElementById('right-scroll');
+  container.scrollTop = 0;
+  const isMastered = state.mastered.has(s.id);
+
+  if (state.rightTab === 'study') {
+    container.innerHTML = `
+      <div class="slide-header-card">
+        <div class="slide-eyebrow">
+          <span>Slide ${String(s.id).padStart(2,'0')}</span>
+          <span>•</span>
+          <span>${escapeHtml(p.full)}</span>
+        </div>
+        <h2 class="slide-main-title">${escapeHtml(s.title)}</h2>
+        <div class="slide-quote-box">“${escapeHtml(s.quote)}”</div>
+      </div>
+
+      <div class="flip-section">
+        <div class="flip-section-head">
+          <span class="section-label">🔄 Thẻ Lật Chuyển Hóa 3D (Bấm vào thẻ hoặc phím F)</span>
+          <button class="mini-btn" id="flip-trigger-btn">Lật thẻ ⇄</button>
+        </div>
+        <div class="flip-scene" id="flip-scene">
+          <div class="flip-card ${state.flipped ? 'flipped' : ''}" id="flip-card">
+            <div class="flip-face flip-front">
+              <div>
+                <div class="flip-badge">⛔ TRƯỚC CHUYỂN HÓA (Tư duy cũ)</div>
+                <div class="flip-title">${escapeHtml(s.flip.beforeTitle)}</div>
+                <ul class="flip-list">
+                  ${s.flip.beforePoints.map(pt => `<li>${escapeHtml(pt)}</li>`).join('')}
+                </ul>
+              </div>
+              <div class="flip-footer">
+                <span class="flip-hint">👆 Nhấp để lật sang "Sau Chuyển Hóa" →</span>
+                <span style="font-size:11px;color:var(--text-muted)">Thẻ ${s.id}/${SLIDES.length}</span>
+              </div>
+            </div>
+
+            <div class="flip-face flip-back">
+              <div>
+                <div class="flip-badge">✨ SAU CHUYỂN HÓA (Đột phá mới)</div>
+                <div class="flip-title">${escapeHtml(s.flip.afterTitle)}</div>
+                <ul class="flip-list">
+                  ${s.flip.afterPoints.map(pt => `<li>${escapeHtml(pt)}</li>`).join('')}
+                </ul>
+                <div style="font-size:0.86em;color:var(--gold);font-weight:700;margin-top:4px;">💎 ${escapeHtml(s.flip.takeaway)}</div>
+              </div>
+              <div class="flip-footer">
+                <span class="flip-hint">↩ Nhấp thẻ để xem lại mặt trước</span>
+                <button class="master-btn ${isMastered ? 'done' : ''}" id="master-card-btn">
+                  ${isMastered ? '✓ Đã Chuyển Hóa' : '✓ Xác nhận Chuyển Hóa (+15 XP)'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="analysis-grid">
+        <div class="info-card">
+          <h4>🎯 Bóc Tách Chiều Sâu Bài Học</h4>
+          <ul class="analysis-points">
+            ${s.analysis.map(a => `<li>${escapeHtml(a)}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="info-card action-box">
+          <h4>🚀 Hành Động Ứng Dụng Ngay Hôm Nay</h4>
+          <p style="font-size:0.92em;line-height:1.58;color:var(--text-soft);">${escapeHtml(s.action)}</p>
+        </div>
+      </div>
+    `;
+
+    const doFlip = (e) => {
+      if (e && e.target.closest('#master-card-btn')) return;
+      state.flipped = !state.flipped;
+      document.getElementById('flip-card').classList.toggle('flipped', state.flipped);
+      playTone(state.flipped ? 660 : 420, 0.1, 'triangle', 0.07);
+    };
+    document.getElementById('flip-scene').onclick = doFlip;
+    document.getElementById('flip-trigger-btn').onclick = doFlip;
+    document.getElementById('master-card-btn').onclick = (e) => {
+      e.stopPropagation();
+      if (!state.mastered.has(s.id)) {
+        state.mastered.add(s.id);
+        addXP(15, `Chuyển hóa thành công Slide ${s.id}!`);
+        renderRightTop();
+      }
+    };
+  } else if (state.rightTab === 'game') {
+    const qDone = state.quizDone.has(s.id);
+    const savedNote = state.notes[s.id] || '';
+    container.innerHTML = `
+      <div class="quiz-card">
+        <div class="slide-eyebrow" style="margin-bottom:8px;">🎮 THỬ THÁCH TRÍ TUỆ — SLIDE ${s.id} ${qDone ? '• ✅ Đã vượt qua' : '• +25 XP'}</div>
+        <div class="quiz-q">${escapeHtml(s.quiz.q)}</div>
+        <div class="quiz-opts" id="quiz-opts">
+          ${s.quiz.options.map((opt, idx) => `
+            <button class="quiz-opt ${qDone && idx === s.quiz.correct ? 'correct' : ''}" data-qidx="${idx}">
+              <b>${String.fromCharCode(65+idx)}.</b> ${escapeHtml(opt)}
+            </button>
+          `).join('')}
+        </div>
+        <div id="quiz-feedback" class="quiz-explain" style="${qDone ? '' : 'display:none;'}">
+          <b>💡 Giải mã:</b> ${escapeHtml(s.quiz.explain)}
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h4>📝 Sổ Tay Cá Nhân (Lưu tự động)</h4>
+        <p style="font-size:0.86em;color:var(--text-muted);">Ghi lại ý tưởng chuyển hóa hoặc câu chuyện của riêng bạn tại Slide ${s.id}:</p>
+        <textarea class="journal-area" id="journal-input" placeholder="Điều chạm vào trái tim tôi nhất ở trang bài học này là...">${escapeHtml(savedNote)}</textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+          <span id="note-status" style="font-size:11px;color:var(--text-muted);">Tự động lưu trên máy của bạn</span>
+          <button class="mini-btn" id="export-notes-inline">📥 Xuất toàn bộ Sổ Tay (.txt)</button>
+        </div>
+      </div>
+    `;
+    document.querySelectorAll('.quiz-opt').forEach(btn => {
+      btn.onclick = () => {
+        const chosen = Number(btn.dataset.qidx);
+        const fb = document.getElementById('quiz-feedback');
+        fb.style.display = 'block';
+        if (chosen === s.quiz.correct) {
+          btn.classList.add('correct');
+          if (!state.quizDone.has(s.id)) {
+            state.quizDone.add(s.id);
+            addXP(25, `Giải mã chính xác thử thách Slide ${s.id}!`);
+          } else {
+            playChime();
+          }
+        } else {
+          btn.classList.add('wrong');
+          playTone(220, 0.16, 'sawtooth', 0.05);
+          showToast('💡 Gần đúng rồi! Xem gợi ý và thử chọn lại nhé.');
+        }
+      };
+    });
+    document.getElementById('journal-input').oninput = (e) => {
+      state.notes[s.id] = e.target.value;
+      saveState();
+      document.getElementById('note-status').textContent = '✓ Đã lưu ghi chú!';
+    };
+    document.getElementById('export-notes-inline').onclick = exportNotes;
+  } else {
+    container.innerHTML = `
+      <div class="slide-eyebrow" style="margin-bottom:6px;">📜 NỘI DUNG NGUYÊN VĂN BÓC TÁCH TỪ FILE PDF (SLIDE ${s.id})</div>
+      <div class="verbatim-box">${escapeHtml(s.verbatim)}</div>
+      <div class="slide-eyebrow" style="margin-bottom:8px;">🎙️ KỊCH BẢN THUYẾT MINH & PHỤ ĐỀ TIẾNG VIỆT (Nhấp câu để nghe)</div>
+      <div id="cue-list">
+        ${s.narration.map((line, i) => `
+          <div class="cue-item" data-cidx="${i}">
+            <b style="color:var(--gold);margin-right:6px;">#${i+1}</b>${escapeHtml(line)}
+          </div>
+        `).join('')}
+      </div>
+    `;
+    document.querySelectorAll('.cue-item').forEach(el => {
+      el.onclick = () => startNarration(Number(el.dataset.cidx));
+    });
+  }
+}
+
+// ===== COUNCIL OF AI ENGINE =====
+const PERSONA_META = {
+  zen: { icon: '🧘', name: 'Thiền Sư Tỉnh Thức', cls: 'zen' },
+  educator: { icon: '🎓', name: 'Nhà Giáo Dục Truyền Cảm Hứng', cls: 'educator' },
+  expert: { icon: '🚀', name: 'Chuyên Gia AI & Chiến Lược', cls: 'expert' }
+};
+
+function renderCouncilForSlide() {
+  const s = SLIDES[state.idx];
+  const qp = document.getElementById('quick-prompts');
+  qp.innerHTML = s.council.prompts.map(q => `<button class="q-pill">💬 ${escapeHtml(q)}</button>`).join('');
+  qp.querySelectorAll('.q-pill').forEach((btn, i) => {
+    btn.onclick = () => askCouncil(s.council.prompts[i]);
+  });
+
+  if (!state.chatHistories[s.id]) {
+    state.chatHistories[s.id] = [{
+      role: 'ai', persona: 'zen',
+      text: `Chào bạn tại Slide ${s.id} (“${s.title}”). Hội đồng Trí Tuệ gồm 🧘 Thiền Sư, 🎓 Nhà Giáo Dục và 🚀 Chuyên Gia đã sẵn sàng đồng hành! Hãy bấm câu hỏi gợi ý phía trên hoặc gõ bất kỳ trăn trở nào của bạn.`
+    }];
+  }
+  renderChatStream();
+}
+
+function renderChatStream() {
+  const s = SLIDES[state.idx];
+  const stream = document.getElementById('chat-stream');
+  const hist = state.chatHistories[s.id] || [];
+  stream.innerHTML = hist.map((m, idx) => {
+    if (m.role === 'user') {
+      return `<div class="msg user"><b>Bạn hỏi:</b> ${escapeHtml(m.text)}</div>`;
+    }
+    const pm = PERSONA_META[m.persona] || PERSONA_META.expert;
+    return `
+      <div class="msg ai ${pm.cls}">
+        <div class="msg-head">
+          <span class="msg-author">${pm.icon} ${pm.name}</span>
+          <button class="speak-msg-btn" data-midx="${idx}" title="Đọc to câu trả lời bằng tiếng Việt">🔊</button>
+        </div>
+        <div>${escapeHtml(m.text).replace(/\n/g, '<br>')}</div>
+      </div>
+    `;
+  }).join('');
+  stream.scrollTop = stream.scrollHeight;
+  stream.querySelectorAll('.speak-msg-btn').forEach(btn => {
+    btn.onclick = () => speakOneLine(hist[Number(btn.dataset.midx)].text);
+  });
+}
+
+function buildOfflineAnswer(slide, persona, question) {
+  const q = question.toLowerCase();
+  const base = slide.council[persona];
+  // Tailor dynamically if user asks a custom question
+  let extra = '';
+  if (/ví dụ|thực tế|áp dụng|lớp học|học sinh|con cái|dạy/.test(q)) {
+    if (persona === 'zen') extra = `\n\n🌿 Thực hành nhỏ ngay hôm nay: ${slide.action}`;
+    if (persona === 'educator') extra = `\n\n🎯 Gợi ý đưa vào lớp học từ Slide ${slide.id}: Thay vì cách cũ (“${slide.flip.beforeTitle}”), hãy dẫn học trò chuyển sang “${slide.flip.afterTitle}” qua hoạt động: ${slide.action}`;
+    if (persona === 'expert') extra = `\n\n⚡ Ứng dụng hệ thống: Kết hợp nguyên lý “${slide.flip.takeaway}” với công thức Prompt 4 yếu tố (Vai trò + Việc cần làm + Bối cảnh + Định dạng) để tạo ngay kịch bản thực hành trong 2 phút.`;
+  } else if (/ai|prompt|lệnh|công cụ|notebook|gemini|antigravity/.test(q)) {
+    if (persona === 'expert') extra = `\n\n🤖 Mẹo AI gắn với Slide ${slide.id}: Hãy đưa nguyên văn thông điệp “${slide.quote}” vào làm BỐI CẢNH cho Gemini/NotebookLM và yêu cầu tạo 3 tình huống nhập vai cho học viên!`;
+    if (persona === 'zen') extra = `\n\n🧘 Nhắc tâm thời công nghệ: Dùng AI để tiết kiệm sức lao động kỹ thuật, nhưng đừng bao giờ giao trái tim tỉnh thức của mình cho thuật toán.`;
+    if (persona === 'educator') extra = `\n\n🎓 Góc nhìn sư phạm AI: Hãy dùng AI soạn phiên bản tương tác sinh động, để trên lớp bạn có trọn vẹn thời gian nhìn vào mắt học sinh và truyền lửa cảm hứng.`;
+  } else if (/tóm tắt|ngắn gọn|cốt lõi|chính/.test(q)) {
+    extra = `\n\n💎 Đúc kết 1 câu từ Slide ${slide.id}: “${slide.flip.takeaway}”`;
+  }
+  return base + extra;
+}
+
+async function callLiveGemini(slide, persona, question) {
+  const personaRole = {
+    zen: 'Bạn là một Thiền Sư tỉnh thức uyên bác, ngôn từ nhẹ nhàng, sâu lắng, dùng ẩn dụ thiên nhiên và tuệ giác tâm thức.',
+    educator: 'Bạn là một Nhà Giáo Dục Truyền Cảm Hứng giàu thực chiến lớp học, ấm áp, luôn nêu ví dụ sư phạm cụ thể dễ áp dụng.',
+    expert: 'Bạn là một Chuyên Gia Đầu Ngành về Chiến lược AI (NotebookLM, Gemini, Antigravity), tư duy sắc bén, thực tiễn và tầm nhìn kiến tạo di sản.'
+  }[persona];
+
+  const prompt = `${personaRole}
+Bối cảnh bài giảng hiện tại (Slide ${slide.id}/${SLIDES.length}):
+- Tiêu đề: ${slide.title}
+- Trích dẫn gốc PDF: ${slide.verbatim}
+- Chuyển hóa: Trước (${slide.flip.beforeTitle}) -> Sau (${slide.flip.afterTitle})
+Câu hỏi của người học: "${question}"
+Hãy trả lời bằng tiếng Việt thật súc tích (khoảng 3-5 câu), sâu sắc, truyền cảm hứng và bám sát nội dung slide này.`;
+
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(state.apiModel)}:generateContent?key=${encodeURIComponent(state.apiKey)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+  });
+  if (!res.ok) throw new Error('API Error ' + res.status);
+  const data = await res.json();
+  const txt = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!txt) throw new Error('Empty response');
+  return txt.trim();
+}
+
+async function askCouncil(rawQ) {
+  const question = (rawQ || '').trim();
+  if (!question) return;
+  const s = SLIDES[state.idx];
+  document.getElementById('council-input').value = '';
+  state.chatHistories[s.id].push({ role: 'user', text: question });
+  renderChatStream();
+  playTone(540, 0.08, 'sine', 0.05);
+
+  const personas = state.persona === 'all' ? ['zen', 'educator', 'expert'] : [state.persona];
+  for (const p of personas) {
+    // Thinking indicator
+    const thinkingObj = { role: 'ai', persona: p, text: 'Đang suy ngẫm sâu sắc...' };
+    state.chatHistories[s.id].push(thinkingObj);
+    renderChatStream();
+
+    let answer = '';
+    if (state.apiKey) {
+      try {
+        answer = await callLiveGemini(s, p, question);
+      } catch(e) {
+        answer = buildOfflineAnswer(s, p, question) + '\n(Đang dùng kho tri thức nội bộ do chưa kết nối được Gemini API)';
+      }
+    } else {
+      await new Promise(r => setTimeout(r, 260));
+      answer = buildOfflineAnswer(s, p, question);
+    }
+    thinkingObj.text = answer;
+    renderChatStream();
+  }
+  addXP(5, 'Đã tham vấn Hội đồng AI!');
+}
+
+// ===== VIETNAMESE NARRATION & AUTO SUBTITLES =====
+// Giọng nhúng sẵn (nữ Aria / nam Helio): mỗi đoạn thuyết minh (cue) có 1 file
+// thu sẵn, phát qua Blob URL để nghe được trên cả Chrome (Samsung) lẫn Safari
+// (iPhone). Phụ đề, bộ đếm cue, thanh tiến độ cue và auto-tour giữ nguyên logic
+// gốc — chỉ thay nguồn âm thanh từ Web Speech sang audio nhúng.
+let viVoices = [];
+let embeddedAudio = null;
+const audioBlobUrlCache = {};
+let narrationToken = 0; // Tăng mỗi lần bắt đầu thuyết minh mới để hủy các lần thử lại cũ còn chờ
+let ttsErrorStreak = 0; // Số lỗi giọng trình duyệt liên tiếp (đủ 2 thì dừng hẳn)
+let ttsUtteranceToken = 0; // Bản v7: tăng mỗi lần ra lệnh đọc mới — sự kiện (onend/onerror/"chó giữ") của lệnh đọc cũ (đã bị hủy hoặc đã qua đoạn khác) phải bị bỏ qua, không được nhảy cóc đoạn đang đọc.
+function refreshViVoices() {
+  // Lấy lại danh sách giọng tiếng Việt mới nhất (getVoices() lúc đầu có thể
+  // trả về rỗng do giọng chưa tải xong).
+  if (!('speechSynthesis' in window)) { viVoices = []; return viVoices; }
+  const all = speechSynthesis.getVoices() || [];
+  viVoices = all.filter(v => /vi/i.test(v.lang) || /vietnam/i.test(v.name));
+  return viVoices;
+}
+function getAudioBlobUrl(gender, idx, cueIdx, dataUri) {
+  const key = gender + ":" + idx + ":" + cueIdx;
+  if (audioBlobUrlCache[key]) return audioBlobUrlCache[key];
+  try {
+    const base64 = (dataUri.split(",")[1] || "");
+    const byteStr = atob(base64);
+    const buf = new Uint8Array(byteStr.length);
+    for (let i = 0; i < byteStr.length; i++) buf[i] = byteStr.charCodeAt(i);
+    const url = URL.createObjectURL(new Blob([buf], { type: "audio/mpeg" }));
+    audioBlobUrlCache[key] = url;
+    return url;
+  } catch (e) {
+    return dataUri; // Dự phòng: giữ nguyên data URI nếu chuyển đổi lỗi
+  }
+}
+function stopEmbeddedAudio() {
+  if (embeddedAudio) {
+    embeddedAudio.onended = null;
+    embeddedAudio.onerror = null;
+    embeddedAudio.onplaying = null;
+    embeddedAudio.pause();
+    embeddedAudio.removeAttribute("src");
+    embeddedAudio.load();
+    embeddedAudio = null;
+  }
+}
+// Bản v2 (20/11/2026): khung hướng dẫn bật giọng tiếng Việt — hiện khi máy
+// không có giọng vi-VN. Gợi ý tự động tôn trọng lựa chọn đóng của chị
+// (voiceGuideDismissed), nhưng khi bấm phát mà lỗi thì vẫn hiện lại vì đó
+// là cách sửa lỗi duy nhất lúc đó.
+let voiceGuideDismissed = false;
+function showVoiceGuide() {
+  const p = document.getElementById('voiceGuidePanel');
+  if (p) p.classList.remove('hidden');
+}
+function hideVoiceGuide() {
+  const p = document.getElementById('voiceGuidePanel');
+  if (p) p.classList.add('hidden');
+}
+function updateVoiceStatus(mode) {
+  const bar = document.getElementById("voiceStatusBar");
+  if (!bar) return;
+  if (mode === "embedded") {
+    bar.textContent = "🎙️ Đang nghe bằng giọng đọc của trình duyệt. Muốn giọng Aria/Helio trầm ấm nhúng sẵn, gửi file HTML này cho trợ lý Jade để thu giọng.";
+  } else if (!embeddedAudioValid) {
+    bar.textContent = "🎙️ Đang nghe bằng giọng đọc của trình duyệt. Muốn giọng Aria/Helio trầm ấm nhúng sẵn, gửi file HTML này cho trợ lý Jade để thu giọng.";
+  } else {
+    bar.textContent = "🎙️ Đang nghe bằng giọng đọc của trình duyệt. Muốn giọng Aria/Helio trầm ấm nhúng sẵn, gửi file HTML này cho trợ lý Jade để thu giọng.";
+  }
+}
+// Lời giảng trang đang mở còn đúng y lời gốc không? (so sánh mảng narration)
+function embeddedCueMatches(idx) {
+  if (!embeddedAudioValid) return false;
+  const s = SLIDES[idx];
+  const orig = DEFAULT_MASTER_SLIDES[idx];
+  if (!s || !orig) return false;
+  return JSON.stringify(s.narration) === JSON.stringify(orig.narration);
+}
+function getVoiceMode() {
+  const v = document.getElementById('voice-select').value;
+  if (v === 'embedded:female') return { type: 'embedded', gender: 'female' };
+  if (v === 'embedded:male') return { type: 'embedded', gender: 'male' };
+  return { type: 'tts' };
+}
+// Cờ ghi nhận lựa chọn CHỦ ĐỘNG của chị với chế độ phụ đề. CHỈ được đặt
+// bởi trình nghe sự kiện 'change' bên dưới — loadVoices() không bao giờ
+// được tự đặt cờ này. (Sửa lỗi mặc định giọng — trước đây mở trang
+// lần đầu, cả Aria và phụ đề cùng được gắn selected, lựa chọn gắn sau là
+// phụ đề thắng nên sách chạy phụ đề im lặng dù giọng nhúng vẫn tốt.)
+let userChoseSubtitle = false;
+function loadVoices() {
+  const sel = document.getElementById('voice-select');
+  const prev = sel.value;
+  sel.innerHTML = '';
+  const addOpt = (value, label, selected) => {
+    const opt = document.createElement('option');
+    opt.value = value; opt.textContent = label;
+    if (selected) opt.selected = true;
+    sel.appendChild(opt);
+  };
+  // Giọng nhúng luôn đứng đầu và là mặc định (nữ Aria) — kể cả khi
+  // prev === '' (mở trang lần đầu), trừ khi chị đã chủ động chọn phụ đề.
+  addOpt('embedded:female', '🎙️ Giọng nữ (giọng trình duyệt)', prev === 'embedded:female' || (prev === '' && !userChoseSubtitle));
+  addOpt('embedded:male', '🎙️ Giọng nam (giọng trình duyệt)', prev === 'embedded:male');
+  if ('speechSynthesis' in window) {
+    const all = speechSynthesis.getVoices();
+    viVoices = all.filter(v => /vi/i.test(v.lang) || /vietnam/i.test(v.name));
+    viVoices.forEach((v) => {
+      addOpt(v.name, `🇻🇳 ${v.name.slice(0, 22)}`, prev === v.name);
+    });
+    // Bản v2: chế độ phụ đề luôn có mặt để chị TỰ CHỌN (kể cả khi đã có giọng
+    // vi-VN) — ví dụ khi muốn đọc thầm bằng phụ đề hoặc khi giọng trình duyệt
+    // trục trặc. Mặc định vẫn là giọng nữ, không tự bật phụ đề.
+    addOpt('', '🇻🇳 Phụ đề TV tự động', userChoseSubtitle && prev === '');
+    // Hiện/ẩn khung hướng dẫn bật giọng: chỉ kết luận "không có giọng" khi
+    // danh sách giọng đã tải xong (getVoices() lúc đầu có thể trả về rỗng).
+    if (all.length > 0 && !voiceGuideDismissed) {
+      if (viVoices.length) hideVoiceGuide(); else showVoiceGuide();
+    }
+  } else {
+    addOpt('', '🇻🇳 Phụ đề TV tự động', false);
+    // Trình duyệt không có speechSynthesis: hiện khung hướng dẫn (trong đó có
+    // cách chọn phụ đề và cách nhờ trợ lý thu giọng nhúng).
+    if (!voiceGuideDismissed) showVoiceGuide();
+  }
+}
+if ('speechSynthesis' in window) {
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+} else {
+  loadVoices();
+}
+// Kiểm tra lại sau 2 giây: có trình duyệt tải giọng chậm mà voiceschanged
+// không bắn — nếu lúc đó vẫn không có giọng vi-VN thì hiện khung hướng dẫn.
+setTimeout(function () {
+  if (!('speechSynthesis' in window) || voiceGuideDismissed) return;
+  if (refreshViVoices().length) hideVoiceGuide(); else showVoiceGuide();
+}, 2000);
+// Nút đóng khung hướng dẫn: chị đã hiểu thì không hiện gợi ý tự động nữa.
+document.getElementById('voiceGuideCloseBtn').addEventListener('click', function () {
+  voiceGuideDismissed = true;
+  hideVoiceGuide();
+});
+// Bản v6 — Đề nghị nghe bằng phụ đề khi máy không có giọng tiếng Việt.
+// (Trước đây bấm "Nghe liên tục" khi không có giọng thì trang dừng im lặng
+// ở trang 1, chị tưởng máy bị kẹt — giờ hỏi rõ để chị chọn, và chỉ cần một
+// lần bấm là nghe tiếp được bằng phụ đề.)
+let subtitleOfferAuto = false; // Đề nghị này có đi kèm chế độ nghe liên tục không?
+function showSubtitleOffer(fromAutoTour) {
+  subtitleOfferAuto = !!fromAutoTour;
+  const p = document.getElementById('subtitleOfferPanel');
+  if (p) p.classList.remove('hidden');
+  showVoiceGuide();
+}
+function hideSubtitleOffer() {
+  const p = document.getElementById('subtitleOfferPanel');
+  if (p) p.classList.add('hidden');
+}
+function startSubtitleListening() {
+  hideSubtitleOffer();
+  const sel = document.getElementById('voice-select');
+  if (sel) sel.value = '';
+  userChoseSubtitle = true;
+  if (subtitleOfferAuto) {
+    setAutoTour(true);
+    showToast('▶ Đang nghe liên tục bằng phụ đề — từ trang ' + (state.idx + 1) + ' đến hết trang ' + SLIDES.length);
+  }
+  startNarration(0);
+}
+document.getElementById('subtitleOfferYesBtn').addEventListener('click', startSubtitleListening);
+document.getElementById('subtitleOfferNoBtn').addEventListener('click', hideSubtitleOffer);
+// Bản v6: đoạn đầu có đọc được không? (để hỏi chị chuyển sang phụ đề TRƯỚC
+// khi bắt đầu nghe liên tục, thay vì bắt đầu rồi kẹt im lặng ở trang 1.)
+function firstCueSpeakable() {
+  const sel = document.getElementById('voice-select');
+  // Chị đã chọn phụ đề → phụ đề hẹn giờ đọc được.
+  if (sel && sel.value === '' && userChoseSubtitle) return true;
+  // Giọng nhúng của đoạn đầu còn dùng được.
+  const mode = getVoiceMode();
+  if (mode.type === 'embedded' && embeddedCueMatches(state.idx)) {
+    const src = ((AUDIO_SETS[mode.gender] || [])[state.idx] || [])[0];
+    if (src) return true;
+  }
+  // Giọng trình duyệt: chỉ kết luận "không có giọng vi" khi danh sách giọng
+  // ĐÃ tải xong (getVoices() lúc đầu có thể trả về rỗng dù máy có giọng vi).
+  if (!('speechSynthesis' in window)) return false;
+  const all = speechSynthesis.getVoices() || [];
+  if (all.length === 0) return true; // chưa biết — cứ bắt đầu, "chó giữ" sẽ xử lý nếu thật sự không đọc được
+  return refreshViVoices().length > 0;
+}
+// Ghi nhận lựa chọn chủ động của chị trên ô chọn giọng: chỉ khi chị tự
+// tay chọn "Phụ đề TV tự động" thì chế độ phụ đề hẹn giờ mới được phép.
+document.getElementById('voice-select').addEventListener('change', function () {
+  userChoseSubtitle = (this.value === '');
+});
+updateVoiceStatus(embeddedAudioValid ? "embedded" : "tts");
+
+function speakOneLine(text) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'vi-VN';
+  u.rate = parseFloat(document.getElementById('rate-select').value) || 1;
+  const chosen = speechSynthesis.getVoices().find(v => v.name === document.getElementById('voice-select').value);
+  if (chosen) u.voice = chosen;
+  speechSynthesis.speak(u);
+}
+
+// Bật/tắt chế độ nghe liên tục (tự động thuyết minh + chuyển trang) — một cờ
+// duy nhất state.autoTour dùng chung cho nút "Tự động" cũ và nút mới
+// "Nghe liên tục cả bài"; hai nút luôn đồng bộ trạng thái với nhau.
+function setAutoTour(on) {
+  state.autoTour = on;
+  const oldBtn = document.getElementById('autotour-btn');
+  if (oldBtn) oldBtn.classList.toggle('active', on);
+  const lb = document.getElementById('listen-all-btn');
+  if (lb) {
+    lb.textContent = on ? '⏸ Dừng nghe liên tục' : '▶ Nghe liên tục cả bài';
+    lb.classList.toggle('active', on);
+  }
+}
+
+// Nút "Nghe liên tục cả bài": một lần bấm là nghe hết từ trang đang mở đến
+// hết trang cuối; bấm lại thì dừng hẳn (kể cả nhạc nền).
+function toggleListenAll() {
+  if (state.autoTour) {
+    setAutoTour(false);
+    stopNarration(true);
+    showToast('⏸ Đã dừng nghe liên tục');
+    return;
+  }
+  // Đang ở trang cuối mà không đọc nữa → quay về trang 1 rồi bắt đầu lại.
+  if (state.idx >= SLIDES.length - 1 && !state.narrating) {
+    state.idx = 0;
+    renderSlide();
+  }
+  // Bản v6: máy đã biết là không có giọng tiếng Việt (và không có giọng
+  // nhúng cho đoạn này) thì HỎI chị nghe bằng phụ đề TRƯỚC khi bắt đầu —
+  // không bắt đầu việc nghe sẽ kẹt im lặng ở trang 1 như trước.
+  if (!firstCueSpeakable()) {
+    showSubtitleOffer(true);
+    return;
+  }
+  setAutoTour(true);
+  showToast('▶ Đang nghe liên tục cả bài — từ trang ' + (state.idx + 1) + ' đến hết trang ' + SLIDES.length);
+  startNarration(0);
+}
+
+function startNarration(fromIdx = 0) {
+  stopNarration(false);
+  narrationToken++;
+  ttsErrorStreak = 0;
+  const s = SLIDES[state.idx];
+  state.narrating = true;
+  state.cueIdx = fromIdx;
+  // Bản v3: mốc đo mức sàn 8 giây/trang ở chế độ phụ đề — đo từ lúc bắt đầu
+  // thuyết minh trang này (không đo từ lúc mở trang). Đặt lại cờ phụ đề:
+  // cờ chỉ bật khi nhánh phụ đề hẹn giờ thật sự chạy trong speakCurrentCueTTSOnly.
+  state.narrationStartAt = Date.now();
+  state.subtitleMode = false;
+  const btn = document.getElementById('play-narration-btn');
+  btn.textContent = '⏸ Tạm dừng';
+  btn.classList.add('playing');
+  if (state.showSub) document.getElementById('subtitle-overlay').classList.remove('hidden');
+  speakCurrentCue();
+  // Chỉ bật nhạc khi thuyết minh vẫn đang chạy (nó có thể đã dừng ngay trong
+  // speakCurrentCue nếu không còn cách nào phát ra tiếng).
+  if (state.narrating) { try { startMusicAuto(); } catch (e) { console.warn('[Nhạc nền] Không bật được nhạc:', e && e.message); } }
+}
+
+function speakCurrentCue() {
+  if (!state.narrating) return;
+  const s = SLIDES[state.idx];
+  if (state.cueIdx >= s.narration.length) {
+    stopNarration(false);
+    document.getElementById('cue-status').textContent = '✓ Đã thuyết minh xong slide này';
+    if (state.autoTour && state.idx < SLIDES.length - 1) {
+      // Bản v5: mức sàn 8 giây/trang áp dụng cho MỌI nhánh giọng đọc khi
+      // nghe liên tục (không chỉ nhánh phụ đề như bản v3/v4). Bằng chứng
+      // vòng 4: đo thật bằng chờ tường minh cho thấy mỗi trang chỉ ở lại
+      // ~5 giây, dù mô phỏng nhánh phụ đề cho ≥8000ms — vì trang 1 có 2
+      // đoạn phụ đề cần tới 3975+4379ms mà vẫn chuyển trang trong ~5 giây,
+      // chứng tỏ các đoạn đã chạy qua NHÁNH GIỌNG TRÌNH DUYỆT (trình duyệt
+      // kiểm tra có giọng tiếng Việt lúc nghe, cờ subtitleMode không bật)
+      // nên mức sàn gắn với subtitleMode đã bị bỏ qua. Mức sàn đo từ lúc
+      // bắt đầu thuyết minh trang này (narrationStartAt): nếu lời giảng
+      // đã đọc hơn 8 giây (giọng nhúng dài, giọng thật đọc chậm) thì chỉ
+      // nghỉ 700ms như cũ — không làm chậm sách có giọng nhúng.
+      // Đây là ĐIỂM CHUYỂN TRANG TỰ ĐỘNG DUY NHẤT (đã rà toàn bộ mã:
+      // chỉ còn nút Tiếp thủ công gọi state.idx++, mà nút đó tắt autoTour
+      // trước), nên đặt mức sàn ở đây là bao phủ mọi đường chạy.
+      const elapsed = state.narrationStartAt ? (Date.now() - state.narrationStartAt) : 0;
+      const pageDelay = Math.max(700, 8000 - elapsed);
+      // Bản v7 — CHỐT Ở LẠI TRANG ĐỘC LẬP (không phụ thuộc mốc
+      // narrationStartAt): đo thật vòng 6 cho thấy trang chuyển nhanh
+      // ~2,5 giây qua đường khung đề nghị dù mức sàn trên đây đúng trong mã
+      // và mô phỏng đường chạy thật vẫn cho ≥8000ms — chứng tỏ có yếu tố
+      // ngoài mã (môi trường/trình duyệt) làm mức sàn dựa trên một mốc duy
+      // nhất bị phá vỡ. Chốt này kiểm tra lại LÚC CHUYỂN TRANG, dựa trên
+      // mốc HIỂN THỊ trang (state.pageStartAt, đặt mới ở mỗi lần
+      // renderSlide): nếu trang chưa đủ 8 giây thì hẹn lại phần còn thiếu
+      // thay vì chuyển ngay. Trang đầu của việc nghe có thể đã mở từ lâu
+      // (pageStartAt cũ) thì chốt này cho qua ngay và mức sàn thuyết minh
+      // vẫn giữ vai trò chính — hai lớp bảo vệ bổ sung cho nhau.
+      const advanceWhenReady = (tries) => {
+        if (!state.autoTour) return; // Chị đã dừng nghe trong lúc chờ
+        const shownFor = state.pageStartAt ? (Date.now() - state.pageStartAt) : 0;
+        if (shownFor < 8000 && tries < 10) {
+          state.cueTimer = setTimeout(() => advanceWhenReady(tries + 1), 8000 - shownFor);
+          return;
+        }
+        if (shownFor < 8000) console.warn('[4D] Chốt ở lại trang đã hẹn lại 10 lần mà trang vẫn chưa đủ 8 giây — chuyển trang để không kẹt.');
+        console.log('[4D] Trang ' + (state.idx + 1) + '/' + SLIDES.length + ': ở lại ' + shownFor + 'ms, chuyển trang.');
+        state.idx++;
+        renderSlide();
+        startNarration(0);
+      };
+      state.cueTimer = setTimeout(() => advanceWhenReady(0), pageDelay);
+    } else if (state.autoTour) {
+      // Đã nghe hết trang cuối trong chế độ liên tục: tắt chế độ, dừng nhạc
+      // nhẹ nhàng (fade 0,8s) và báo hoàn thành.
+      setAutoTour(false);
+      stopMusicAuto();
+      showToast(`🎉 Đã nghe xong toàn bộ bài giảng ${SLIDES.length} trang!`);
+    }
+    return;
+  }
+
+  const line = s.narration[state.cueIdx];
+  document.getElementById('subtitle-text').textContent = line;
+  document.getElementById('cue-counter').textContent = `${state.cueIdx + 1}/${s.narration.length}`;
+  document.getElementById('cue-fill').style.width = `${Math.round(((state.cueIdx + 1) / s.narration.length) * 100)}%`;
+  document.getElementById('cue-status').textContent = '🎙️ Đang thuyết minh tiếng Việt...';
+  document.querySelectorAll('.cue-item').forEach((el, i) => el.classList.toggle('active', i === state.cueIdx));
+
+  const rate = parseFloat(document.getElementById('rate-select').value) || 1;
+  const nextCue = () => {
+    if (!state.narrating) return;
+    state.cueIdx++;
+    speakCurrentCue();
+  };
+
+  // Ưu tiên giọng thu sẵn của đúng đoạn này (chỉ khi còn hiệu lực và lời giảng đúng y lời gốc).
+  const mode = getVoiceMode();
+  if (mode.type === 'embedded' && embeddedCueMatches(state.idx)) {
+    const src = ((AUDIO_SETS[mode.gender] || [])[state.idx] || [])[state.cueIdx];
+    if (src && playEmbeddedCue(state.idx, state.cueIdx, mode.gender, rate, nextCue)) return;
+  }
+  speakCurrentCueTTSOnly();
+}
+
+// Đọc đoạn hiện tại bằng giọng của trình duyệt (dự phòng khi không có/không
+// phát được giọng nhúng, hoặc khi người dùng chọn giọng trình duyệt).
+function speakCurrentCueTTSOnly() {
+  if (!state.narrating) return;
+  const s = SLIDES[state.idx];
+  const line = s.narration[state.cueIdx];
+  const rate = parseFloat(document.getElementById('rate-select').value) || 1;
+  const nextCue = () => {
+    if (!state.narrating) return;
+    state.cueIdx++;
+    speakCurrentCue();
+  };
+  // Dừng hẳn thuyết minh khi không còn cách nào phát ra tiếng (không chạy
+  // phụ đề im lặng để người nghe khỏi tưởng máy bị lỗi).
+  const stopWithoutVoice = () => {
+    const wasAutoTour = state.autoTour;
+    stopNarration(true);
+    const bar = document.getElementById("voiceStatusBar");
+    if (bar) bar.textContent = "⚠️ Trình duyệt này không phát được giọng đọc. Chị bấm nút phát lại để thử lại, hoặc mở link bằng Chrome nhé.";
+    // Bản v2: cập nhật luôn dòng trạng thái (trước đây dòng "Đang thuyết minh…"
+    // còn hiển thị dù tiếng đã dừng) và hiện khung hướng dẫn bật giọng tiếng Việt.
+    const cs = document.getElementById('cue-status');
+    if (cs) cs.textContent = '⚠️ Không phát được giọng đọc — xem hướng dẫn bật giọng tiếng Việt bên dưới';
+    showVoiceGuide();
+    // Bản v6: dừng vì không có giọng (kể cả khi "chó giữ" bắt được lỗi giữa
+    // chừng khi đang nghe liên tục) thì đề nghị nghe bằng phụ đề để chị
+    // chuyển sang chỉ bằng một lần bấm — không bao giờ để việc nghe kẹt im
+    // lặng mà không có lối ra.
+    showSubtitleOffer(wasAutoTour);
+    showToast("⚠️ Trình duyệt này không phát được giọng đọc. Chị bấm nút phát lại để thử lại, hoặc mở link bằng Chrome nhé.");
+  };
+  updateVoiceStatus("tts");
+  if ('speechSynthesis' in window && refreshViVoices().length > 0) {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(line);
+    u.lang = 'vi-VN'; u.rate = rate;
+    const mode = getVoiceMode();
+    if (mode.type === 'embedded') u.pitch = mode.gender === 'female' ? 1.08 : 0.92;
+    const chosen = speechSynthesis.getVoices().find(v => v.name === document.getElementById('voice-select').value)
+      || (mode.type === 'embedded' ? viVoices[0] : null);
+    if (chosen) u.voice = chosen;
+    let ttsWatchdog = null;   // Hẹn giờ "chó giữ" 3 giây (bản v2)
+    let ttsMaxTimer = null;   // Bản v6: "chó giữ" thời lượng tối đa (giọng đã bắt đầu nhưng không bao giờ kết thúc)
+    let ttsStarted = false;   // Giọng đã bắt đầu đọc thật hay chưa
+    let ttsWatchdogFired = false; // Chó giữ đã xử lý lỗi (tránh xử lý trùng với onerror/onend)
+    let ttsMaxFired = false;      // Bản v6: "chó giữ" thời lượng đã xử lý lỗi (tránh xử lý trùng)
+    // Bản v7 — chốt hoàn thành đoạn + mã hiệu lệnh đọc: Chrome đôi khi bắn
+    // CẢ onerror VÀ onend cho cùng một lệnh đọc (đặc biệt khi lệnh bị hủy),
+    // và "chó giữ" của đoạn cũ vẫn còn hẹn giờ sau khi đã sang đoạn mới
+    // (stopNarration chỉ xóa cueTimer, không xóa các hẹn giờ "chó giữ").
+    // Không có chốt này, mỗi sự kiện đều gọi nextCue một lần làm nhảy cóc
+    // đoạn (mô phỏng tái hiện: hai lần chuyển đoạn cách nhau chỉ 10ms ở
+    // trang 10). myUtterance nhận diện lệnh đọc này; ttsCueSettled đảm bảo
+    // mỗi đoạn chỉ được chuyển tiếp ĐÚNG MỘT LẦN dù có bao nhiêu sự kiện bắn.
+    const myUtterance = ++ttsUtteranceToken;
+    let ttsCueSettled = false;
+    u.onstart = () => { ttsStarted = true; if (ttsWatchdog) { clearTimeout(ttsWatchdog); ttsWatchdog = null; } };
+    u.onend = () => {
+      if (ttsWatchdog) { clearTimeout(ttsWatchdog); ttsWatchdog = null; }
+      if (ttsMaxTimer) { clearTimeout(ttsMaxTimer); ttsMaxTimer = null; }
+      if (myUtterance !== ttsUtteranceToken) return; // Sự kiện của lệnh đọc cũ — bỏ qua
+      ttsErrorStreak = 0; // Lệnh đọc xong (dù onerror đã bắn trước đó) thì vẫn tính là xong, không dồn lỗi
+      if (ttsCueSettled) return; // Đã chuyển đoạn rồi (onerror bắn trước) — không chuyển trùng
+      ttsCueSettled = true;
+      state.cueTimer = setTimeout(nextCue, state.autoTour ? 200 : 350);
+    };
+    u.onerror = () => {
+      if (ttsWatchdog) { clearTimeout(ttsWatchdog); ttsWatchdog = null; }
+      if (ttsMaxTimer) { clearTimeout(ttsMaxTimer); ttsMaxTimer = null; }
+      if (myUtterance !== ttsUtteranceToken) return; // Sự kiện của lệnh đọc cũ — bỏ qua
+      if (ttsCueSettled) return; // Đã chuyển đoạn rồi (onend bắn trước) — không chuyển trùng
+      ttsCueSettled = true;
+      if (!state.narrating) return;
+      ttsErrorStreak++;
+      if (ttsErrorStreak >= 2) { stopWithoutVoice(); return; }
+      // Lỗi thoáng qua ở 1 đoạn: bỏ qua đoạn lỗi, sang đoạn sau (vẫn đọc thành tiếng).
+      state.cueTimer = setTimeout(nextCue, state.autoTour ? 200 : 350);
+    };
+    speechSynthesis.speak(u);
+    // Bản v2 — "chó giữ" 3 giây: giọng trình duyệt đôi khi nhận lệnh nhưng
+    // không phát ra tiếng mà cũng không báo lỗi. Nếu sau 3 giây chưa bắt đầu
+    // đọc thì coi như lỗi, đủ 2 lần liên tiếp thì dừng hẳn + hiện hướng dẫn
+    // bật giọng (không chạy phụ đề im lặng).
+    ttsWatchdog = setTimeout(() => {
+      if (myUtterance !== ttsUtteranceToken || ttsStarted || ttsCueSettled || !state.narrating) return;
+      ttsWatchdogFired = true;
+      ttsCueSettled = true;
+      try { speechSynthesis.cancel(); } catch (e) {}
+      if (ttsMaxTimer) { clearTimeout(ttsMaxTimer); ttsMaxTimer = null; }
+      ttsErrorStreak++;
+      // Bản v6: đang nghe liên tục mà giọng không phát ra tiếng thì DỪNG
+      // NGAY (không chờ đủ 2 lần như trước) + đề nghị phụ đề — giọng đã
+      // nhận lệnh mà không đọc thì không phải lỗi thoáng qua, chờ thêm chỉ
+      // làm việc nghe kẹt im lặng ở trang đó.
+      if (state.autoTour) { stopWithoutVoice(); return; }
+      if (ttsErrorStreak >= 2) { stopWithoutVoice(); return; }
+      state.cueTimer = setTimeout(nextCue, state.autoTour ? 200 : 350);
+    }, 3000);
+    // Bản v6 — "chó giữ" thời lượng tối đa: giọng đã bắt đầu đọc nhưng không
+    // bao giờ báo xong (treo giữa đoạn) thì sau một mức chờ cũng phải chuyển
+    // tiếp/dừng, không kẹt mãi. Mức chờ = 3 lần thời gian đọc ước tính, tối
+    // thiểu 20 giây, tối đa 120 giây (đủ rộng để không cắt ngang đoạn dài
+    // đọc chậm).
+    const estMs = Math.max(2600, (line.length * 64) / rate);
+    ttsMaxTimer = setTimeout(() => {
+      if (myUtterance !== ttsUtteranceToken || ttsCueSettled || !state.narrating) return;
+      ttsMaxFired = true;
+      ttsCueSettled = true;
+      try { speechSynthesis.cancel(); } catch (e) {}
+      if (ttsWatchdog) { clearTimeout(ttsWatchdog); ttsWatchdog = null; }
+      ttsErrorStreak++;
+      if (state.autoTour) { stopWithoutVoice(); return; }
+      if (ttsErrorStreak >= 2) { stopWithoutVoice(); return; }
+      state.cueTimer = setTimeout(nextCue, 350);
+    }, Math.min(120000, Math.max(20000, estMs * 3)));
+  } else if (userChoseSubtitle && document.getElementById('voice-select').value === '') {
+    // Chị CHỦ ĐỘNG chọn "Phụ đề TV tự động" (cờ userChoseSubtitle) → giữ chế độ phụ đề hẹn giờ.
+    // Nếu ô giọng ở '' do mặc định (cờ false) thì rơi xuống nhánh dưới: dừng hẳn + báo rõ.
+    // Bản v3: bật cờ state.subtitleMode để nhánh chuyển trang biết trang này
+    // đang chạy phụ đề (mức sàn 8 giây/trang được tính ở đó).
+    state.subtitleMode = true;
+    document.getElementById('cue-status').textContent = 'CC Đang chạy phụ đề tiếng Việt tự động';
+    const est = Math.max(2600, (line.length * 64) / rate);
+    state.cueTimer = setTimeout(nextCue, est);
+  } else {
+    // Không có giọng tiếng Việt thật mà cũng không chọn chế độ phụ đề →
+    // DỪNG hẳn, không chạy phụ đề im lặng.
+    stopWithoutVoice();
+  }
+}
+
+// Phát file giọng thu sẵn của 1 đoạn (cue). Hết đoạn thì gọi onDone để sang
+// cue tiếp theo, giống hệt logic u.onend của giọng trình duyệt.
+// Thử phát tối đa 2 lần: lần đầu + 1 lần thử lại bằng Audio element mới và
+// Blob URL mới (lỗi lần bấm phát đầu tiên trên điện thoại thường do audio
+// chưa sẵn sàng, thử lại là phát được). Chỉ khi cả 2 lần đều lỗi mới rơi
+// sang giọng trình duyệt.
+function playEmbeddedCue(idx, cueIdx, gender, rate, onDone) {
+  const src = ((AUDIO_SETS[gender] || [])[idx] || [])[cueIdx];
+  if (!src) return false;
+  stopEmbeddedAudio();
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  const myToken = narrationToken;
+  let audioFallbackDone = false;
+  let retryCount = 0;
+  const playAttempt = () => {
+    const audio = new Audio(getAudioBlobUrl(gender, idx, cueIdx, src));
+    embeddedAudio = audio;
+    audio.playbackRate = rate;
+    audio.preload = "auto";
+    audio.onplaying = () => {
+      if (embeddedAudio === audio) updateVoiceStatus("embedded");
+    };
+    audio.onended = () => {
+      if (embeddedAudio !== audio || !state.narrating) return;
+      state.cueTimer = setTimeout(onDone, state.autoTour ? 200 : 350);
+    };
+    const failAttempt = (err) => {
+      if (audioFallbackDone || embeddedAudio !== audio) return;
+      const reason = err ? (err.name ? err.name + ': ' + (err.message || '') : String(err)) : 'unknown error';
+      console.warn('[Giọng nhúng] Không phát được trang ' + (idx + 1) + ' đoạn ' + (cueIdx + 1) + ' (' + gender + '), lần thử ' + (retryCount + 1) + ': ' + reason);
+      if (retryCount < 1 && state.narrating) {
+        retryCount++;
+        stopEmbeddedAudio();
+        const bar = document.getElementById("voiceStatusBar");
+        if (bar) bar.textContent = "🔄 Đang thử phát lại giọng đọc…";
+        setTimeout(() => {
+          if (!state.narrating || audioFallbackDone) return;
+          if (myToken !== narrationToken || state.idx !== idx || state.cueIdx !== cueIdx) return;
+          const key = gender + ":" + idx + ":" + cueIdx;
+          if (audioBlobUrlCache[key]) {
+            try { URL.revokeObjectURL(audioBlobUrlCache[key]); } catch (e) {}
+            delete audioBlobUrlCache[key];
+          }
+          playAttempt();
+        }, 300);
+        return;
+      }
+      audioFallbackDone = true;
+      stopEmbeddedAudio();
+      if (!state.narrating) return;
+      const bar = document.getElementById("voiceStatusBar");
+      if (bar) bar.textContent = "⚠️ Giọng nhúng không phát được (" + (err && err.name ? err.name : 'lỗi phát') + ") — đã chuyển sang giọng trình duyệt";
+      speakCurrentCueTTSOnly();
+    };
+    audio.onerror = () => {
+      const ae = audio.error;
+      failAttempt(ae ? { name: 'MediaError ' + ae.code, message: ae.message || '' } : null);
+    };
+    audio.play().catch(failAttempt);
+  };
+  playAttempt();
+  updateVoiceStatus("embedded");
+  return true;
+}
+
+function stopNarration(stopAutoTour = true) {
+  state.narrating = false;
+  // Chế độ nghe liên tục: giữ nhạc chạy xuyên suốt giữa các trang (không
+  // dừng/khởi động lại nhạc ở mỗi lần chuyển trang). Chỉ dừng nhạc khi tắt
+  // hẳn chế độ liên tục hoặc khi nghe từng trang bình thường.
+  if (stopAutoTour || !state.autoTour) stopMusicAuto();
+  clearTimeout(state.cueTimer);
+  stopEmbeddedAudio();
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  const btn = document.getElementById('play-narration-btn');
+  btn.textContent = '🎙️ Thuyết minh TV';
+  btn.classList.remove('playing');
+  if (stopAutoTour) {
+    setAutoTour(false);
+  }
+}
+
+// ===== ZOOM & PAN SLIDE IMAGE =====
+function updateSlideTransform() {
+  const img = document.getElementById('slide-img');
+  img.style.transform = `translate(${state.panX}px, ${state.panY}px) scale(${state.slideZoom})`;
+  document.getElementById('slide-zoom-val').textContent = `${Math.round(state.slideZoom * 100)}%`;
+}
+function resetSlideZoom() { state.slideZoom = 1; state.panX = 0; state.panY = 0; updateSlideTransform(); }
+
+function initSlideZoomPan() {
+  const stage = document.getElementById('slide-stage');
+  stage.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY < 0 ? 0.14 : -0.14;
+    state.slideZoom = Math.min(3.2, Math.max(0.6, +(state.slideZoom + delta).toFixed(2)));
+    if (state.slideZoom <= 1) { state.panX = 0; state.panY = 0; }
+    updateSlideTransform();
+  }, { passive: false });
+
+  let panning = false, sx = 0, sy = 0, ox = 0, oy = 0;
+  stage.addEventListener('mousedown', (e) => {
+    if (e.target.closest('button') || state.slideZoom <= 1) return;
+    panning = true; sx = e.clientX; sy = e.clientY; ox = state.panX; oy = state.panY;
+    stage.classList.add('panning');
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!panning) return;
+    state.panX = ox + (e.clientX - sx);
+    state.panY = oy + (e.clientY - sy);
+    updateSlideTransform();
+  });
+  window.addEventListener('mouseup', () => { panning = false; stage.classList.remove('panning'); });
+
+  document.getElementById('slide-zoom-in').onclick = () => { state.slideZoom = Math.min(3.2, +(state.slideZoom + 0.2).toFixed(2)); updateSlideTransform(); };
+  document.getElementById('slide-zoom-out').onclick = () => { state.slideZoom = Math.max(0.6, +(state.slideZoom - 0.2).toFixed(2)); if (state.slideZoom <= 1) { state.panX = 0; state.panY = 0; } updateSlideTransform(); };
+  document.getElementById('slide-zoom-reset').onclick = resetSlideZoom;
+}
+
+// ===== 4-WAY FLEXIBLE RESIZERS (LEFT/RIGHT & UP/DOWN) =====
+function initResizers() {
+  // 1. Horizontal Resizer (Left Pane <-> Right Pane)
+  const hRes = document.getElementById('h-resizer');
+  const leftPane = document.getElementById('left-pane');
+  const ws = document.getElementById('workspace');
+  let dragH = false;
+
+  hRes.addEventListener('mousedown', (e) => {
+    e.preventDefault(); dragH = true; hRes.classList.add('dragging');
+    document.querySelectorAll('iframe').forEach(f => f.style.pointerEvents = 'none');
+  });
+  hRes.addEventListener('dblclick', () => setHorizontalSplit(50));
+
+  // 2. Vertical Resizer inside Right Pane (Analysis <-> Council of AI)
+  const rvRes = document.getElementById('right-v-resizer');
+  const rTop = document.getElementById('right-top');
+  const rBody = document.querySelector('.right-body');
+  let dragRV = false;
+
+  rvRes.addEventListener('mousedown', (e) => {
+    e.preventDefault(); dragRV = true; rvRes.classList.add('dragging');
+  });
+  rvRes.addEventListener('dblclick', () => { rTop.style.height = '56%'; });
+
+  // 3. Vertical Resizer inside Left Pane (Slide <-> Video when in Song Song mode)
+  const lvRes = document.getElementById('left-v-resizer');
+  const vStage = document.getElementById('video-stage');
+  const lBody = document.querySelector('.left-body');
+  let dragLV = false;
+
+  lvRes.addEventListener('mousedown', (e) => {
+    e.preventDefault(); dragLV = true; lvRes.classList.add('dragging');
+    document.querySelectorAll('iframe').forEach(f => f.style.pointerEvents = 'none');
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (dragH) {
+      const rect = ws.getBoundingClientRect();
+      const pct = Math.min(78, Math.max(22, ((e.clientX - rect.left) / rect.width) * 100));
+      leftPane.style.width = pct.toFixed(1) + '%';
+    }
+    if (dragRV) {
+      const rect = rBody.getBoundingClientRect();
+      const pct = Math.min(82, Math.max(18, ((e.clientY - rect.top) / rect.height) * 100));
+      rTop.style.height = pct.toFixed(1) + '%';
+    }
+    if (dragLV) {
+      const rect = lBody.getBoundingClientRect();
+      const bottomPct = Math.min(75, Math.max(20, ((rect.bottom - e.clientY) / rect.height) * 100));
+      vStage.style.height = bottomPct.toFixed(1) + '%';
+    }
+  });
+  window.addEventListener('mouseup', () => {
+    if (dragH || dragRV || dragLV) {
+      dragH = dragRV = dragLV = false;
+      hRes.classList.remove('dragging'); rvRes.classList.remove('dragging'); lvRes.classList.remove('dragging');
+      document.querySelectorAll('iframe').forEach(f => f.style.pointerEvents = 'auto');
+    }
+  });
+}
+
+function setHorizontalSplit(leftPct) {
+  resetMaximize();
+  document.getElementById('left-pane').style.width = leftPct + '%';
+  document.querySelectorAll('.preset-group .hud-btn').forEach(b => {
+    b.classList.toggle('active', Number(b.dataset.layout) === leftPct);
+  });
+}
+
+function resetMaximize() {
+  state.maxPane = null;
+  document.getElementById('left-pane').classList.remove('hidden', 'maximized');
+  document.getElementById('right-pane').classList.remove('hidden', 'maximized');
+  document.getElementById('h-resizer').classList.remove('hidden');
+  document.getElementById('right-top').classList.remove('hidden', 'expanded');
+  document.getElementById('right-bottom').classList.remove('hidden', 'expanded');
+  document.getElementById('right-v-resizer').classList.remove('hidden');
+}
+
+function toggleMaximize(target) {
+  if (state.maxPane === target) { resetMaximize(); return; }
+  resetMaximize();
+  state.maxPane = target;
+  if (target === 'left') {
+    document.getElementById('right-pane').classList.add('hidden');
+    document.getElementById('h-resizer').classList.add('hidden');
+    document.getElementById('left-pane').classList.add('maximized');
+  } else if (target === 'right') {
+    document.getElementById('left-pane').classList.add('hidden');
+    document.getElementById('h-resizer').classList.add('hidden');
+    document.getElementById('right-pane').classList.add('maximized');
+  } else if (target === 'rtop') {
+    document.getElementById('right-bottom').classList.add('hidden');
+    document.getElementById('right-v-resizer').classList.add('hidden');
+    document.getElementById('right-top').classList.add('expanded');
+  } else if (target === 'council') {
+    document.getElementById('right-top').classList.add('hidden');
+    document.getElementById('right-v-resizer').classList.add('hidden');
+    document.getElementById('right-bottom').classList.add('expanded');
+  }
+}
+
+// ===== SLIDE MAP & EXPORT =====
+function openSlideMap() {
+  const grid = document.getElementById('map-grid');
+  grid.innerHTML = SLIDES.map((s, i) => `
+    <div class="map-thumb ${i === state.idx ? 'current' : ''}" data-sidx="${i}">
+      ${state.mastered.has(s.id) ? '<span class="map-done-badge">✓ Đã chuyển hóa</span>' : ''}
+      <img src="${SLIDE_IMAGES[i]}" loading="lazy" alt="Slide ${s.id}" />
+      <div class="map-thumb-info">
+        <span class="map-thumb-num">${String(s.id).padStart(2,'0')}</span>
+        <span>${escapeHtml(s.title)}</span>
+      </div>
+    </div>
+  `).join('');
+  grid.querySelectorAll('.map-thumb').forEach(el => {
+    el.onclick = () => {
+      // Bản v7: chuyển trang thủ công phải tắt chế độ nghe liên tục trước
+      // (như nút Tiếp/Lùi) — trước đây bấm bản đồ khi đang nghe liên tục thì
+      // trang nhảy ngay mà cờ autoTour vẫn bật, việc nghe rơi vào trạng thái
+      // "ma" (không thuyết minh mà cũng không dừng hẳn).
+      setAutoTour(false);
+      state.idx = Number(el.dataset.sidx);
+      document.getElementById('map-modal').classList.remove('open');
+      renderSlide();
+    };
+  });
+  document.getElementById('map-modal').classList.add('open');
+}
+
+function exportNotes() {
+  let out = 'SỔ TAY CÁ NHÂN — ' + (typeof BOOK_META !== 'undefined' && BOOK_META.title ? BOOK_META.title : 'Bài Giảng 4D').toUpperCase() + '\n';
+  out += `Cấp bậc hiện tại: ${getRank(state.xp)} (${state.xp} XP | ${state.mastered.size}/${SLIDES.length} thẻ đã chuyển hóa)\n`;
+  out += '='.repeat(70) + '\n\n';
+  SLIDES.forEach(s => {
+    const note = (state.notes[s.id] || '').trim();
+    const mark = state.mastered.has(s.id) ? '[✓ Đã chuyển hóa]' : '[ ]';
+    if (note || state.mastered.has(s.id)) {
+      out += `Slide ${s.id}: ${s.title} ${mark}\n`;
+      out += `• Đúc kết: ${s.flip.takeaway}\n`;
+      if (note) out += `• Ghi chú của tôi: ${note}\n`;
+      out += '\n';
+    }
+  });
+  const blob = new Blob([out], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'So_Tay_Bai_Giang_4D.txt';
+  a.click();
+  showToast('📥 Đã xuất Sổ Tay thành công!');
+}
+
+// ===== BOOTSTRAP UI EVENTS =====
+function initUI() {
+  applyTheme();
+  initSlideZoomPan();
+  initResizers();
+
+  // Pillar nav
+  const pNav = document.getElementById('pillar-nav');
+  pNav.innerHTML = PILLARS.map(p => `<button class="p-nav-btn" data-pid="${p.id}" data-start="${p.range[0]-1}">${p.num === '0' ? '🌱' : p.num + '.'} ${p.name}</button>`).join('');
+  pNav.querySelectorAll('.p-nav-btn').forEach(b => {
+    // Bản v7: như bản đồ trang — chuyển trang thủ công phải tắt chế độ nghe
+    // liên tục trước, không để việc nghe rơi vào trạng thái "ma".
+    b.onclick = () => { setAutoTour(false); state.idx = Number(b.dataset.start); renderSlide(); };
+  });
+
+  // Curated Video Preset Chips
+  const vp = document.getElementById('video-presets');
+  vp.innerHTML = PRESET_VIDEOS.map((v, i) => `<button class="video-chip" data-vidx="${i}">▶ ${escapeHtml(v.label)}</button>`).join('');
+  vp.querySelectorAll('.video-chip').forEach(b => {
+    b.onclick = () => {
+      const v = PRESET_VIDEOS[Number(b.dataset.vidx)];
+      const s = SLIDES[state.idx];
+      state.customVideos[s.id] = v.url; saveState();
+      renderVideoForSlide(s, v.url);
+      showToast(`🎬 Đã nhúng: ${v.label}`);
+    };
+  });
+
+  // Left Mode Tabs
+  document.querySelectorAll('#left-mode-tabs .tab-btn').forEach(btn => {
+    btn.onclick = () => {
+      state.leftMode = btn.dataset.lmode;
+      document.querySelectorAll('#left-mode-tabs .tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      const slideSt = document.getElementById('slide-stage');
+      const vidSt = document.getElementById('video-stage');
+      const lvRes = document.getElementById('left-v-resizer');
+      if (state.leftMode === 'slide') {
+        slideSt.classList.remove('hidden'); vidSt.classList.add('hidden'); vidSt.classList.remove('full-stage'); lvRes.classList.add('hidden');
+      } else if (state.leftMode === 'video') {
+        slideSt.classList.add('hidden'); vidSt.classList.remove('hidden'); vidSt.classList.add('full-stage'); lvRes.classList.add('hidden');
+        renderVideoForSlide(SLIDES[state.idx]);
+      } else {
+        slideSt.classList.remove('hidden'); vidSt.classList.remove('hidden'); vidSt.classList.remove('full-stage'); lvRes.classList.remove('hidden');
+        renderVideoForSlide(SLIDES[state.idx]);
+      }
+    };
+  });
+
+  // Embed Video Button
+  document.getElementById('embed-video-btn').onclick = () => {
+    const val = document.getElementById('video-url-input').value.trim();
+    const s = SLIDES[state.idx];
+    state.customVideos[s.id] = val; saveState();
+    renderVideoForSlide(s, val);
+    showToast('🎬 Đã cập nhật video minh họa cho slide này!');
+  };
+
+  // Right Tabs
+  document.querySelectorAll('#right-tabs .tab-btn').forEach(btn => {
+    btn.onclick = () => {
+      state.rightTab = btn.dataset.rtab;
+      document.querySelectorAll('#right-tabs .tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      renderRightTop();
+    };
+  });
+
+  // Right Text Zoom
+  const setTextScale = (v) => {
+    state.textScale = Math.min(1.35, Math.max(0.85, +v.toFixed(2)));
+    document.documentElement.style.setProperty('--right-scale', state.textScale);
+    document.getElementById('text-zoom-val').textContent = `${Math.round(state.textScale * 100)}%`;
+  };
+  document.getElementById('text-zoom-in').onclick = () => setTextScale(state.textScale + 0.1);
+  document.getElementById('text-zoom-out').onclick = () => setTextScale(state.textScale - 0.1);
+
+  // Layout Presets & Maximize
+  document.querySelectorAll('.preset-group .hud-btn').forEach(b => {
+    b.onclick = () => setHorizontalSplit(Number(b.dataset.layout));
+  });
+  document.getElementById('max-left-btn').onclick = () => toggleMaximize('left');
+  document.getElementById('max-right-btn').onclick = () => toggleMaximize('right');
+  document.getElementById('max-rtop-btn').onclick = () => toggleMaximize('rtop');
+  document.getElementById('max-council-btn').onclick = () => toggleMaximize('council');
+
+  // Navigation
+  const goPrev = () => { if (state.idx > 0) { setAutoTour(false); state.idx--; renderSlide(); playTone(440, 0.06, 'sine', 0.04); } };
+  const goNext = () => { if (state.idx < SLIDES.length - 1) { setAutoTour(false); state.idx++; renderSlide(); playTone(560, 0.06, 'sine', 0.04); } };
+  document.getElementById('btn-prev').onclick = goPrev;
+  document.getElementById('btn-next').onclick = goNext;
+  document.getElementById('stage-prev').onclick = goPrev;
+  document.getElementById('stage-next').onclick = goNext;
+
+  // Narration & Subtitles & Auto-tour
+  // Nút phát thường = nghe từng trang: luôn tắt chế độ nghe liên tục trước.
+  document.getElementById('play-narration-btn').onclick = () => { if (state.narrating) { stopNarration(true); } else { setAutoTour(false); startNarration(0); } };
+  document.getElementById('toggle-sub-btn').onclick = (e) => {
+    state.showSub = !state.showSub;
+    e.currentTarget.classList.toggle('active', state.showSub);
+    document.getElementById('subtitle-overlay').classList.toggle('hidden', !state.showSub);
+  };
+  document.getElementById('autotour-btn').onclick = () => {
+    if (state.autoTour) { setAutoTour(false); stopNarration(true); }
+    else { setAutoTour(true); showToast('▶ Bắt đầu trình chiếu & thuyết minh tự động!'); startNarration(0); }
+  };
+  document.getElementById('listen-all-btn').onclick = toggleListenAll;
+
+  // Council Persona Tabs & Input
+  document.querySelectorAll('#persona-tabs .persona-btn').forEach(b => {
+    b.onclick = () => {
+      state.persona = b.dataset.p;
+      document.querySelectorAll('#persona-tabs .persona-btn').forEach(x => x.classList.toggle('active', x === b));
+    };
+  });
+  document.getElementById('council-send').onclick = () => askCouncil(document.getElementById('council-input').value);
+  document.getElementById('council-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') askCouncil(e.target.value);
+  });
+
+  // Theme & SFX
+  document.getElementById('theme-btn').onclick = () => { state.theme = state.theme === 'dark' ? 'light' : 'dark'; applyTheme(); saveState(); };
+  document.getElementById('sfx-btn').onclick = (e) => { state.sfx = !state.sfx; e.currentTarget.textContent = state.sfx ? '🔊' : '🔇'; saveState(); };
+  document.getElementById('sfx-btn').textContent = state.sfx ? '🔊' : '🔇';
+
+  // Modals
+  document.getElementById('open-map-btn').onclick = openSlideMap;
+  document.getElementById('close-map-btn').onclick = () => document.getElementById('map-modal').classList.remove('open');
+  document.getElementById('export-notes-btn').onclick = exportNotes;
+  document.getElementById('lightbox-btn').onclick = () => document.getElementById('lightbox-modal').classList.add('open');
+  document.getElementById('lightbox-modal').onclick = () => document.getElementById('lightbox-modal').classList.remove('open');
+
+  // API Settings Modal
+  const syncApiBadge = () => {
+    const b = document.getElementById('ai-mode-badge');
+    if (state.apiKey) { b.textContent = '✨ Gemini API Live'; b.style.color = '#fbbf24'; }
+    else { b.textContent = 'Trí tuệ nội bộ'; b.style.color = '#6ee7b7'; }
+  };
+  syncApiBadge();
+  document.getElementById('api-btn').onclick = () => {
+    document.getElementById('gemini-key-input').value = state.apiKey;
+    document.getElementById('gemini-model-select').value = state.apiModel;
+    document.getElementById('api-modal').classList.add('open');
+  };
+  document.getElementById('close-api-btn').onclick = () => document.getElementById('api-modal').classList.remove('open');
+  document.getElementById('save-api-btn').onclick = () => {
+    state.apiKey = document.getElementById('gemini-key-input').value.trim();
+    state.apiModel = document.getElementById('gemini-model-select').value;
+    saveState(); syncApiBadge();
+    document.getElementById('api-modal').classList.remove('open');
+    showToast(state.apiKey ? '✨ Đã kết nối Gemini API trực tiếp!' : 'Đã chuyển về Hội đồng AI nội bộ');
+  };
+  document.getElementById('clear-api-btn').onclick = () => {
+    state.apiKey = ''; document.getElementById('gemini-key-input').value = '';
+    saveState(); syncApiBadge();
+    showToast('Đã xóa API Key');
+  };
+
+  // Keyboard shortcuts
+  window.addEventListener('keydown', (e) => {
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+    if (e.key === 'ArrowRight') goNext();
+    else if (e.key === 'ArrowLeft') goPrev();
+    else if (e.key === 'f' || e.key === 'F') {
+      const btn = document.getElementById('flip-trigger-btn');
+      if (btn) btn.click();
+    } else if (e.key === 'm' || e.key === 'M') openSlideMap();
+    else if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+    }
+  });
+
+  renderSlide();
+}
+
+window.addEventListener('DOMContentLoaded', initUI);
+
+    // ===== NHẠC NỀN HỘP NHẠC (MUSIC BOX) v2: giai điệu pentatonic du dương, không buồn ngủ =====
+    // Tổng hợp trực tiếp bằng Web Audio API — không dùng file nhạc ngoài, không tải từ web.
+    // TUYỆT ĐỐI KHÔNG dùng drone đơn điệu (chị đã chê nhạc 432Hz drone ở sách khác là buồn ngủ).
+    function initAudioContext() {
+      // Nhạc lỗi thì chỉ tắt nhạc, không bao giờ được làm hỏng giọng đọc.
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+      } catch (e) {
+        console.warn('[Nhạc nền] Không tạo được AudioContext:', e && e.message);
+        audioCtx = null;
+      }
+    }
+
+    let musicEnabled = true;        // Chị tắt bằng nút Nhạc nền thì giọng đọc không tự bật lại nhạc
+    let musicAutoStarted = false;   // Nhạc có phải do giọng đọc tự bật hay không
+    let isMusicPlaying = false;
+    let musicMasterGain = null;
+    let musicPadGain = null;
+    let musicPadOscs = [];
+    let musicTimer = null;
+    let musicNextNoteTime = 0;
+    let musicStep = 0;
+    let musicDegree = 4;
+    let musicRecent = [];
+
+    // Thang ngũ cung trưởng C, 2 quãng tám (C5–A6) — âm sắc hộp nhạc sáng, trong, du dương.
+    const MUSIC_SCALE = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50, 1174.66, 1318.51, 1567.98, 1760.00];
+    const MUSIC_BEAT = 0.42; // ~143 nhịp/phút (nốt móc đơn) — vừa phải, không chậm gây buồn ngủ
+    const MUSIC_BASS = [130.81, 174.61, 196.00, 146.83]; // C3 F3 G3 D3 — vòng bass trầm nhẹ
+    const MUSIC_CHORDS = [[261.63, 329.63], [220.00, 261.63], [174.61, 220.00], [196.00, 246.94]]; // C Am F G (pad)
+
+    function updateMusicBtn() {
+      const btn = document.getElementById("musicBtn");
+      if (!btn) return;
+      btn.classList.toggle("active", isMusicPlaying);
+    }
+
+    // Một nốt hộp nhạc: triangle + harmonic quãng tám, decay nhanh như gõ phím đàn.
+    function musicPluck(freq, when, peak) {
+      const o1 = audioCtx.createOscillator();
+      const g1 = audioCtx.createGain();
+      o1.type = "triangle";
+      o1.frequency.setValueAtTime(freq, when);
+      g1.gain.setValueAtTime(0.0001, when);
+      g1.gain.linearRampToValueAtTime(peak, when + 0.008);
+      g1.gain.exponentialRampToValueAtTime(0.0001, when + 0.9);
+      o1.connect(g1); g1.connect(musicMasterGain);
+      o1.start(when); o1.stop(when + 1.0);
+      const o2 = audioCtx.createOscillator();
+      const g2 = audioCtx.createGain();
+      o2.type = "sine";
+      o2.frequency.setValueAtTime(freq * 2, when);
+      g2.gain.setValueAtTime(0.0001, when);
+      g2.gain.linearRampToValueAtTime(peak * 0.25, when + 0.006);
+      g2.gain.exponentialRampToValueAtTime(0.0001, when + 0.35);
+      o2.connect(g2); g2.connect(musicMasterGain);
+      o2.start(when); o2.stop(when + 0.4);
+    }
+
+    // Nốt bass trầm nhẹ, ngân dài.
+    function musicBassNote(freq, when) {
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = "sine";
+      o.frequency.setValueAtTime(freq, when);
+      g.gain.setValueAtTime(0.0001, when);
+      g.gain.linearRampToValueAtTime(0.05, when + 0.05);
+      g.gain.exponentialRampToValueAtTime(0.0001, when + 1.6);
+      o.connect(g); g.connect(musicMasterGain);
+      o.start(when); o.stop(when + 1.7);
+    }
+
+    // Lớp pad rất mờ dưới giai điệu (2 nốt hợp âm, đổi hợp âm mỗi 16 bước).
+    function musicStartPad() {
+      musicStopPad();
+      const chord = MUSIC_CHORDS[Math.floor(musicStep / 16) % MUSIC_CHORDS.length];
+      musicPadGain = audioCtx.createGain();
+      musicPadGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      musicPadGain.gain.exponentialRampToValueAtTime(0.022, audioCtx.currentTime + 1.5);
+      musicPadGain.connect(musicMasterGain);
+      musicPadOscs = chord.map(f => {
+        const o = audioCtx.createOscillator();
+        o.type = "triangle";
+        o.frequency.setValueAtTime(f, audioCtx.currentTime);
+        o.connect(musicPadGain);
+        o.start();
+        return o;
+      });
+    }
+    function musicStopPad() {
+      const oscs = musicPadOscs, g = musicPadGain;
+      musicPadOscs = []; musicPadGain = null;
+      if (!oscs.length) return;
+      try { g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.6); } catch (e) {}
+      setTimeout(() => { try { oscs.forEach(o => o.stop()); } catch (e) {} }, 700);
+    }
+
+    // Sinh nốt tiếp theo: random walk trên thang pentatonic, thỉnh thoảng lặp motif,
+    // thỉnh thoảng nhảy quãng — giai điệu có biến hóa, không đơn điệu, không buồn ngủ.
+    function musicNextDegree() {
+      if (musicRecent.length >= 4 && Math.random() < 0.18) {
+        return musicRecent[musicRecent.length - 4]; // Lặp lại motif 4 nốt trước
+      }
+      const step = Math.floor(Math.random() * 5) - 2; // -2..+2
+      let d = musicDegree + step;
+      if (Math.random() < 0.12) d = musicDegree + (Math.random() < 0.5 ? -4 : 4); // Nhảy quãng
+      d = Math.max(0, Math.min(MUSIC_SCALE.length - 1, d));
+      if (d === musicDegree) d = Math.max(0, Math.min(MUSIC_SCALE.length - 1, d + (Math.random() < 0.5 ? 1 : -1)));
+      musicDegree = d;
+      musicRecent.push(d);
+      if (musicRecent.length > 8) musicRecent.shift();
+      return d;
+    }
+
+    function musicScheduleStep(step, when) {
+      // Đổi hợp âm pad mỗi 16 bước
+      if (step > 0 && step % 16 === 0) musicStartPad();
+      // Bass trầm mỗi 8 bước
+      if (step % 8 === 0) musicBassNote(MUSIC_BASS[Math.floor(step / 8) % MUSIC_BASS.length], when);
+      // Giai điệu chính — thỉnh thoảng nghỉ 1 nhịp cho có hơi thở
+      if (Math.random() < 0.12) return;
+      const deg = musicNextDegree();
+      musicPluck(MUSIC_SCALE[deg], when, 0.10 + Math.random() * 0.05);
+      // Thỉnh thoảng thêm nốt hòa âm (quãng 3 trên)
+      if (Math.random() < 0.15 && deg + 2 < MUSIC_SCALE.length) {
+        musicPluck(MUSIC_SCALE[deg + 2], when, 0.05);
+      }
+    }
+
+    // Bộ lập lịch lookahead: cứ 120ms lại lên lịch trước các nốt trong 0,35s tới.
+    function musicTick() {
+      if (!isMusicPlaying) return;
+      const ahead = audioCtx.currentTime + 0.35;
+      while (musicNextNoteTime < ahead) {
+        musicScheduleStep(musicStep, musicNextNoteTime);
+        musicNextNoteTime += MUSIC_BEAT;
+        musicStep++;
+      }
+    }
+
+    function startMusicBox(auto) {
+      if (isMusicPlaying) return; // Đang phát rồi thì giữ nguyên người bật (không cướp quyền)
+      initAudioContext();
+      if (!audioCtx) return; // Không có AudioContext thì bỏ qua nhạc, giọng đọc vẫn phát bình thường
+      musicMasterGain = audioCtx.createGain();
+      musicMasterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      musicMasterGain.gain.exponentialRampToValueAtTime(1, audioCtx.currentTime + 1.2);
+      musicMasterGain.connect(audioCtx.destination);
+      musicStep = 0;
+      musicDegree = 4;
+      musicRecent = [];
+      musicStartPad();
+      musicNextNoteTime = audioCtx.currentTime + 0.15;
+      musicTimer = setInterval(musicTick, 120);
+      isMusicPlaying = true;
+      musicAutoStarted = !!auto;
+      updateMusicBtn();
+    }
+
+    function stopMusicBox() {
+      if (!isMusicPlaying) { musicAutoStarted = false; return; }
+      if (musicTimer) { clearInterval(musicTimer); musicTimer = null; }
+      musicStopPad();
+      const g = musicMasterGain;
+      try { g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8); } catch (e) {}
+      // Tắt cờ ngay (không đợi fade xong) để bấm phát lại liền vẫn bật được nhạc.
+      musicMasterGain = null;
+      isMusicPlaying = false;
+      musicAutoStarted = false;
+      updateMusicBtn();
+      setTimeout(() => { try { g.disconnect(); } catch (e) {} }, 850);
+    }
+
+    function startMusicAuto() {
+      if (musicEnabled && !isMusicPlaying) startMusicBox(true);
+    }
+
+    function stopMusicAuto() {
+      if (musicAutoStarted) stopMusicBox();
+    }
+
+    // Bản v2 (20/11/2026): nút nhạc bật/tắt theo TRẠNG THÁI PHÁT THẬT
+    // (isMusicPlaying), không theo cờ musicEnabled — trước đây bấm lần đầu
+    // khi nhạc chưa phát chỉ đổi cờ mà không phát ra tiếng. startMusicBox tạo
+    // và resume AudioContext ngay trong sự kiện bấm nên nhạc khởi động độc
+    // lập, không phụ thuộc vào trạng thái giọng đọc.
+    function toggleMusic() {
+      if (isMusicPlaying) {
+        musicEnabled = false;
+        stopMusicBox();
+        showToast('🎵 Đã tắt nhạc nền');
+      } else {
+        musicEnabled = true;
+        startMusicBox(false);
+        showToast(isMusicPlaying ? '🎵 Đã bật nhạc nền' : '⚠️ Không bật được nhạc nền trên trình duyệt này');
+      }
+      updateMusicBtn();
+    }
+
+    // ===== HIỆU ỨNG ĐỘNG 4D (v2) — bong bóng trong suốt + hiệu ứng theo từng trang =====
+    // Bảng gán hiệu ứng theo số trang (1-based). Muốn đổi hiệu ứng trang nào thì sửa ở đây.
+    // Bong bóng + hạt sáng chạy trên MỌI trang (nền chung); các hiệu ứng dưới đây là hiệu ứng riêng thêm vào.
+    // Hiệu ứng động theo từng trang (mẫu 3 trang; sách thật có thể mở rộng
+    // thêm trang tại đây — khoá là số thứ tự trang, giá trị là danh sách hiệu ứng).
+    const PAGE_FX = {
+      1: ['sprout', 'rays'],
+      2: ['rings'],
+      3: ['rays']
+    };
+
+    let fxEnabled = true;
+    try { const _fx = localStorage.getItem('bai_giang_4d_fx_enabled_v2'); if (_fx !== null) fxEnabled = _fx === '1'; } catch (e) {}
+    let fxOverlay = null, fxCanvas = null, fxCtx = null, fxDom = null;
+    let fxW = 0, fxH = 0, fxDpr = 1;
+    let fxRaf = null, fxLastT = 0, fxAmbientReady = false;
+    let fxBubbles = [], fxSparkles = [], fxStars = [], fxNeurons = null;
+    let fxPage = 0;
+
+    // Mật độ hiệu ứng theo màn hình: điện thoại (≤640px) giảm số bong bóng/hạt/sao/nơ-ron cho mượt và đỡ tốn pin.
+    const fxIsSmallScreen = () => window.innerWidth <= 640;
+    let fxSmallScreen = fxIsSmallScreen();
+    // Tôn trọng chế độ giảm chuyển động của máy (iOS/Android): bật thì không chạy hiệu ứng động.
+    const FX_REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // --- SVG cho hiệu ứng DOM (mầm, lửa, chân, bướm, tre, tia sáng, vòng tròn đồng tâm) ---
+    const FX_SVG = {
+      sprout: `<div class="fx-item fx-sprout"><svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg"><g class="sprout-sway"><path class="stem" d="M50 115 Q48 85 50 55 Q52 35 50 20" fill="none" stroke="#4ade80" stroke-width="4" stroke-linecap="round"/><path class="leaf-l" d="M50 62 Q28 58 22 38 Q44 36 50 56 Z" fill="#22c55e"/><path class="leaf-r" d="M50 48 Q72 44 78 24 Q56 22 50 42 Z" fill="#4ade80"/><circle cx="50" cy="18" r="6" fill="#86efac"/></g><ellipse cx="50" cy="116" rx="22" ry="4" fill="#14532d" opacity="0.5"/></svg></div>`,
+      flame: `<div class="fx-item fx-flame"><svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg"><path class="flame-outer" d="M50 8 C58 26 84 40 84 70 A34 34 0 1 1 16 70 C16 44 40 32 44 16 C46 26 50 30 50 30 C50 22 48 14 50 8 Z" fill="#f97316"/><path class="flame-mid" d="M50 34 C56 46 72 54 72 72 A22 22 0 1 1 28 72 C28 56 44 48 46 36 C48 44 50 46 50 46 C50 40 48 36 50 34 Z" fill="#fbbf24"/><path class="flame-inner" d="M50 58 C54 66 62 70 62 80 A12 12 0 1 1 38 80 C38 70 46 66 48 58 C49 62 50 64 50 64 C50 60 49 58 50 58 Z" fill="#fef08a"/><circle class="ember" cx="38" cy="30" r="2.5" fill="#fbbf24"/><circle class="ember e2" cx="62" cy="22" r="2" fill="#fb923c"/><circle class="ember e3" cx="50" cy="12" r="1.8" fill="#fde68a"/></svg></div>`,
+      feet: `<div class="fx-item fx-feet"><svg viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg"><ellipse class="shadow s1" cx="45" cy="92" rx="26" ry="5" fill="#000" opacity="0.35"/><ellipse class="shadow s2" cx="115" cy="92" rx="26" ry="5" fill="#000" opacity="0.35"/><g class="foot-l"><path d="M45 88 C30 88 26 70 30 52 C33 36 38 22 45 20 C52 22 57 36 60 52 C64 70 60 88 45 88 Z" fill="#fbbf24"/><circle cx="34" cy="18" r="4" fill="#fbbf24"/><circle cx="41" cy="12" r="4.5" fill="#fbbf24"/><circle cx="49" cy="11" r="4.5" fill="#fbbf24"/><circle cx="56" cy="16" r="4" fill="#fbbf24"/></g><g class="foot-r"><path d="M115 88 C100 88 96 70 100 52 C103 36 108 22 115 20 C122 22 127 36 130 52 C134 70 130 88 115 88 Z" fill="#f59e0b"/><circle cx="104" cy="18" r="4" fill="#f59e0b"/><circle cx="111" cy="12" r="4.5" fill="#f59e0b"/><circle cx="119" cy="11" r="4.5" fill="#f59e0b"/><circle cx="126" cy="16" r="4" fill="#f59e0b"/></g></svg></div>`,
+      butterfly: `<div class="fx-item fx-butterfly"><svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg"><g class="wing-l"><path d="M48 40 C30 12 6 10 8 30 C10 46 30 48 48 44 Z" fill="#f472b6"/><path d="M48 46 C32 56 16 66 22 72 C30 78 44 60 48 50 Z" fill="#c084fc"/></g><g class="wing-r"><path d="M52 40 C70 12 94 10 92 30 C90 46 70 48 52 44 Z" fill="#f472b6"/><path d="M52 46 C68 56 84 66 78 72 C70 78 56 60 52 50 Z" fill="#c084fc"/></g><ellipse cx="50" cy="42" rx="3.5" ry="14" fill="#334155"/><circle cx="50" cy="26" r="4" fill="#334155"/><path d="M48 23 Q44 14 40 12 M52 23 Q56 14 60 12" stroke="#334155" stroke-width="1.5" fill="none"/></svg></div>`,
+      bamboo: `<div class="fx-item fx-bamboo"><svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg"><rect x="28" y="10" width="10" height="140" rx="5" fill="#22c55e"/><rect x="52" y="30" width="9" height="120" rx="4.5" fill="#16a34a"/><rect x="72" y="0" width="10" height="150" rx="5" fill="#4ade80"/><g stroke="#14532d" stroke-width="1.6"><line x1="28" y1="50" x2="38" y2="50"/><line x1="28" y1="95" x2="38" y2="95"/><line x1="52" y1="70" x2="61" y2="70"/><line x1="52" y1="112" x2="61" y2="112"/><line x1="72" y1="40" x2="82" y2="40"/><line x1="72" y1="88" x2="82" y2="88"/><line x1="72" y1="128" x2="82" y2="128"/></g><path d="M38 22 Q56 12 66 20 Q54 26 38 26 Z" fill="#4ade80"/><path d="M61 44 Q78 34 88 42 Q76 50 61 48 Z" fill="#22c55e"/><path d="M28 130 Q12 122 6 132 Q18 138 28 134 Z" fill="#4ade80"/></svg></div>`,
+      rays: `<div class="fx-item fx-rays"></div>`,
+      rings: `<div class="fx-item fx-rings"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle class="ring r1" cx="100" cy="100" r="18"/><circle class="ring r2" cx="100" cy="100" r="34"/><circle class="ring r3" cx="100" cy="100" r="50"/><circle class="ring r4" cx="100" cy="100" r="66"/><circle class="ring r5" cx="100" cy="100" r="82"/></svg></div>`
+    };
+
+    // --- Canvas: bong bóng trong suốt + hạt sáng (mọi trang), sao (trang 21), nơ-ron (trang 5, 15) ---
+    function fxFitCanvas() {
+      if (!fxOverlay || !fxCanvas) return;
+      const r = fxOverlay.getBoundingClientRect();
+      const w = Math.max(0, r.width), h = Math.max(0, r.height);
+      if (Math.abs(w - fxW) < 1 && Math.abs(h - fxH) < 1) return;
+      fxW = w; fxH = h;
+      fxDpr = Math.min(window.devicePixelRatio || 1, fxSmallScreen ? 1.5 : 2);
+      fxCanvas.width = Math.round(fxW * fxDpr);
+      fxCanvas.height = Math.round(fxH * fxDpr);
+      fxCtx.setTransform(fxDpr, 0, 0, fxDpr, 0, 0);
+      fxBubbles.forEach(b => { b.x = Math.min(b.x, fxW); b.y = Math.min(b.y, fxH); });
+      fxSparkles.forEach(s => { s.x = Math.min(s.x, fxW); s.y = Math.min(s.y, fxH); });
+    }
+
+    function fxInitAmbient() {
+      fxBubbles = Array.from({ length: fxSmallScreen ? 8 : 14 }, () => ({
+        x: Math.random() * fxW, y: Math.random() * fxH,
+        r: 4 + Math.random() * 12,
+        vy: -(8 + Math.random() * 14),
+        swayAmp: 6 + Math.random() * 16, swayFreq: 0.3 + Math.random() * 0.6, swayPhase: Math.random() * Math.PI * 2,
+        alpha: 0.35 + Math.random() * 0.45
+      }));
+      fxSparkles = Array.from({ length: fxSmallScreen ? 5 : 8 }, () => ({
+        x: Math.random() * fxW, y: Math.random() * fxH,
+        r: 1 + Math.random() * 2.2,
+        vy: -(4 + Math.random() * 8),
+        phase: Math.random() * Math.PI * 2, freq: 0.8 + Math.random() * 1.6
+      }));
+      fxAmbientReady = true;
+    }
+
+    function fxInitStars() {
+      fxStars = Array.from({ length: fxSmallScreen ? 20 : 42 }, () => ({
+        x: Math.random() * fxW, y: Math.random() * fxH * 0.72,
+        r: 0.6 + Math.random() * 1.6,
+        phase: Math.random() * Math.PI * 2, freq: 0.6 + Math.random() * 2.2
+      }));
+    }
+
+    function fxInitNeurons() {
+      const nodes = Array.from({ length: fxSmallScreen ? 8 : 14 }, () => ({
+        x: fxW * 0.08 + Math.random() * fxW * 0.84,
+        y: fxH * 0.08 + Math.random() * fxH * 0.84,
+        r: 2 + Math.random() * 2.5,
+        phase: Math.random() * Math.PI * 2
+      }));
+      const edges = [];
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+          if (Math.hypot(dx, dy) < Math.max(90, fxW * 0.22)) edges.push([i, j]);
+        }
+      }
+      const pulses = Array.from({ length: fxSmallScreen ? 5 : 9 }, () => ({
+        e: edges.length ? Math.floor(Math.random() * edges.length) : 0,
+        t: Math.random(), speed: 0.25 + Math.random() * 0.45, dir: Math.random() < 0.5 ? 1 : -1
+      }));
+      fxNeurons = { nodes, edges, pulses };
+    }
+
+    // Bong bóng trong suốt: viền sáng mờ + điểm sáng phản chiếu.
+    function fxDrawBubble(b, t) {
+      const ctx = fxCtx;
+      const x = b.x + Math.sin(t * b.swayFreq + b.swayPhase) * b.swayAmp;
+      ctx.save();
+      ctx.globalAlpha = b.alpha;
+      ctx.beginPath(); ctx.arc(x, b.y, b.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.38)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(x - b.r * 0.35, b.y - b.r * 0.4, Math.max(1, b.r * 0.18), 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function fxFrame(now) {
+      if (!fxEnabled || FX_REDUCED_MOTION) { fxRaf = null; return; }
+      const dt = Math.min(0.05, (now - fxLastT) / 1000 || 0.016);
+      fxLastT = now;
+      const t = now / 1000;
+      const ctx = fxCtx;
+      ctx.clearRect(0, 0, fxW, fxH);
+      // Sao nhấp nháy (trang 21)
+      if (fxPage === 21) {
+        fxStars.forEach(s => {
+          const a = 0.25 + 0.65 * (0.5 + 0.5 * Math.sin(t * s.freq + s.phase));
+          ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 244, 200, ${a})`; ctx.fill();
+        });
+      }
+      // Nơ-ron thần kinh (trang 5, 15): nút sáng + sợi nối + xung sáng chạy dọc sợi
+      if (fxNeurons && (fxPage === 5 || fxPage === 15)) {
+        const { nodes, edges, pulses } = fxNeurons;
+        ctx.lineWidth = 1;
+        edges.forEach(([i, j]) => {
+          ctx.beginPath(); ctx.moveTo(nodes[i].x, nodes[i].y); ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.strokeStyle = 'rgba(103, 232, 249, 0.28)'; ctx.stroke();
+        });
+        pulses.forEach(p => {
+          p.t += p.speed * dt * p.dir;
+          if (p.t > 1) { p.t = 1; p.dir = -1; }
+          if (p.t < 0) { p.t = 0; p.dir = 1; if (edges.length) p.e = Math.floor(Math.random() * edges.length); }
+          const e = edges[p.e]; if (!e) return;
+          const x = nodes[e[0]].x + (nodes[e[1]].x - nodes[e[0]].x) * p.t;
+          const y = nodes[e[0]].y + (nodes[e[1]].y - nodes[e[0]].y) * p.t;
+          ctx.beginPath(); ctx.arc(x, y, 2.6, 0, Math.PI * 2);
+          ctx.fillStyle = '#a5f3fc';
+          ctx.shadowColor = '#22d3ee'; ctx.shadowBlur = 8;
+          ctx.fill(); ctx.shadowBlur = 0;
+        });
+        nodes.forEach(n => {
+          const r = n.r * (1 + 0.25 * Math.sin(t * 2 + n.phase));
+          ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(167, 139, 250, 0.9)';
+          ctx.shadowColor = '#a78bfa'; ctx.shadowBlur = 10;
+          ctx.fill(); ctx.shadowBlur = 0;
+        });
+      }
+      // Bong bóng trong suốt bay lên nhẹ (mọi trang)
+      fxBubbles.forEach(b => {
+        b.y += b.vy * dt;
+        if (b.y + b.r < -4) { b.y = fxH + b.r + 4; b.x = Math.random() * fxW; }
+        fxDrawBubble(b, t);
+      });
+      // Hạt sáng bay lên nhẹ (mọi trang)
+      fxSparkles.forEach(s => {
+        s.y += s.vy * dt;
+        if (s.y < -4) { s.y = fxH + 4; s.x = Math.random() * fxW; }
+        const a = 0.15 + 0.5 * (0.5 + 0.5 * Math.sin(t * s.freq + s.phase));
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(251, 191, 36, ${a})`; ctx.fill();
+      });
+      fxRaf = requestAnimationFrame(fxFrame);
+    }
+
+    function fxBuildDom(page) {
+      const list = PAGE_FX[page] || [];
+      fxDom.innerHTML = list.map(k => FX_SVG[k] || '').join('');
+    }
+
+    const FxEngine = {
+      // Gọi mỗi khi renderSlide đổi trang: dọn hiệu ứng cũ, dựng hiệu ứng của trang mới.
+      startForSlide(index) {
+        fxPage = index + 1;
+        if (!fxDom || !fxCanvas) return;
+        fxDom.innerHTML = '';
+        fxStars = [];
+        fxNeurons = null;
+        if (!fxEnabled || FX_REDUCED_MOTION) return;
+        fxFitCanvas();
+        if (!fxAmbientReady && fxW > 10) fxInitAmbient();
+        if (fxPage === 21) fxInitStars();
+        if (fxPage === 5 || fxPage === 15) fxInitNeurons();
+        fxBuildDom(fxPage);
+        if (!fxRaf) { fxLastT = performance.now(); fxRaf = requestAnimationFrame(fxFrame); }
+      },
+      // Dừng hẳn mọi hiệu ứng (khi chị tắt bằng nút Hiệu ứng).
+      stopAll() {
+        if (fxRaf) { cancelAnimationFrame(fxRaf); fxRaf = null; }
+        if (fxCtx) fxCtx.clearRect(0, 0, fxW, fxH);
+        if (fxDom) fxDom.innerHTML = '';
+        fxStars = []; fxNeurons = null;
+      }
+    };
+
+    function setupFx() {
+      fxOverlay = document.getElementById('fxOverlay');
+      fxCanvas = document.getElementById('fxCanvas');
+      fxDom = document.getElementById('fxDom');
+      if (!fxOverlay || !fxCanvas || !fxDom) return;
+      fxCtx = fxCanvas.getContext('2d');
+      fxFitCanvas();
+      if (fxW > 10) fxInitAmbient();
+      window.addEventListener('resize', () => {
+        fxFitCanvas();
+        const small = fxIsSmallScreen();
+        if (small !== fxSmallScreen) {
+          fxSmallScreen = small;
+          fxAmbientReady = false;
+          if (fxEnabled) FxEngine.startForSlide(state.idx);
+        }
+      });
+      updateFxBtn();
+    }
+
+    function updateFxBtn() {
+      const btn = document.getElementById('fxToggleBtn');
+      if (!btn) return;
+      btn.classList.toggle('active', fxEnabled);
+    }
+
+    function toggleFx() {
+      fxEnabled = !fxEnabled;
+      try { localStorage.setItem('bai_giang_4d_fx_enabled_v2', fxEnabled ? '1' : '0'); } catch (e) {}
+      updateFxBtn();
+      if (fxEnabled) {
+        FxEngine.startForSlide(state.idx);
+      } else {
+        FxEngine.stopAll();
+      }
+      try { playTone(660, 0.08, 'sine', 0.05); } catch (e) {}
+      showToast(fxEnabled ? '✨ Đã bật hiệu ứng động' : '✨ Đã tắt hiệu ứng động');
+    }
+
+    // Tạm dừng vòng lặp hiệu ứng khi tab bị ẩn (đỡ tốn pin), mở lại khi quay lại tab.
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (fxRaf) { cancelAnimationFrame(fxRaf); fxRaf = null; }
+      } else if (fxEnabled && fxOverlay && !FX_REDUCED_MOTION) {
+        FxEngine.startForSlide(state.idx);
+      }
+    });
+
+    // Vuốt ngang trên khung ảnh để chuyển trang (điện thoại).
+    // Chỉ nhận vuốt ngang rõ ràng (≥50px, ngang trội hơn dọc); không chặn cuộn dọc,
+    // không nhận khi đang phóng to ảnh (để kéo pan) hoặc chạm vào nút/link/ô nhập.
+    function setupSwipeNavigation() {
+      const frame = document.getElementById('slide-stage');
+      if (!frame) return;
+      let startX = 0, startY = 0, startT = 0, tracking = false;
+      frame.addEventListener('touchstart', (e) => {
+        if (e.touches.length !== 1) { tracking = false; return; }
+        if (state.slideZoom && state.slideZoom > 1.01) return;
+        if (e.target.closest && e.target.closest('button, a, input, textarea, select')) return;
+        const t = e.touches[0];
+        startX = t.clientX; startY = t.clientY; startT = Date.now(); tracking = true;
+      }, { passive: true });
+      frame.addEventListener('touchend', (e) => {
+        if (!tracking) return;
+        tracking = false;
+        if (state.slideZoom && state.slideZoom > 1.01) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - startX, dy = t.clientY - startY;
+        if (Math.abs(dx) < 50) return;
+        if (Math.abs(dx) < Math.abs(dy) * 1.5) return;
+        if (Date.now() - startT > 800) return;
+        if (dx < 0) document.getElementById('btn-next').click();
+        else document.getElementById('btn-prev').click();
+      }, { passive: true });
+    }
+
+    // INIT v2 — đăng ký sau initUI nên chạy sau renderSlide() đầu tiên.
+    window.addEventListener('DOMContentLoaded', () => {
+      setupFx();
+      FxEngine.startForSlide(state.idx);
+      setupSwipeNavigation();
+      const mb = document.getElementById('musicBtn');
+      if (mb) mb.onclick = toggleMusic;
+      const fb = document.getElementById('fxToggleBtn');
+      if (fb) fb.onclick = toggleFx;
+      updateMusicBtn();
+      updateFxBtn();
+    });
+</script>
+</body>
+</html>

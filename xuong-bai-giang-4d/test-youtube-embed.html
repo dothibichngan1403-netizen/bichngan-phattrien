@@ -34,8 +34,33 @@
 <p>Địa chỉ khung: <code>https://www.youtube.com/embed/RcGyVTAoXEU?rel=0&amp;origin=https://dothibichngan1403-netizen.github.io</code> — kèm đúng thuộc tính <code>referrerpolicy</code> và <code>allow</code> mà trình phát 4D bản v5 dùng. Khung này kiểm chứng rằng URL nhúng có tham số origin tự nó là hợp lệ (trang chẩn đoán này chạy trên https nên luôn gửi được Referer — khung này KHÔNG tái hiện được trường hợp trang bài giảng chạy trên Blob URL).</p>
 <iframe src="https://www.youtube.com/embed/RcGyVTAoXEU?rel=0&amp;origin=https://dothibichngan1403-netizen.github.io" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
+<h2>5. THÍ NGHIỆM V7 — Khung được tạo ĐỘNG bằng JavaScript khi bấm phát (đúng đường chạy của mặt nạ v6)</h2>
+<p>Khung này KHÔNG có sẵn trong HTML. Bấm nút dưới đây, JavaScript sẽ chèn iframe bằng <code>innerHTML</code> (giống hệt hàm <code>loadYoutubePlayer</code> của mặt nạ v6: địa chỉ <code>https://www.youtube.com/embed/RcGyVTAoXEU?rel=0&amp;origin=https://dothibichngan1403-netizen.github.io&amp;autoplay=1</code>, cùng thuộc tính <code>referrerpolicy</code> và <code>allow</code>), nhưng chạy trên trang https này. <b>Nếu khung 5 PHÁT ĐƯỢC → tạo động không phải nguyên nhân Lỗi 153. Nếu khung 5 LỖI 153 → tạo động chính là nguyên nhân.</b></p>
+<button id="btn-frame5" style="font-size:16px; padding:12px 22px; border-radius:8px; border:none; background:#f59e0b; color:#1e293b; font-weight:bold; cursor:pointer">▶ Tạo khung 5 và phát video</button>
+<div id="frame5-box" style="margin-top:12px"></div>
+
+<h2>6. THÍ NGHIỆM V7 — Trang Blob URL (tái hiện đúng ngữ cảnh trang bài giảng)</h2>
+<p>Bấm nút dưới đây, JavaScript sẽ tạo một trang Blob URL chứa ĐÚNG mã nhúng của khung 4 (iframe tĩnh + tham số <code>origin</code>) rồi mở nó ở tab mới — giống hệt cách Xưởng mở trang bài giảng bằng Blob URL (xem trước trong khung, nút Mở toàn màn hình). <b>Nếu trang Blob LỖI 153 trong khi khung 4 phát được → nguyên nhân chính xác là ngữ cảnh Blob URL (YouTube không xác minh được nguồn gốc trang nhúng). Nếu trang Blob PHÁT ĐƯỢC → nguyên nhân nằm ở chỗ khác trong mã trang bài giảng.</b></p>
+<button id="btn-blob" style="font-size:16px; padding:12px 22px; border-radius:8px; border:none; background:#22d3ee; color:#1e293b; font-weight:bold; cursor:pointer">🧪 Mở trang Blob URL ở tab mới</button>
+<script>
+document.getElementById('btn-frame5').addEventListener('click', function () {
+  var box = document.getElementById('frame5-box');
+  box.innerHTML = '<iframe width="100%" height="360" src="https://www.youtube.com/embed/RcGyVTAoXEU?rel=0&origin=https://dothibichngan1403-netizen.github.io&autoplay=1" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border:2px solid #334155;border-radius:8px;background:#000"></iframe>';
+  this.disabled = true;
+  this.textContent = 'Đã tạo khung 5 — xem kết quả bên dưới';
+});
+document.getElementById('btn-blob').addEventListener('click', function () {
+  var page = '<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8"><title>Thí nghiệm Blob URL — nhúng YouTube</title>'
+    + '<style>body{font-family:sans-serif;max-width:720px;margin:0 auto;padding:20px;background:#0f172a;color:#e2e8f0}iframe{width:100%;height:360px;border:2px solid #334155;border-radius:8px;background:#000}</style></head><body>'
+    + '<h1>Thí nghiệm Blob URL</h1><p>Trang này chạy trên Blob URL (địa chỉ bắt đầu bằng blob:), chứa ĐÚNG mã nhúng của khung 4. Nếu video dưới đây Lỗi 153 trong khi khung 4 trên trang chẩn đoán phát được, thì ngữ cảnh Blob URL chính là nguyên nhân.</p>'
+    + '<iframe src="https://www.youtube.com/embed/RcGyVTAoXEU?rel=0&origin=https://dothibichngan1403-netizen.github.io" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></body></html>';
+  var url = URL.createObjectURL(new Blob([page], { type: 'text/html' }));
+  window.open(url, '_blank');
+});
+</script>
+
 <h2>Đối chiếu</h2>
 <p>Xem video gốc trên YouTube (mở tab mới): <a href="https://www.youtube.com/watch?v=RcGyVTAoXEU" target="_blank" rel="noopener" style="color:#fbbf24">https://www.youtube.com/watch?v=RcGyVTAoXEU</a></p>
-<p><b>Cách đọc kết quả:</b> nếu cả 3 khung đầu đều lỗi 153 trong khi link gốc ở trên vẫn phát được, thì lỗi nằm ở MÔI TRƯỜNG trình duyệt (trình duyệt này chặn video nhúng), không phải lỗi mã của Xưởng. Nếu khung 1 phát được mà khung 2 lỗi, thì lỗi nằm ở tham số/thuộc tính của khung 2. Kết quả ngày 20/11/2026: cả 3 khung đều PHÁT ĐƯỢC — chứng tỏ trình duyệt không chặn video nhúng; Lỗi 153 chỉ xảy ra trong trang bài giảng vì trang đó chạy trên Blob URL (xem trước trong xưởng, tab toàn màn hình) nên không gửi được Referer cho YouTube. Bản v5 sửa bằng tham số <code>origin</code> (khung 4) — tham số này là thông tin nhận diện tương đương khi không gửi được Referer, theo đúng tài liệu YouTube.</p>
+<p><b>Cách đọc kết quả:</b> nếu cả 3 khung đầu đều lỗi 153 trong khi link gốc ở trên vẫn phát được, thì lỗi nằm ở MÔI TRƯỜNG trình duyệt (trình duyệt này chặn video nhúng), không phải lỗi mã của Xưởng. Nếu khung 1 phát được mà khung 2 lỗi, thì lỗi nằm ở tham số/thuộc tính của khung 2. Kết quả ngày 20/11/2026: cả 3 khung đều PHÁT ĐƯỢC — chứng tỏ trình duyệt không chặn video nhúng; Lỗi 153 chỉ xảy ra trong trang bài giảng vì trang đó chạy trên Blob URL (xem trước trong xưởng, tab toàn màn hình) nên không gửi được Referer cho YouTube. Bản v5 sửa bằng tham số <code>origin</code> (khung 4) — tham số này là thông tin nhận diện tương đương khi không gửi được Referer, theo đúng tài liệu YouTube. <b>Cập nhật vòng 6:</b> tham số origin KHÔNG sửa được trường hợp Blob URL — bấm phát trên mặt nạ nạp lười vẫn Lỗi 153 ngay, cả trong khung xem trước lẫn tab Blob URL toàn màn hình. Nạp lười chỉ giấu lỗi cho tới lúc bấm phát; giả thuyết khung 0x0 đã SAI. Thí nghiệm khung 5 và Blob URL ở trên (vòng 7) xác định chắc chắn nguyên nhân trước khi sửa. <b>Hướng sửa v7:</b> trang xem <code>xem.html</code> trên https đọc dữ liệu bài từ localStorage — video chạy trong ngữ cảnh https như khung 4; file HTML tải về vẫn giữ mặt nạ + nút “Xem video trên YouTube” vì mở file trực tiếp là file:// nên video vẫn có thể lỗi 153.</p>
 </body>
 </html>
