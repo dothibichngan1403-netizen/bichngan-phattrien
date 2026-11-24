@@ -1,6 +1,6 @@
 /* Service worker — Kids English 4+.
    Cache-first cho toan bo app de mo nhanh va dung offline sau lan mo dau tien. */
-const CACHE = "kids-english-4plus-v1";
+const CACHE = "kids-english-4plus-v2";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png"];
 
 self.addEventListener("install", (event) => {
