@@ -2803,6 +2803,9 @@ function startNarration(fromIdx = 0) {
   // Chỉ bật nhạc khi thuyết minh vẫn đang chạy (nó có thể đã dừng ngay trong
   // speakCurrentCue nếu không còn cách nào phát ra tiếng).
   if (state.narrating) { try { startWater(); } catch (e) {} }
+  // FIX 27/11: thử bật nước lại sau 1,5 giây — lần bấm nghe đầu tiên file
+  // nước có thể chưa tải xong nên lần bật đầu chưa kịp chạy.
+  setTimeout(() => { try { if (state.narrating && waterOn) startWater(); } catch (e) {} }, 1500);
 }
 
 async function speakCurrentCue() {
@@ -3109,10 +3112,8 @@ async function playEmbeddedCue(idx, cueIdx, gender, rate, onDone) {
 
 function stopNarration(stopAutoTour = true) {
   state.narrating = false;
-  // Chế độ nghe liên tục: giữ nhạc chạy xuyên suốt giữa các trang (không
-  // dừng/khởi động lại nhạc ở mỗi lần chuyển trang). Chỉ dừng nhạc khi tắt
-  // hẳn chế độ liên tục hoặc khi nghe từng trang bình thường.
-  if (stopAutoTour || !state.autoTour) stopWater();
+  // FIX 27/11: nhạc nước là nhạc nền — chảy xuyên suốt khi đọc sách, không
+  // dừng khi lật trang hay khi thuyết minh dừng. Chỉ nút 💧 mới tắt nước.
   clearTimeout(state.cueTimer);
   stopEmbeddedAudio();
   if ('speechSynthesis' in window) speechSynthesis.cancel();
@@ -4163,6 +4164,7 @@ window.addEventListener('DOMContentLoaded', initUI);
       updateFxBtn();
       updateMotionBtn();
       updateWaterBtn();
+      try { ensureWaterBlobUrl(); } catch (e) {} // FIX 27/11: tải sẵn file nước ngay khi mở trang.
       setTimeout(primeCurrentAudio, 300);
       updateKenBurns();
       applySlideMedia(); // Bản v5: hiện video trang 6 hoặc GIF/poster tĩnh theo nút 🎬 + giảm chuyển động.
