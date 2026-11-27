@@ -4221,7 +4221,9 @@ window.addEventListener('DOMContentLoaded', initUI);
       const url = await ensureVideoBlobUrl(pageIdx);
       if (!url || videoSrcPage !== pageIdx) return;
       if (v.src !== url) { v.src = url; v.load(); }
-      if (gifMotionOn()) {
+      // FIX 27/11: video Flow LUON hien + phat — khong phu thuoc nut anh dong
+      // hay localStorage dung chung voi sach khac (video la noi dung, khong phai hieu ung).
+      {
         const img = document.getElementById('slide-img');
         if (img) img.classList.add('video-hidden');
         v.classList.add('show');
@@ -4268,7 +4270,8 @@ window.addEventListener('DOMContentLoaded', initUI);
           ensureVideoForPage(idx); // Bản web: tải video rời rồi mới gán src
         }
         v.muted = true;
-        if (gifMotionOn()) {
+        // FIX 27/11: trang co video Flow LUON hien video + phat (khong phu thuoc nut anh dong).
+        if (true) {
           img.classList.add('video-hidden');
           v.classList.add('show');
           // Video chưa tải xong thì ensureVideoForPage sẽ phát khi sẵn sàng;
