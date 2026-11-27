@@ -1557,7 +1557,7 @@ const SLIDE_IMAGES = ["media/poster/p01.jpg.b64", "media/poster/p02.jpg.b64", "m
 // mảng 30 phần tử: null trừ trang có video thật (trang 6: bánh răng quay).
 // Phát qua Blob URL (getVideoBlobUrl) — KHÔNG phát trực tiếp data URI vì
 // iOS/Safari chặn. Poster của video là SLIDE_IMAGES cùng trang (khung đầu).
-const SLIDE_VIDEOS = ["media/video/p01-loop-48s.mp4.b64", null, null, "media/video/p04-loop-48s.mp4.b64", null, null, null, null, null, null, "media/video/p11-loop-48s.mp4.b64", null, null, null, null, "media/video/p16-loop-48s.mp4.b64", null, null, null, null, null, null, "media/video/p23-loop-48s.mp4.b64", null, null, null, null, null, null, "media/video/p30-loop-48s.mp4.b64"];
+const SLIDE_VIDEOS = [["media/video/p01-loop-48s.mp4.b64.1", "media/video/p01-loop-48s.mp4.b64.2"], null, null, ["media/video/p04-loop-48s.mp4.b64.1", "media/video/p04-loop-48s.mp4.b64.2"], null, null, null, null, null, null, ["media/video/p11-loop-48s.mp4.b64.1", "media/video/p11-loop-48s.mp4.b64.2"], null, null, null, null, ["media/video/p16-loop-48s.mp4.b64.1", "media/video/p16-loop-48s.mp4.b64.2"], null, null, null, null, null, null, ["media/video/p23-loop-48s.mp4.b64.1", "media/video/p23-loop-48s.mp4.b64.2"], null, null, null, null, null, null, ["media/video/p30-loop-48s.mp4.b64.1", "media/video/p30-loop-48s.mp4.b64.2"]];
 
 // Áp dụng tiêu đề sách (BOOK_META) lên giao diện: tiêu đề tab trình duyệt,
 // tên sách ở đầu trang, tiêu đề bản đồ hành trình. Đặt ở cuối khối dữ liệu
@@ -2234,7 +2234,12 @@ function b64ToBlobUrl(base64, mime) {
   for (let i = 0; i < byteStr.length; i++) buf[i] = byteStr.charCodeAt(i);
   return URL.createObjectURL(new Blob([buf], { type: mime }));
 }
-// Lấy Blob URL giọng đọc của 1 đoạn (cue); '' nếu tải/giải mã lỗi.
+// Tải nhiều phần .b64 rồi nối lại (video vòng 48s: 1 file .b64 ~4,8 MiB
+// vượt giới hạn request ~4 MiB của GitHub MCP nên tách làm 2 phần).
+async function fetchB64Multi(paths) {
+  const parts = await Promise.all(paths.map((p) => fetchB64Text(p)));
+  return parts.join('');
+}
 async function ensureAudioBlobUrl(gender, idx, cueIdx, path) {
   const key = gender + ':' + idx + ':' + cueIdx;
   if (audioBlobUrlCache[key]) return audioBlobUrlCache[key];
@@ -2256,12 +2261,14 @@ async function ensureAmbientBlobUrl(idx) {
   } catch (e) { return ''; }
 }
 // Lấy Blob URL video của 1 trang; '' nếu tải/giải mã lỗi.
+// SLIDE_VIDEOS[trang] có thể là chuỗi (1 file) hoặc mảng 2 phần .b64.
 async function ensureVideoBlobUrl(pageIdx) {
   if (videoBlobUrlCache[pageIdx]) return videoBlobUrlCache[pageIdx];
-  const path = (typeof SLIDE_VIDEOS !== 'undefined' && SLIDE_VIDEOS[pageIdx]) || '';
-  if (!path) return '';
+  const entry = (typeof SLIDE_VIDEOS !== 'undefined' && SLIDE_VIDEOS[pageIdx]) || '';
+  if (!entry) return '';
   try {
-    const url = b64ToBlobUrl(await fetchB64Text(path), 'video/mp4');
+    const b64 = Array.isArray(entry) ? await fetchB64Multi(entry) : await fetchB64Text(entry);
+    const url = b64ToBlobUrl(b64, 'video/mp4');
     videoBlobUrlCache[pageIdx] = url;
     return url;
   } catch (e) { return ''; }
@@ -2287,7 +2294,10 @@ function prefetchPageMedia(pageIdx) {
   const poster = (typeof SLIDE_IMAGES !== 'undefined' && SLIDE_IMAGES[pageIdx]) || '';
   if (poster) fetchB64Text(poster).catch(() => {});
   const video = (typeof SLIDE_VIDEOS !== 'undefined' && SLIDE_VIDEOS[pageIdx]) || '';
-  if (video) fetchB64Text(video).catch(() => {});
+  if (video) {
+    if (Array.isArray(video)) video.forEach((p) => fetchB64Text(p).catch(() => {}));
+    else fetchB64Text(video).catch(() => {});
+  }
   const amb = (typeof AMBIENT_SETS !== 'undefined' && AMBIENT_SETS[pageIdx]) || '';
   if (amb) fetchB64Text(amb).catch(() => {});
   let g = 'female';
